@@ -40,7 +40,7 @@ $('.table .btn').live('click', (event) ->
 )
 
 Response.action( ->
-  if Response.band(481)
+  if Response.band(479)
     $('table').removeClass('table-condensed')
     $('.btn').removeClass('btn-small')
   else
