@@ -46,10 +46,10 @@ git commit -am "first commit"
 git push -u origin master
 
 bundle exec rake all heroku:setup
-bundle exec rake all heroku:deploy;
-heroku run rake db:migrate --app recoverytracker-staging;
-heroku run rake db:seed --app recoverytracker-staging;
-heroku run rake db:migrate --app recoverytracker;
+bundle exec rake all heroku:deploy
+heroku run rake db:migrate --app recoverytracker-staging
+heroku run rake db:seed --app recoverytracker-staging
+heroku run rake db:migrate --app recoverytracker
 
 
 
