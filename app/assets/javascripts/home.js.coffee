@@ -38,3 +38,10 @@ $('.table .btn').live('click', (event) ->
   
   $('#score').html(score)
 )
+
+Response.action( ->
+  if Response.band(481)
+    $('table').removeClass('table-condensed')
+  else
+    $('table').addClass('table-condensed')
+)

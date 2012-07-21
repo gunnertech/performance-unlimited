@@ -31,13 +31,17 @@
 body section {
   clear: both;
   display: none;
+  margin-bottom: 20px;
   &#current-roster {
     display: block;
   }
 }
 
+td {
+  vertical-align: middle !important;
+}
+
 td.score {
-  padding-top: 13px;
   strong {
     font-size: 20px;
   }
