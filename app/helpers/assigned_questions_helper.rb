@@ -1,0 +1,2 @@
+module AssignedQuestionsHelper
+end

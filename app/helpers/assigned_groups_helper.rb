@@ -1,0 +1,2 @@
+module AssignedGroupsHelper
+end

@@ -11,7 +11,126 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120720224042) do
+ActiveRecord::Schema.define(:version => 20120724011401) do
+
+  create_table "assigned_groups", :force => true do |t|
+    t.integer  "group_id"
+    t.integer  "user_id"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  add_index "assigned_groups", ["group_id"], :name => "index_assigned_groups_on_group_id"
+  add_index "assigned_groups", ["user_id"], :name => "index_assigned_groups_on_user_id"
+
+  create_table "assigned_question_sets", :force => true do |t|
+    t.integer  "question_set_id"
+    t.integer  "survey_id"
+    t.integer  "position"
+    t.datetime "created_at",      :null => false
+    t.datetime "updated_at",      :null => false
+  end
+
+  add_index "assigned_question_sets", ["question_set_id"], :name => "index_assigned_question_sets_on_question_set_id"
+  add_index "assigned_question_sets", ["survey_id"], :name => "index_assigned_question_sets_on_survey_id"
+
+  create_table "assigned_questions", :force => true do |t|
+    t.integer  "question_id"
+    t.integer  "question_set_id"
+    t.integer  "position"
+    t.datetime "created_at",      :null => false
+    t.datetime "updated_at",      :null => false
+  end
+
+  add_index "assigned_questions", ["question_id"], :name => "index_assigned_questions_on_question_id"
+  add_index "assigned_questions", ["question_set_id"], :name => "index_assigned_questions_on_question_set_id"
+
+  create_table "assigned_surveys", :force => true do |t|
+    t.integer  "survey_id"
+    t.integer  "division_id"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
+  end
+
+  add_index "assigned_surveys", ["division_id"], :name => "index_assigned_surveys_on_division_id"
+  add_index "assigned_surveys", ["survey_id"], :name => "index_assigned_surveys_on_survey_id"
+
+  create_table "completed_surveys", :force => true do |t|
+    t.date     "date"
+    t.integer  "user_id"
+    t.integer  "survey_id"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  add_index "completed_surveys", ["survey_id"], :name => "index_completed_surveys_on_survey_id"
+  add_index "completed_surveys", ["user_id"], :name => "index_completed_surveys_on_user_id"
+
+  create_table "divisions", :force => true do |t|
+    t.string   "name"
+    t.integer  "organization_id"
+    t.datetime "created_at",      :null => false
+    t.datetime "updated_at",      :null => false
+  end
+
+  add_index "divisions", ["organization_id"], :name => "index_divisions_on_organization_id"
+
+  create_table "groups", :force => true do |t|
+    t.string   "name"
+    t.integer  "division_id"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
+  end
+
+  add_index "groups", ["division_id"], :name => "index_groups_on_division_id"
+
+  create_table "organizations", :force => true do |t|
+    t.string   "name"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  create_table "point_ranges", :force => true do |t|
+    t.integer  "assigned_survey_id"
+    t.integer  "low"
+    t.integer  "high"
+    t.text     "description"
+    t.datetime "created_at",         :null => false
+    t.datetime "updated_at",         :null => false
+  end
+
+  add_index "point_ranges", ["assigned_survey_id"], :name => "index_point_ranges_on_assigned_survey_id"
+
+  create_table "question_sets", :force => true do |t|
+    t.string   "name"
+    t.text     "description"
+    t.datetime "created_at",      :null => false
+    t.datetime "updated_at",      :null => false
+    t.integer  "organization_id"
+  end
+
+  add_index "question_sets", ["organization_id"], :name => "index_question_sets_on_organization_id"
+
+  create_table "questions", :force => true do |t|
+    t.string   "short_text"
+    t.text     "long_text"
+    t.datetime "created_at",      :null => false
+    t.datetime "updated_at",      :null => false
+    t.integer  "organization_id"
+  end
+
+  add_index "questions", ["organization_id"], :name => "index_questions_on_organization_id"
+
+  create_table "responses", :force => true do |t|
+    t.integer  "question_id"
+    t.string   "short_text"
+    t.string   "long_text"
+    t.integer  "points"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
+  end
+
+  add_index "responses", ["question_id"], :name => "index_responses_on_question_id"
 
   create_table "roles", :force => true do |t|
     t.string   "name"
@@ -23,6 +142,25 @@ ActiveRecord::Schema.define(:version => 20120720224042) do
 
   add_index "roles", ["name", "resource_type", "resource_id"], :name => "index_roles_on_name_and_resource_type_and_resource_id"
   add_index "roles", ["name"], :name => "index_roles_on_name"
+
+  create_table "selected_responses", :force => true do |t|
+    t.integer  "user_id"
+    t.integer  "response_id"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
+  end
+
+  add_index "selected_responses", ["response_id"], :name => "index_selected_responses_on_response_id"
+  add_index "selected_responses", ["user_id"], :name => "index_selected_responses_on_user_id"
+
+  create_table "surveys", :force => true do |t|
+    t.string   "name"
+    t.datetime "created_at",      :null => false
+    t.datetime "updated_at",      :null => false
+    t.integer  "organization_id"
+  end
+
+  add_index "surveys", ["organization_id"], :name => "index_surveys_on_organization_id"
 
   create_table "users", :force => true do |t|
     t.string   "email",                  :default => "", :null => false

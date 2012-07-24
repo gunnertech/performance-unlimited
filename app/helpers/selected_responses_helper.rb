@@ -1,0 +1,2 @@
+module SelectedResponsesHelper
+end

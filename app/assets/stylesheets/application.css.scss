@@ -29,34 +29,37 @@
 @import "compass/typography/text/nowrap";
 @import "compass/typography/text/ellipsis";
 
-body section {
-  clear: both;
-  display: none;
-  margin-bottom: 20px;
-  &#current-roster {
-    display: block;
+.home {
+  section {
+    clear: both;
+//    display: none;
+    margin-bottom: 20px;
+    &#current-roster {
+      display: block;
+    }
+  }
+
+  td {
+    vertical-align: middle !important;
+    &.score {
+      strong {
+        font-size: 20px;
+      }
+    }
+
+    .btn {
+      @include ellipsis;
+
+      box-sizing: border-box;
+      text-align: center;
+      width: 70px;
+      &.btn-small {
+        width: 48px;
+      }
+    }
   }
 }
 
-td {
-  vertical-align: middle !important;
-  &.score {
-    strong {
-      font-size: 20px;
-    }
-  }
-  
-  .btn {
-    @include ellipsis;
-    
-    box-sizing: border-box;
-    text-align: center;
-    width: 70px;
-    &.btn-small {
-      width: 48px;
-    }
-  }
-}
 
 .navbar-inner {
   .brand {

@@ -53,6 +53,41 @@ heroku run rake db:migrate --app recoverytracker
 
 
 
+
+
+rails g scaffold organization name:string
+rails g scaffold division name:string organization:belongs_to
+rails g scaffold group name:string division:belongs_to
+rails g scaffold assigned_group group:belongs_to user:belongs_to
+rails g scaffold survey name:string
+rails g scaffold assigned_survey survey:belongs_to division:belongs_to
+rails g scaffold point_range assigned_survey:belongs_to low:integer high:integer description:text
+rails g scaffold question_set name:string description:text
+rails g scaffold assigned_question_set question_set:belongs_to survey:belongs_to position:integer
+rails g scaffold question short_text:string long_text:text
+rails g scaffold assigned_question question:belongs_to question_set:belongs_to position:integer
+rails g scaffold completed_survey date:date user:belongs_to survey:belongs_to
+rails g scaffold response question:belongs_to short_text:string long_text:string points:integer
+rails g scaffold selected_response user:belongs_to response:belongs_to
+
+rake db:migrate
+
+rails g bootstrap:themed organizations -f
+rails g bootstrap:themed divisions -f
+rails g bootstrap:themed groups -f
+rails g bootstrap:themed divisions -f
+rails g bootstrap:themed assigned_groups -f
+rails g bootstrap:themed surveys -f
+rails g bootstrap:themed assigned_surveys -f
+rails g bootstrap:themed point_ranges -f
+rails g bootstrap:themed question_sets -f
+rails g bootstrap:themed assigned_question_sets -f
+rails g bootstrap:themed questions -f
+rails g bootstrap:themed assigned_questions -f
+rails g bootstrap:themed completed_surveys -f
+rails g bootstrap:themed responses -f
+rails g bootstrap:themed selected_responses -f
+
 ________________________
 
 License
