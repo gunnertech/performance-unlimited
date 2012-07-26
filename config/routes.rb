@@ -1,4 +1,6 @@
 Recoverytracker::Application.routes.draw do
+  
+
   resources :selected_responses
 
   resources :responses
@@ -20,26 +22,20 @@ Recoverytracker::Application.routes.draw do
   resources :surveys
 
   resources :assigned_groups
+  
+  resources :groups, only: [] do
+    resources :users
+  end
 
-  resources :groups
-
-  resources :divisions
+  resources :divisions do
+    resources :groups
+  end
 
   resources :organizations
-
-  get "users/index"
-
-  get "users/show"
-
-  get "users/create"
-
-  get "users/update"
-
-  get "users/destroy"
-
-  get "users/new"
-
-  get "users/edit"
+  
+  resources :users do
+    resources :assigned_divisions
+  end
 
   devise_for :users
   authenticated :user do

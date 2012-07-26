@@ -1,0 +1,2 @@
+module AssignedDivisionsHelper
+end

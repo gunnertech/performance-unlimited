@@ -1,5 +1,5 @@
 class User < ActiveRecord::Base
-	rolify
+  rolify
   # Include default devise modules. Others available are:
   # :token_authenticatable, :confirmable,
   # :lockable, :timeoutable and :omniauthable
@@ -11,6 +11,8 @@ class User < ActiveRecord::Base
   
   has_many :assigned_groups
   has_many :groups, through: :assigned_groups
+  has_many :assigned_divisions
+  has_many :divisions, through: :assigned_divisions
   
   def to_s
     name

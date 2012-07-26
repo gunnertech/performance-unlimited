@@ -11,7 +11,17 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120724011401) do
+ActiveRecord::Schema.define(:version => 20120725235034) do
+
+  create_table "assigned_divisions", :force => true do |t|
+    t.integer  "division_id"
+    t.integer  "user_id"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
+  end
+
+  add_index "assigned_divisions", ["division_id"], :name => "index_assigned_divisions_on_division_id"
+  add_index "assigned_divisions", ["user_id"], :name => "index_assigned_divisions_on_user_id"
 
   create_table "assigned_groups", :force => true do |t|
     t.integer  "group_id"
@@ -97,9 +107,11 @@ ActiveRecord::Schema.define(:version => 20120724011401) do
     t.text     "description"
     t.datetime "created_at",         :null => false
     t.datetime "updated_at",         :null => false
+    t.string   "name"
   end
 
   add_index "point_ranges", ["assigned_survey_id"], :name => "index_point_ranges_on_assigned_survey_id"
+  add_index "point_ranges", ["name"], :name => "index_point_ranges_on_name"
 
   create_table "question_sets", :force => true do |t|
     t.string   "name"

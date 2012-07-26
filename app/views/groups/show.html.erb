@@ -1,16 +1,17 @@
 <%- model_class = Group -%>
 <div class="page-header">
-  <h1><%=t '.title', :default => model_class.model_name.human %></h1>
+  <h1><%= parent %> <%= @group %></h1>
 </div>
 
 <dl class="dl-horizontal">
-  <dt><strong><%= model_class.human_attribute_name(:name) %>:</strong></dt>
-  <dd><%= @group.name %></dd>
-  <dt><strong><%= model_class.human_attribute_name(:division_id) %>:</strong></dt>
-  <dd><%= @group.division_id %></dd>
+  <% @group.users.each do |user| %>
+    <dt><strong><%= link_to(user,user) %></strong></dt>
+  <% end %>
 </dl>
 
 <div class="form-actions">
+  <%= link_to t('add_member'),
+              new_group_user_path(@group), :class => 'btn btn-primary'  %>
   <%= link_to t('.back', :default => t("helpers.links.back")),
               groups_path, :class => 'btn'  %>
   <%= link_to t('.edit', :default => t("helpers.links.edit")),

@@ -4,4 +4,8 @@ class Group < ActiveRecord::Base
   has_many :users, through: :assigned_groups
   
   attr_accessible :name
+  
+  def to_s
+    name
+  end
 end

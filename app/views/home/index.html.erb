@@ -26,150 +26,42 @@
   </table>
 </section>
 
-<% @survey.assigned_question_sets.each do |assigned_question_set| %>
+<% @survey.assigned_question_sets.each_with_index do |assigned_question_set,i| %>
   <section class="clearfix question-set" id="<%= assigned_question_set.name.parameterize %>">
     <h1><%= assigned_question_set %></h1>
+    <table class="table">
+      <tbody>
+        <% assigned_question_set.question_set.assigned_questions.each do |assigned_question| %>
+          <tr>
+            <td><strong><%= assigned_question %></strong></td>
+            <% 0.upto(assigned_question_set.question_set.max_responses).each do |i| %>
+              <td>
+                <% if assigned_question.question.responses[i] %>
+                  <a href="#" class="answer btn <%= response_css_point_class(assigned_question.question.responses[i],i+1) %>" data-value="<%= assigned_question.question.responses[i].points %>"><%= assigned_question.question.responses[i].short_text.try(:html_safe) %></a>
+                <% else %>
+                  &nbsp;
+                <% end %>
+              </td>
+            <% end %>
+            <td class="score"><strong></strong></td>
+          </tr> 
+        <% end %>
+      </tbody>
+    </table>
+    
+    <% if assigned_question_set == @survey.assigned_question_sets.first %>
+      <a href="#current-roster" class="navigate btn btn-inverse pull-left">Prev</a>
+    <% else %>
+      <a href="#<%= @survey.assigned_question_sets[i-1].to_s.parameterize %>" class="navigate btn btn-inverse pull-left">Prev</a>
+    <% end %>
+    
+    <% if assigned_question_set == @survey.assigned_question_sets.last %>
+      <a href="#summary" class="navigate btn btn-inverse pull-right next disabled">Next</a>
+    <% else %>
+      <a href="#<%= @survey.assigned_question_sets[i+1].to_s.parameterize %>" class="navigate btn btn-inverse pull-right next disabled">Next</a>
+    <% end %>
   </section>
 <% end %>
-
-<section class="clearfix question-set" id="recovery-habits">
-  <h1>Recovery Habits</h1>
-  <table class="table">
-    <tbody>
-      <tr>
-        <td><strong>Sleep Hours</strong></td>
-        <td><a href="#" class="answer btn btn-success" data-value="2">&gt; 8</a></td>
-        <td><a href="#" class="answer btn btn-primary" data-value="1">6-8</a></td>
-        <td><a href="#" class="answer btn btn-danger" data-value="-1">&lt; 8</a></td>
-        <td class="score"><strong></strong></td>
-      </tr>
-      <tr>
-        <td><strong>Active Cool Down</strong></td>
-        <td><a href="#" class="answer btn btn-success" data-value="2">Yes</a></td>
-        <td><a href="#" class="answer btn btn-danger" data-value="-1">No</a></td>
-        <td></td>
-        <td class="score"><strong></strong></td>
-      </tr>
-      <tr>
-        <td><strong>Nap / Relaxation</strong></td>
-        <td><a href="#" class="answer btn btn-success" data-value="2">Yes</a></td>
-        <td><a href="#" class="answer btn btn-danger" data-value="-1">No</a></td>
-        <td></td>
-        <td class="score"><strong></strong></td>
-      </tr>
-      <tr>
-        <td><strong>Cold Tub / Contrast / Ice</strong></td>
-        <td><a href="#" class="answer btn btn-success" data-value="2">Yes</a></td>
-        <td><a href="#" class="answer btn btn-danger" data-value="-1">No</a></td>
-        <td></td>
-        <td class="score"><strong></strong></td>
-      </tr>
-      <tr>
-        <td><strong>Post Activity Protein Shake</strong></td>
-        <td><a href="#" class="answer btn btn-success" data-value="2">Yes</a></td>
-        <td><a href="#" class="answer btn btn-danger" data-value="-1">No</a></td>
-        <td></td>
-        <td class="score"><strong></strong></td>
-      </tr>
-      <tr>
-        <td><strong>Muscle Armor</strong></td>
-        <td><a href="#" class="answer btn btn-success" data-value="2">Yes</a></td>
-        <td><a href="#" class="answer btn btn-danger" data-value="-1">No</a></td>
-        <td></td>
-        <td class="score"><strong></strong></td>
-      </tr>
-    </tbody>
-  </table>
-  <a href="#current-roster" class="navigate btn btn-inverse pull-left">Prev</a>
-  <a href="#nutrition" class="navigate btn btn-inverse pull-right next disabled">Next</a>
-</section>
-
-<section class="clearfix question-set" id="nutrition">
-  <h1>Nutrition</h1>
-  <table class="table">
-    <tbody>
-      <tr>
-        <td><strong>Breakfast Within 1 Hour Waking</strong></td>
-        <td><a href="#" class="answer btn btn-success" data-value="2">Yes</a></td>
-        <td><a href="#" class="answer btn btn-danger" data-value="-1">No</a></td>
-        <td></td>
-        <td class="score"><strong></strong></td>
-      </tr>
-      <tr>
-        <td><strong>Meals Per Day</strong></td>
-        <td><a href="#" class="answer btn btn-success" data-value="2">&gt; 4</a></td>
-        <td><a href="#" class="answer btn btn-primary" data-value="1">3</a></td>
-        <td><a href="#" class="answer btn btn-danger" data-value="-1">&lt; 3</a></td>
-        <td class="score"><strong></strong></td>
-      </tr>
-      <tr>
-        <td><strong>Hydration</strong></td>
-        <td><a href="#" class="answer btn btn-success" data-value="2">Clear</a></td>
-        <td><a href="#" class="answer btn btn-primary" data-value="1">Medium</a></td>
-        <td><a href="#" class="answer btn btn-danger" data-value="-1">Dark</a></td>
-        <td class="score"><strong></strong></td>
-      </tr>
-      <tr>
-        <td><strong>Caffeine Occurrences</strong></td>
-        <td><a href="#" class="answer btn btn-success" data-value="2">None</a></td>
-        <td><a href="#" class="answer btn btn-danger" data-value="-1">&gt; 2</a></td>
-        <td></td>
-        <td class="score"><strong></strong></td>
-      </tr>
-      <tr>
-        <td><strong>Alcohol Use</strong></td>
-        <td><a href="#" class="answer btn btn-success" data-value="2">0</a></td>
-        <td><a href="#" class="answer btn btn-primary" data-value="1">1-3</a></td>
-        <td><a href="#" class="answer btn btn-danger" data-value="-1">&gt; 3</a></td>
-        <td class="score"><strong></strong></td>
-      </tr>
-    </tbody>
-  </table>
-  <a href="#recovery-habits" class="navigate btn btn-inverse pull-left">Prev</a>
-  <a href="#uncontrolables" class="navigate btn btn-inverse pull-right next disabled">Next</a>
-</section>
-
-<section class="clearfix question-set" id="uncontrolables">
-  <h1>Uncontrolables</h1>
-  <table class="table">
-    <tbody>
-      <tr>
-        <td><strong>Current Soreness</strong></td>
-        <td><a href="#" class="answer btn btn-success" data-value="2">None</a></td>
-        <td><a href="#" class="answer btn btn-primary" data-value="1">Some</a></td>
-        <td><a href="#" class="answer btn btn-warning" data-value="0">Mod</a></td>
-        <td><a href="#" class="answer btn btn-danger" data-value="-1">High</a></td>
-        <td class="score"><strong></strong></td>
-      </tr>
-      <tr>
-        <td><strong>Consecutive Days Activity</strong></td>
-        <td><a href="#" class="answer btn btn-success" data-value="2">0-3</a></td>
-        <td><a href="#" class="answer btn btn-primary" data-value="1">4-9</a></td>
-        <td><a href="#" class="answer btn btn-danger" data-value="-1">&lt; 9</a></td>
-        <td></td>
-        <td class="score"><strong></strong></td>
-      </tr>
-      <tr>
-        <td><strong>Temperature</strong></td>
-        <td><a href="#" class="answer btn btn-success" data-value="2">&lt; 80</a></td>
-        <td><a href="#" class="answer btn btn-primary" data-value="1">80-90</a></td>
-        <td><a href="#" class="answer btn btn-danger" data-value="-1">&gt; 90</a></td>
-        <td></td>
-        <td class="score"><strong></strong></td>
-      </tr>
-      <tr>
-        <td><strong>Time Traveled (hours)</strong></td>
-        <td><a href="#" class="answer btn btn-success" data-value="2">&lt; 3</a></td>
-        <td><a href="#" class="answer btn btn-primary" data-value="1">3-6</a></td>
-        <td><a href="#" class="answer btn btn-danger" data-value="-1">&gt; 6</a></td>
-        <td></td>
-        <td class="score"><strong></strong></td>
-      </tr>
-    </tbody>
-  </table>
-  <a href="#nutrition" class="navigate btn btn-inverse pull-left">Prev</a>
-  <a href="#summary" class="navigate btn btn-inverse pull-right next disabled">Next</a>
-</section>
 
 <section id="summary">
   <div class="row-fluid">
@@ -180,26 +72,12 @@
     <div class="span6" id="scale">
       <h3>Scale</h3>
       <table class="table table-bordered">
-        <tr>
-          <td><span class="label label-success">9 or More</span></td>
-          <td>Fully Recovered</td>
-        </tr>
-        <tr>
-          <td><span class="label label-info">7-8</span></td>
-          <td>Mostly Recovered</td>
-        </tr>
-        <tr>
-          <td><span class="label">5-6</span></td>
-          <td>Somewhat Recovered</td>
-        </tr>
-        <tr>
-          <td><span class="label label-warning">3-4</span></td>
-          <td>Under Recovered</td>
-        </tr>
-        <tr>
-          <td><span class="label label-important">Less than 3</span></td>
-          <td>Severely Under Recovered</td>
-        </tr>
+        <% @survey.point_ranges.each_with_index do |point_range,i| %>
+          <tr>
+            <td><%= point_range_to_html(@survey,point_range,i) %></td>
+            <td><%= point_range.name %></td>
+          </tr>
+        <% end %>
       </table>
     </div>
   </div>
