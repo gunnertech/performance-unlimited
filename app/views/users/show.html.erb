@@ -3,7 +3,27 @@
   <h1><%= @user %> <small>(<%= @user.groups.map(&:to_s).join(',') %>)</small></h1>
 </div>
 
-<p>Graphs, Tables, etc will go here.... I promise</p>
+<section>
+  <h2><%=t 'completed_surveys' %></h2>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th><%=t 'date_slug' %></th>
+        <th><%=t 'name' %></th>
+        <th><%=t 'score' %></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @user.completed_surveys.each do |completed_survey| %>
+        <tr>
+          <td><%= completed_survey.date %></td>
+          <td><%= completed_survey %></td>
+          <td><%= completed_survey.score %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</section>
 
 <div class="form-actions">
   <%= link_to t('.edit', :default => t("helpers.links.edit")),

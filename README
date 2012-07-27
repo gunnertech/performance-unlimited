@@ -38,6 +38,10 @@ rails g heroku:config
 
 # Tweak heroku.yml
 # Change authorization method in heroku-rails gem
+# def authorize
+#   return if @heroku
+#   @heroku = Heroku::Auth.client
+# end
 
 git remote add origin https://github.com/gunnertech/recoverytracker.git
 git remote set-url origin git@github.com:gunnertech/recoverytracker.git

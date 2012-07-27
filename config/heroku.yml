@@ -24,7 +24,10 @@ config:
     PATH: "bin:vendor/bundle/ruby/1.9.1/bin:/usr/local/bin:/usr/bin:/bin"
     # CONFIG_VAR1: "config1"
     # CONFIG_VAR2: "config2"
-
+  
+  staging:
+    RACK_ENV: staging
+    RAILS_ENV: staging
   # you can also override configuration settings for each environment
   # production:
   #   CONFIG_VAR1: "config1-production"

@@ -14,7 +14,7 @@
           <% grouped_user_row.each do |grouped_user| %>
             <td>
               <% if grouped_user[i] %>
-                <a href="#recovery-habits" class="navigate"><%= grouped_user[i] %></a>
+                <a data-user_id="<%= grouped_user[i].id %>" href="#recovery-habits" class="user navigate"><%= grouped_user[i] %></a>
               <% else %>
                 &nbsp;
               <% end %>
@@ -37,7 +37,7 @@
             <% 0.upto(assigned_question_set.question_set.max_responses).each do |i| %>
               <td>
                 <% if assigned_question.question.responses[i] %>
-                  <a href="#" class="answer btn <%= response_css_point_class(assigned_question.question.responses[i],i+1) %>" data-value="<%= assigned_question.question.responses[i].points %>"><%= assigned_question.question.responses[i].short_text.try(:html_safe) %></a>
+                  <a data-response_id="<%= assigned_question.question.responses[i].id %>" data-question_id="<%= assigned_question.question.id %>" href="#" class="answer btn <%= response_css_point_class(assigned_question.question.responses[i],i+1) %>" data-value="<%= assigned_question.question.responses[i].points %>"><%= assigned_question.question.responses[i].short_text.try(:html_safe) %></a>
                 <% else %>
                   &nbsp;
                 <% end %>
@@ -56,7 +56,7 @@
     <% end %>
     
     <% if assigned_question_set == @survey.assigned_question_sets.last %>
-      <a href="#summary" class="navigate btn btn-inverse pull-right next disabled">Next</a>
+      <a href="#summary" data-user_id="<%= current_user.try(:id) %>" data-sumbission-uri="<%= survey_completed_surveys_path(@survey) %>" class="navigate btn btn-primary pull-right next disabled">Submit Answers</a>
     <% else %>
       <a href="#<%= @survey.assigned_question_sets[i+1].to_s.parameterize %>" class="navigate btn btn-inverse pull-right next disabled">Next</a>
     <% end %>

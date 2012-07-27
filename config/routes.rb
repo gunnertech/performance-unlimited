@@ -5,8 +5,6 @@ Recoverytracker::Application.routes.draw do
 
   resources :responses
 
-  resources :completed_surveys
-
   resources :assigned_questions
 
   resources :questions
@@ -19,7 +17,9 @@ Recoverytracker::Application.routes.draw do
 
   resources :assigned_surveys
 
-  resources :surveys
+  resources :surveys do
+    resources :completed_surveys
+  end
 
   resources :assigned_groups
   
@@ -35,6 +35,7 @@ Recoverytracker::Application.routes.draw do
   
   resources :users do
     resources :assigned_divisions
+    resources :completed_surveys
   end
 
   devise_for :users

@@ -2,6 +2,32 @@
 # All this logic will automatically be available in application.js.
 # You can use CoffeeScript in this file: http://jashkenas.github.com/coffee-script/
 
+$('.user.navigate').live('click', (event) ->
+  event.preventDefault()
+  $('.navigate.btn-primary').data('user_id', $(this).data('user_id'))
+)
+
+$('.navigate.btn-primary').live('click', (event) ->
+  event.preventDefault()
+  response_string = ''
+  $('.answer.active').each(->
+    response_string = "#{response_string},#{$(this).data('question_id')}-#{$(this).data('response_id')}"
+  )
+  
+  response_string = response_string.replace(/^,/,'')
+  
+  $.ajax(
+    $(this).data('sumbission-uri'),
+    type: 'POST',
+    dataType: "json",
+    data: 
+      responses: response_string
+      taker_id: $(this).data('user_id')
+  )
+  
+  console.log(response_string)
+)
+
 $('.navigate').live('click', (event) ->
   event.preventDefault()
   if $(this).hasClass('disabled')

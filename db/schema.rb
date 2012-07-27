@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120725235034) do
+ActiveRecord::Schema.define(:version => 20120727002902) do
 
   create_table "assigned_divisions", :force => true do |t|
     t.integer  "division_id"
@@ -158,10 +158,13 @@ ActiveRecord::Schema.define(:version => 20120725235034) do
   create_table "selected_responses", :force => true do |t|
     t.integer  "user_id"
     t.integer  "response_id"
-    t.datetime "created_at",  :null => false
-    t.datetime "updated_at",  :null => false
+    t.datetime "created_at",          :null => false
+    t.datetime "updated_at",          :null => false
+    t.integer  "selected_survey_id"
+    t.integer  "completed_survey_id"
   end
 
+  add_index "selected_responses", ["completed_survey_id"], :name => "index_selected_responses_on_completed_survey_id"
   add_index "selected_responses", ["response_id"], :name => "index_selected_responses_on_response_id"
   add_index "selected_responses", ["user_id"], :name => "index_selected_responses_on_user_id"
 

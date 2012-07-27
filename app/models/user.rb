@@ -13,6 +13,7 @@ class User < ActiveRecord::Base
   has_many :groups, through: :assigned_groups
   has_many :assigned_divisions
   has_many :divisions, through: :assigned_divisions
+  has_many :completed_surveys
   
   def to_s
     name
