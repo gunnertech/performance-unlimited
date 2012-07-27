@@ -24,7 +24,7 @@ class Division < ActiveRecord::Base
       return grouped_users
     end
     
-    0.upto((users.size/groups.count).ceil-1).each do |row|
+    0.upto((users.size/groups.count).ceil).each do |row|
       grouped_users[row] ||= []
       groups.each_with_index do |group,i|
         grouped_users[row][i] ||= []
