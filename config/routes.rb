@@ -1,5 +1,5 @@
 Recoverytracker::Application.routes.draw do
-  
+  devise_for :users
 
   resources :selected_responses
 
@@ -38,7 +38,7 @@ Recoverytracker::Application.routes.draw do
     resources :completed_surveys
   end
 
-  devise_for :users
+  
   authenticated :user do
     root :to => 'home#index'
   end
