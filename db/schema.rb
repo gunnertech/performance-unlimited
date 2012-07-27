@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120727002902) do
+ActiveRecord::Schema.define(:version => 20120727014849) do
 
   create_table "assigned_divisions", :force => true do |t|
     t.integer  "division_id"
@@ -140,6 +140,7 @@ ActiveRecord::Schema.define(:version => 20120727002902) do
     t.integer  "points"
     t.datetime "created_at",  :null => false
     t.datetime "updated_at",  :null => false
+    t.integer  "position"
   end
 
   add_index "responses", ["question_id"], :name => "index_responses_on_question_id"
@@ -160,7 +161,6 @@ ActiveRecord::Schema.define(:version => 20120727002902) do
     t.integer  "response_id"
     t.datetime "created_at",          :null => false
     t.datetime "updated_at",          :null => false
-    t.integer  "selected_survey_id"
     t.integer  "completed_survey_id"
   end
 

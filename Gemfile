@@ -18,6 +18,7 @@ gem 'bootstrap-will_paginate'
 gem "pg"
 gem "modernizr-rails"
 gem "has_scope"
+gem 'acts_as_list'
 
 group :assets do
   gem 'sass-rails',   '~> 3.2.3'

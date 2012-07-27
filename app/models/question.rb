@@ -3,7 +3,7 @@ class Question < ActiveRecord::Base
   
   has_many :assigned_questions
   has_many :question_sets, through: :assigned_questions
-  has_many :responses
+  has_many :responses, order: :position
   
   attr_accessible :long_text, :short_text
   

@@ -4,6 +4,8 @@ class AssignedQuestion < ActiveRecord::Base
   
   attr_accessible :position, :question_set
   
+  acts_as_list scope: :question_set
+  
   def to_s
     question.to_s
   end
