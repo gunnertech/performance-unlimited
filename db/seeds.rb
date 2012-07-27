@@ -43,6 +43,7 @@ pittsburgh_pirates_infielders.users << pedro_alvarez unless pittsburgh_pirates_i
 pittsburgh_pirates_outfielders.users << gorkys_hernandez unless pittsburgh_pirates_outfielders.users.include?(gorkys_hernandez)
 
 pirates_organization_survey = pirates_organization.surveys.find_or_create_by_name('Recovery Survey')
+user2.add_role 'admin', pirates_organization_survey
 
 pittsburgh_pirates.surveys << pirates_organization_survey unless pittsburgh_pirates.surveys.include?(pirates_organization_survey)
 

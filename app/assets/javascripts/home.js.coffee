@@ -24,8 +24,6 @@ $('.navigate.btn-primary').live('click', (event) ->
       responses: response_string
       taker_id: $(this).data('user_id')
   )
-  
-  console.log(response_string)
 )
 
 $('.navigate').live('click', (event) ->
@@ -47,7 +45,7 @@ $('.navigate').live('click', (event) ->
     $($(this).attr('href')).show()
 )
 
-$('.table .btn').live('click', (event) ->
+$('.home.index .table .btn').live('click', (event) ->
   score = 0
   event.preventDefault()
   $(this).parents('tr').find('.btn').removeClass('active')

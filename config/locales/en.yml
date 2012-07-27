@@ -2,5 +2,18 @@
 # See https://github.com/svenfuchs/rails-i18n/tree/master/rails%2Flocale for starting points.
 
 en:
+  add_question: 'Add Question'
   hello: "Hello world"
   date_slug: "Date Taken"
+  position_hint: "The order you'd like this to appear in"
+  time:
+    formats:
+      picker: "%m/%d/%Y"
+      default: '%B %d, %Y'
+      month_day: '%B %d'
+      day_year: '%d, %Y'
+      day_year_time: '%d, %Y %l %p'
+      time_only: '%l %p'
+      long: '%B %d, %Y %l %p'
+      input: '%m/%d/%Y %I:%M %p'
+  

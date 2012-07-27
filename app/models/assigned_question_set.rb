@@ -6,7 +6,11 @@ class AssignedQuestionSet < ActiveRecord::Base
   
   acts_as_list scope: :survey
   
-  attr_accessible :position
+  attr_accessible :position, :question_set_attributes
+  
+  accepts_nested_attributes_for :question_set
+  
+  delegate :assigned_questions, :assigned_questions=, to: :question_set, allow_nil: true
   
   def to_s
     name

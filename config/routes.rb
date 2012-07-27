@@ -3,13 +3,15 @@ Recoverytracker::Application.routes.draw do
 
   resources :selected_responses
 
-  resources :responses
-
   resources :assigned_questions
 
-  resources :questions
+  resources :questions do
+    resources :responses
+  end
 
-  resources :assigned_question_sets
+  resources :assigned_question_sets, only: [] do
+    resources :assigned_questions
+  end
 
   resources :question_sets
 
@@ -19,6 +21,7 @@ Recoverytracker::Application.routes.draw do
 
   resources :surveys do
     resources :completed_surveys
+    resources :assigned_question_sets
   end
 
   resources :assigned_groups

@@ -14,7 +14,7 @@
           <% grouped_user_row.each do |grouped_user| %>
             <td>
               <% if grouped_user[i] %>
-                <a data-user_id="<%= grouped_user[i].id %>" href="#recovery-habits" class="user navigate"><%= grouped_user[i] %></a>
+                <a data-user_id="<%= grouped_user[i].id %>" href="#<%= @survey.assigned_question_sets.first.to_s.parameterize %>" class="user navigate"><%= grouped_user[i] %></a>
               <% else %>
                 &nbsp;
               <% end %>

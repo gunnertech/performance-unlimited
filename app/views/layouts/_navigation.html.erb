@@ -2,25 +2,28 @@
 <ul class="nav">
   <% if user_signed_in? %>
     <li>
-    <%= link_to 'Logout', destroy_user_session_path, :method=>'delete' %>        
+      <%= link_to 'Logout', destroy_user_session_path, :method=>'delete' %>        
     </li>
   <% else %>
     <li>
-    <%= link_to 'Login', new_user_session_path %>  
+      <%= link_to 'Login', new_user_session_path %>  
     </li>
   <% end %>
   <% if user_signed_in? %>
     <li>
-    <%= link_to 'Edit account', edit_user_registration_path %>
+      <%= link_to 'Edit account', edit_user_registration_path %>
     </li>
-    <% if true || current_user.has_role?(:admin) %>
-      <li>
-      <%= link_to 'My Divisions', user_assigned_divisions_path(current_user) %>
+    <% if signed_in? && !Organization.with_role('admin', current_user).empty? %>
+      <li class="<%= (controller_name == 'assigned_divisions' ? 'active' : '') %>">
+        <%= link_to t('my_divisions'), user_assigned_divisions_path(current_user) %>
+      </li>
+      <li class="<%= (controller_name == 'surveys' ? 'active' : '') %>">
+        <%= link_to t('my_surveys'), surveys_path %>
       </li>
     <% end %>
   <% else %>
     <li>
-    <%= link_to 'Sign up', new_user_registration_path %>
+      <%= link_to 'Sign up', new_user_registration_path %>
     </li>
   <% end %>
 </ul>

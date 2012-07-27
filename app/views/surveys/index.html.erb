@@ -5,17 +5,15 @@
 <table class="table table-striped">
   <thead>
     <tr>
-      <th><%= model_class.human_attribute_name(:id) %></th>
       <th><%= model_class.human_attribute_name(:name) %></th>
-      <th><%= model_class.human_attribute_name(:created_at) %></th>
+      <th><%=t 'created' %></th>
       <th><%=t '.actions', :default => t("helpers.actions") %></th>
     </tr>
   </thead>
   <tbody>
     <% @surveys.each do |survey| %>
       <tr>
-        <td><%= link_to survey.id, survey_path(survey) %></td>
-        <td><%= survey.name %></td>
+        <td><%= link_to survey, survey %></td>
         <td><%=l survey.created_at %></td>
         <td>
           <%= link_to t('.edit', :default => t("helpers.links.edit")),

@@ -1,9 +1,12 @@
-<%= simple_form_for @assigned_question, :html => { :class => 'form-horizontal' } do |f| %>
-  <%= f.input :question_id %>
-  <%= f.input :question_set_id %>
-  <%= f.input :position %>
+<%= simple_form_for [parent,@assigned_question], :html => { :class => 'form-horizontal' } do |f| %>
+  <%= f.simple_fields_for :question do |question_form| %>
+    <%= question_form.input :short_text %>
+    <%= question_form.input :long_text %>
+  <% end %>
+
+  <%= f.input :position, input_html: { value: (resource.position || (parent.assigned_questions.last ? (parent.assigned_questions.last.position || 0) + 1 : 1)) }, hint: t('position_hint') %>
   <div class="form-actions">
-    <%= f.button :submit, :class => 'btn-primary' %>
+    <%= f.button :submit, :class => 'btn-primary', value: t('add_question') %>
     <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
                 assigned_questions_path, :class => 'btn' %>
   </div>

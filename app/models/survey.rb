@@ -1,4 +1,6 @@
 class Survey < ActiveRecord::Base
+  resourcify
+  
   belongs_to :organization
   
   has_many :assigned_question_sets, order: :position
