@@ -75,3 +75,7 @@
 .btn {
   @include nowrap;
 }
+
+.graph {
+  min-height: 400px;
+}

@@ -5,6 +5,7 @@
 $('.user.navigate').live('click', (event) ->
   event.preventDefault()
   $('.navigate.btn-primary').data('user_id', $(this).data('user_id'))
+  $('#graph .graph').data('user_id', $(this).data('user_id'))
 )
 
 $('.navigate.btn-primary').live('click', (event) ->
@@ -23,6 +24,9 @@ $('.navigate.btn-primary').live('click', (event) ->
     data: 
       responses: response_string
       taker_id: $(this).data('user_id')
+  )
+  .done((objects,status,xhr) ->
+    draw_graph()
   )
 )
 

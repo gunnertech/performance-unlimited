@@ -97,7 +97,8 @@
     </div>
   
     <div class="span6" id="graph">
-      <h3>Graph Goes Here</h3>
+      <h2><%=t 'last_5_days' %></h2>
+      <div class="graph" data-user_id="<%= current_user.try(:id) %>" data-day_range="5"></div>
     </div>
   </div>
 </section>

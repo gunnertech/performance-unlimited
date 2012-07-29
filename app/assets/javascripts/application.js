@@ -13,5 +13,6 @@
 //= require jquery
 //= require jquery_ujs
 //= require response
+//= require flot/jquery.flot
 //= require twitter/bootstrap
 //= require_tree .

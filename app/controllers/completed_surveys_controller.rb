@@ -3,6 +3,13 @@ class CompletedSurveysController < InheritedResources::Base
   belongs_to :user, optional: true
   respond_to :json
   
+  def index
+    if parent?
+      @completed_surveys = parent.completed_surveys.limit((params[:day_range]||30))
+    end
+    index!
+  end
+  
   def create
     @completed_survey = parent.completed_surveys.create(user_id: params[:taker_id].to_i, date: Date.today)
     

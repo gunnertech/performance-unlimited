@@ -25,6 +25,30 @@
   </table>
 </section>
 
+<section class="row-fluid">
+  <div class="span6">
+    <h2><%=t 'last_5_days' %></h2>
+    <div class="graph" data-user_id="<%= @user.id %>" data-day_range="5"></div>
+  </div>
+  
+  <div class="span6">
+    <h2><%=t 'last_10_days' %></h2>
+    <div class="graph" data-user_id="<%= @user.id %>" data-day_range="10"></div>
+  </div>
+</section>
+
+<section class="row-fluid">
+  <div class="span6">
+    <h2><%=t 'last_15_days' %></h2>
+    <div class="graph" data-user_id="<%= @user.id %>" data-day_range="15"></div>
+  </div>
+  
+  <div class="span6">
+    <h2><%=t 'last_30_days' %></h2>
+    <div class="graph" data-user_id="<%= @user.id %>" data-day_range="30"></div>
+  </div>
+</section>
+
 <div class="form-actions">
   <%= link_to t('.edit', :default => t("helpers.links.edit")),
               edit_user_path(@user), :class => 'btn' %>
