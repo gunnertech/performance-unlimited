@@ -1,29 +1,40 @@
-<%= link_to "Recovery Tracker", root_path, :class => 'brand' %>
-<ul class="nav">
-  <% if user_signed_in? %>
-    <li>
-      <%= link_to 'Logout', destroy_user_session_path, :method=>'delete' %>        
-    </li>
-  <% else %>
-    <li>
-      <%= link_to 'Login', new_user_session_path %>  
-    </li>
-  <% end %>
-  <% if user_signed_in? %>
-    <li>
-      <%= link_to 'Edit account', edit_user_registration_path %>
-    </li>
-    <% if signed_in? && !Organization.with_role('admin', current_user).empty? %>
-      <li class="<%= (controller_name == 'assigned_divisions' ? 'active' : '') %>">
-        <%= link_to t('my_divisions'), user_assigned_divisions_path(current_user) %>
+<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+  <span class="icon-bar"></span>
+  <span class="icon-bar"></span>
+  <span class="icon-bar"></span>
+</a>
+<% if @organization.nil? %>
+  <%= link_to "Recovery Tracker", root_path, :class => 'brand' %>
+<% else %>
+  <%= link_to "#{image_tag(@organization.logo.url)} Recovery Tracker".html_safe, root_path, :class => 'brand' %>
+<% end %>
+<div class="nav-collapse">
+  <ul class="nav">
+    <% if user_signed_in? %>
+      <li>
+        <%= link_to 'Logout', destroy_user_session_path, :method=>'delete' %>        
       </li>
-      <li class="<%= (controller_name == 'surveys' ? 'active' : '') %>">
-        <%= link_to t('my_surveys'), surveys_path %>
+    <% else %>
+      <li>
+        <%= link_to 'Login', new_user_session_path %>  
       </li>
     <% end %>
-  <% else %>
-    <li>
-      <%= link_to 'Sign up', new_user_registration_path %>
-    </li>
-  <% end %>
-</ul>
+    <% if user_signed_in? %>
+      <li>
+        <%= link_to 'Edit account', edit_user_registration_path %>
+      </li>
+      <% if signed_in? && !Organization.with_role('admin', current_user).empty? %>
+        <li class="<%= (controller_name == 'assigned_divisions' ? 'active' : '') %>">
+          <%= link_to t('my_divisions'), user_assigned_divisions_path(current_user) %>
+        </li>
+        <li class="<%= (controller_name == 'surveys' ? 'active' : '') %>">
+          <%= link_to t('my_surveys'), surveys_path %>
+        </li>
+      <% end %>
+    <% else %>
+      <li>
+        <%= link_to 'Sign up', new_user_registration_path %>
+      </li>
+    <% end %>
+  </ul>
+</div>

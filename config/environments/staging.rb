@@ -1,3 +1,7 @@
+PAPERCLIP_STORAGE_OPTIONS = { storage: 's3', 
+                             s3_credentials: "#{Rails.root}/config/s3.yml",
+                             path: "/:style/:id/:filename"}
+
 Recoverytracker::Application.configure do
   # Settings specified here will take precedence over those in config/application.rb
 

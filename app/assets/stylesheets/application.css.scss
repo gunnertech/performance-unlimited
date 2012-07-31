@@ -64,11 +64,17 @@
 
 .navbar-inner {
   .brand {
-    @include background-size(contain);
-    
-    background: image-url('logos/pittsburgh-pirates.png') no-repeat 0 0 scroll transparent;
-    display: block;
-    padding-left: 60px !important;
+    padding-bottom: 0 !important;
+    padding-top: 0 !important;
+    line-height: 38px !important;
+    img {
+      height: 38px;
+    }
+//    @include background-size(contain);
+//    
+//    background: image-url('logos/pittsburgh-pirates.png') no-repeat 0 0 scroll transparent;
+//    display: block;
+//    padding-left: 60px !important;
   }
 }
 

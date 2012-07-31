@@ -26,7 +26,7 @@ $('.navigate.btn-primary').live('click', (event) ->
       taker_id: $(this).data('user_id')
   )
   .done((objects,status,xhr) ->
-    draw_graph()
+    draw_graphs()
   )
 )
 

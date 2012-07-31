@@ -2,11 +2,15 @@
 # All this logic will automatically be available in application.js.
 # You can use CoffeeScript in this file: http://jashkenas.github.com/coffee-script/
 
-window.draw_graph = ->
+window.draw_graphs = ->
   $(".graph").each( ->
-    if user_id = $(this).data('user_id') && $(this).width()
-      $el = $(this)
-      $.ajax("/users/#{$(this).data('user_id')}/completed_surveys.json?day_range=#{$(this).data('day_range')}")
+    $el = $(this)
+    if $(this).width() && $(this).data('day_range')
+      url = "/completed_surveys.json?day_range=#{$(this).data('day_range')}"
+      if $(this).data('user_id')
+        url = "/users/#{$(this).data('user_id')}#{url}"
+        
+      $.ajax(url)
       .done((objects, status, jqxhr) ->
         data = []
         $.each(objects, (i,item) -> data.push([new Date(item.date), item.score]) )
@@ -31,5 +35,5 @@ window.draw_graph = ->
   )
 
 $( ->
-  draw_graph()
+  draw_graphs()
 )

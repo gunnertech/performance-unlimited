@@ -1,6 +1,7 @@
 <%- model_class = User -%>
-<div class="page-header">
-  <h1><%= @user %> <small>(<%= @user.groups.map(&:to_s).join(',') %>)</small></h1>
+<div class="page-header clearfix">
+  <h1 class="pull-left"><%= @user %> <small>(<%= @user.groups.map(&:to_s).join(',') %>)</small></h1>
+  <%= link_to t('download_last_30_days'), user_path(@user,format:'csv'), class: 'btn btn-primary btn-large pull-right' %>
 </div>
 
 <section>

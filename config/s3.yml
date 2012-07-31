@@ -1,0 +1,16 @@
+development:
+  access_key_id: AKIAJLZSJ7DLDBAIC3QA
+  secret_access_key: "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'"
+  bucket: com.gunnertech.recoverytracker.development
+test:
+  access_key_id: AKIAJLZSJ7DLDBAIC3QA
+  secret_access_key: "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'"
+  bucket: circlestreet-test
+production:
+  access_key_id: AKIAJLZSJ7DLDBAIC3QA
+  secret_access_key: "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"
+  bucket: com.gunnertech.recoverytracker.development.production
+staging:
+  access_key_id: AKIAJLZSJ7DLDBAIC3QA 
+  secret_access_key: "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"
+  bucket: com.gunnertech.recoverytracker.staging

@@ -1,0 +1,10 @@
+<%- 
+require 'csv'
+csv_lib = RUBY_VERSION =~ /^1.8/ ? FasterCSV : CSV
+ 
+csv_output = csv_lib.generate(headers: true) do |csv|
+  csv << [ "Date","Score" ]
+  @user.completed_surveys.limit(30).each do |completed_survey|
+    csv << [completed_survey.date, completed_survey.score]
+  end
+end -%><%= csv_output.html_safe %>

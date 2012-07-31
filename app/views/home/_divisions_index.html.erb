@@ -1,0 +1,15 @@
+<section id="divisions">
+  <h1><%=t 'choose_division' %></h1>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th><%=t 'name' %></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @organization.divisions.each do |division| %>
+        <tr><td><%= link_to division.name, root_path(division_id: division.id) %></td></tr>
+      <% end %>
+    </tbody>
+  </table>
+</section>
