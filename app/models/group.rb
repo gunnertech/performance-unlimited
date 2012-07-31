@@ -8,4 +8,8 @@ class Group < ActiveRecord::Base
   def to_s
     name
   end
+  
+  def as_json(options = {})
+    super options.merge(include: {users:{}})
+  end
 end
