@@ -1,0 +1,10 @@
+<%- 
+require 'csv'
+csv_lib = RUBY_VERSION =~ /^1.8/ ? FasterCSV : CSV
+ 
+csv_output = csv_lib.generate(headers: true) do |csv|
+  csv << ["", @dates.map(&:to_s) ].flatten
+  @group.users.each do |user|
+    csv << [user.name, @dates.map{|date| user.completed_surveys.find_by_date(date).try(:score) || 'NA' }].flatten
+  end
+end -%><%= csv_output.html_safe %>
