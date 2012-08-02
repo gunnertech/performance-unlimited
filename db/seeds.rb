@@ -8,7 +8,7 @@
 puts 'SETTING UP DEFAULT USER LOGIN'
 user = User.find_or_create_by_email :name => 'First User', :email => 'user@example.com', :password => 'please', :password_confirmation => 'please'
 puts 'New user created: ' << user.name
-brendon_huttmann = User.find_or_create_by_email :name => 'Brendon Httmann', :email => 'huttmannb@gmail.com', :password => 'please', :password_confirmation => 'please'
+brendon_huttmann = User.find_or_create_by_email :name => 'Brendon Huttmann', :email => 'huttmannb@gmail.com', :password => 'please', :password_confirmation => 'please'
 puts 'New user created: ' << brendon_huttmann.name
 user.add_role 'admin'
 
