@@ -8,8 +8,8 @@
 puts 'SETTING UP DEFAULT USER LOGIN'
 user = User.find_or_create_by_email :name => 'First User', :email => 'user@example.com', :password => 'please', :password_confirmation => 'please'
 puts 'New user created: ' << user.name
-user2 = User.find_or_create_by_email :name => 'Second User', :email => 'user2@example.com', :password => 'please', :password_confirmation => 'please'
-puts 'New user created: ' << user2.name
+brendon_huttmann = User.find_or_create_by_email :name => 'Brendon Httmann', :email => 'huttmannb@gmail.com', :password => 'please', :password_confirmation => 'please'
+puts 'New user created: ' << brendon_huttmann.name
 user.add_role 'admin'
 
 a_j_burnett = User.find_or_create_by_email name: 'A.J. Burnett', email: 'a_j_burnett@example.com', password: 'please', password_confirmation: 'please'
@@ -23,8 +23,8 @@ pirates_organization = Organization.find_or_create_by_name('The Pirates Organiza
 
 pittsburgh_pirates = pirates_organization.divisions.find_or_create_by_name('Pittsburgh Pirates')
 
-user2.add_role('admin',user2.assigned_divisions.create(division: pittsburgh_pirates)) if user2.assigned_divisions.empty?
-user2.add_role 'admin', pirates_organization
+brendon_huttmann.add_role('admin',brendon_huttmann.assigned_divisions.create(division: pittsburgh_pirates)) if brendon_huttmann.assigned_divisions.empty?
+brendon_huttmann.add_role 'admin', pirates_organization
 
 
 a_j_burnett.add_role 'athlete', pittsburgh_pirates
@@ -43,7 +43,7 @@ pittsburgh_pirates_infielders.users << pedro_alvarez unless pittsburgh_pirates_i
 pittsburgh_pirates_outfielders.users << gorkys_hernandez unless pittsburgh_pirates_outfielders.users.include?(gorkys_hernandez)
 
 pirates_organization_survey = pirates_organization.surveys.find_or_create_by_name('Recovery Survey')
-user2.add_role 'admin', pirates_organization_survey
+brendon_huttmann.add_role 'admin', pirates_organization_survey
 
 pittsburgh_pirates.surveys << pirates_organization_survey unless pittsburgh_pirates.surveys.include?(pirates_organization_survey)
 
