@@ -44,6 +44,7 @@ Recoverytracker::Application.routes.draw do
   resources :users do
     resources :assigned_divisions
     resources :completed_surveys
+    resources :assigned_groups
   end
 
   

@@ -1,5 +1,5 @@
 <%- model_class = AssignedDivision -%>
-<div class="page-header">
+<div class="page-header clearfix">
   <h1><%=t '.title', :default => model_class.model_name.human.pluralize %></h1>
 </div>
 
@@ -9,7 +9,7 @@
     <thead>
       <tr>
         <% assigned_division.division.groups.each do |group| %>
-          <th><%= group.name %></th>
+          <th><%= link_to group.name, [group.division, group] %></th>
         <% end %>
       </tr>
     </thead>

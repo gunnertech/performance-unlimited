@@ -19,4 +19,8 @@ class User < ActiveRecord::Base
     name
   end
   
+  def assigned_group_for(groupd_id)
+    assigned_groups.where{ group_id == my{groupd_id} }.first
+  end
+  
 end
