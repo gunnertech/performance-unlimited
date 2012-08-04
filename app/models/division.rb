@@ -24,7 +24,9 @@ class Division < ActiveRecord::Base
       return grouped_users
     end
     
-    0.upto((users.size/groups.count).ceil).each do |row|
+    biggest_group = groups.max_by{ |group| group.users.count }
+    
+    0.upto(biggest_group.users.count-1).each do |row|
       grouped_users[row] ||= []
       groups.each_with_index do |group,i|
         grouped_users[row][i] ||= []

@@ -5,9 +5,13 @@ class UsersController < InheritedResources::Base
   def create
     if parent?
       @user = User.create(params[:user])
-      parent.users << @user
+      if @user.valid?
+        parent.users << @user
+      end
+      create!{ [parent.division, parent] }
+    else
+      create!
     end
-    create!
   end
   
   
