@@ -34,9 +34,11 @@ class User < ActiveRecord::Base
   end
   
   def set_first_name_and_last_name
-    name_pieces = name.split(" ")
-    self.first_name = name_pieces.first
-    self.last_name = (name_pieces - [name_pieces.first]).join(" ").strip
+    if name
+      name_pieces = name.split(" ")
+      self.first_name = name_pieces.first
+      self.last_name = (name_pieces - [name_pieces.first]).join(" ").strip
+    end
   end
   
   def assigned_group_for(groupd_id)
