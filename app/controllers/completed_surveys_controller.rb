@@ -5,7 +5,9 @@ class CompletedSurveysController < InheritedResources::Base
   
   def index
     if parent?
-      @completed_surveys = parent.completed_surveys.limit((params[:day_range]||30))
+      start_date = params[:day_range].to_i.days.ago
+      end_date = Date.today
+      @completed_surveys = parent.completed_surveys.where{ date >> (start_date..end_date)  }
     end
     index!
   end

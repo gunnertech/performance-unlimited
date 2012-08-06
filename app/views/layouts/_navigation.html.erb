@@ -11,24 +11,36 @@
 <div class="nav-collapse">
   <ul class="nav">
     <% if user_signed_in? %>
+      <li><p class="navbar-text"><%=t 'signed_in_as' %>: <%= current_user.name %></p></li>
+      <li class="divider-vertical"></li>
       <li>
-        <%= link_to 'Logout', destroy_user_session_path, :method=>'delete' %>        
+        <%= link_to t('log_out'), destroy_user_session_path, :method=>'delete' %>        
       </li>
     <% else %>
       <li>
-        <%= link_to 'Login', new_user_session_path %>  
+        <%= link_to t('log_in'), new_user_session_path %>  
       </li>
     <% end %>
     <% if user_signed_in? %>
       <li>
-        <%= link_to 'Edit account', edit_user_registration_path %>
+        <%= link_to t('edit_account'), edit_user_registration_path %>
       </li>
-      <% if signed_in? && !Organization.with_role('admin', current_user).empty? %>
-        <li class="<%= (controller_name == 'assigned_divisions' ? 'active' : '') %>">
-          <%= link_to t('my_divisions'), user_assigned_divisions_path(current_user) %>
-        </li>
-        <li class="<%= (controller_name == 'surveys' ? 'active' : '') %>">
-          <%= link_to t('my_surveys'), surveys_path %>
+      <% if signed_in? && Organization.with_role('admin', current_user).count > 0 %>
+        <li class="dropdown pull-right">
+          <a href="#"class="dropdown-toggle" data-toggle="dropdown"><%=t 'admin' %><b class="caret"></b></a>
+          <ul class="dropdown-menu">
+            <% Organization.with_role('admin', current_user).each do |organization| %>
+              <li>
+                <%= link_to organization, organization %>
+              </li>
+            <% end %>
+            <li class="<%= (controller_name == 'assigned_divisions' ? 'active' : '') %>">
+              <%= link_to t('divisions'), user_assigned_divisions_path(current_user) %>
+            </li>
+            <li class="<%= (controller_name == 'surveys' ? 'active' : '') %>">
+              <%= link_to t('surveys'), surveys_path %>
+            </li>
+          </ul>
         </li>
       <% end %>
     <% else %>

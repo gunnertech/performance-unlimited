@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120731135454) do
+ActiveRecord::Schema.define(:version => 20120806190327) do
 
   create_table "assigned_divisions", :force => true do |t|
     t.integer  "division_id"
@@ -65,12 +65,28 @@ ActiveRecord::Schema.define(:version => 20120731135454) do
   add_index "assigned_surveys", ["division_id"], :name => "index_assigned_surveys_on_division_id"
   add_index "assigned_surveys", ["survey_id"], :name => "index_assigned_surveys_on_survey_id"
 
+  create_table "authentications", :force => true do |t|
+    t.string   "provider"
+    t.string   "uid"
+    t.string   "nickname"
+    t.string   "token"
+    t.string   "secret"
+    t.string   "authenticationable_type"
+    t.integer  "authenticationable_id"
+    t.datetime "created_at",              :null => false
+    t.datetime "updated_at",              :null => false
+  end
+
+  add_index "authentications", ["authenticationable_id", "authenticationable_type"], :name => "a_id_and_a_type_on_authenticiations"
+  add_index "authentications", ["authenticationable_type", "authenticationable_id"], :name => "a_type_and_a_id_on_authenticiations"
+
   create_table "completed_surveys", :force => true do |t|
     t.date     "date"
     t.integer  "user_id"
     t.integer  "survey_id"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
+    t.integer  "score"
   end
 
   add_index "completed_surveys", ["survey_id"], :name => "index_completed_surveys_on_survey_id"
@@ -195,6 +211,8 @@ ActiveRecord::Schema.define(:version => 20120731135454) do
     t.datetime "created_at",                             :null => false
     t.datetime "updated_at",                             :null => false
     t.string   "name"
+    t.string   "first_name"
+    t.string   "last_name"
   end
 
   add_index "users", ["email"], :name => "index_users_on_email", :unique => true

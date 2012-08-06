@@ -1,0 +1,35 @@
+defaults: &defaults
+  providers:
+    - name: twitter
+      key: 1XdeVftT44k9rwH8ETnbmQ
+      secret: zstInOnrePd24Lvl1DtBw2tLHI1PWWNWhQ6Eq8
+    - name: facebook
+      key: 180930071946269 #aka app_id
+      secret: bb7ba4d6aca52226489e1e1a18d8904c
+      options: 'email,offline_access,manage_pages,publish_stream'
+
+development:
+  <<: *defaults
+
+test:
+  <<: *defaults
+
+staging:
+  providers:
+    - name: twitter
+      key: yFf1ULJIxmlaCSxmbC0QQ
+      secret: PPFZylLB4OENh5V4kjby5gFvlgKvWfNUMI9mnEZsvHE
+    - name: facebook
+      key: 420173401368728 #aka app_id
+      secret: 9ed41b727d3b038188a68abdd7518e24
+      options: 'email,offline_access,manage_pages,publish_stream'
+
+production:
+  providers:
+    - name: twitter
+      key: z8b5q47mBAnAQ1IptVp6Lg
+      secret: mgRkxthj8is8asGHDnXigF8jmiumirSjQDoTrDj2rGA
+    - name: facebook
+      key: 365707056833919 #aka app_id
+      secret: 0bf6c64c3f5a883b07d0c9f534b34b25
+      options: 'email,offline_access,manage_pages,publish_stream'

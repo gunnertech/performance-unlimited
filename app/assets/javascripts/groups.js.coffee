@@ -1,5 +1,5 @@
 window.draw_group_graphs = ->
-  $(".graph").each( ->
+  $(".group-graph").each( ->
     $el = $(this)
     if $(this).width() && $(this).data('day_range')
       if $(this).data('group_id')

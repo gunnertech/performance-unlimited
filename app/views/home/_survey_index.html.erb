@@ -1,33 +1,35 @@
-<section id="current-roster">
-  <h1><%=t 'current_roster' %></h1>
-  <table class="table table-striped">
-    <thead>
-      <tr>
-        <% @groups.each do |group| %>
-          <th><%= group.name %></th>
-        <% end %>
-      </tr>
-    </thead>
-    <tbody>
-      <% @grouped_users.each_with_index do |grouped_user_row,i| %>
+<% if current_user.has_role? 'admin', @survey %>
+  <section id="current-roster">
+    <h1><%=t 'current_roster' %></h1>
+    <table class="table table-striped">
+      <thead>
         <tr>
-          <% grouped_user_row.each do |grouped_user| %>
-            <td>
-              <% if grouped_user[i] %>
-                <a data-user_id="<%= grouped_user[i].id %>" href="#<%= @survey.assigned_question_sets.first.to_s.parameterize %>" class="user navigate"><%= grouped_user[i] %></a>
-              <% else %>
-                &nbsp;
-              <% end %>
-            </td>
+          <% @groups.each do |group| %>
+            <th><%= group.name %></th>
           <% end %>
         </tr>
-      <% end %>
-    </tbody>
-  </table>
-</section>
+      </thead>
+      <tbody>
+        <% @grouped_users.each_with_index do |grouped_user_row,i| %>
+          <tr>
+            <% grouped_user_row.each do |grouped_user| %>
+              <td>
+                <% if grouped_user[i] %>
+                  <a data-user_id="<%= grouped_user[i].id %>" href="#<%= @survey.assigned_question_sets.first.to_s.parameterize %>" class="user navigate"><%= grouped_user[i] %></a>
+                <% else %>
+                  &nbsp;
+                <% end %>
+              </td>
+            <% end %>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </section>
+<% end %> 
 
 <% @survey.assigned_question_sets.each_with_index do |assigned_question_set,i| %>
-  <section class="clearfix question-set" id="<%= assigned_question_set.name.parameterize %>">
+  <section class="clearfix question-set <%= i==0 && current_user.has_role?('athlete', @division) ? 'start' : '' %>" id="<%= assigned_question_set.name.parameterize %>">
     <h1><%= assigned_question_set %></h1>
     <table class="table">
       <tbody>
@@ -67,6 +69,14 @@
   <div class="row-fluid">
     <div class="span6" id="final-score">
       <h1>Final Score: <span id="score">0</span></h1>
+      <ul class="unstyled">
+        <% @survey.organization.twitter_accounts.each do |account| %>
+          <li>
+            <a href="http://twitter.com/<%= account.nickname %>"><img src="<%= @organization.twitter_profile_image_src(account.nickname) %>" /></a>
+            <a href="http://twitter.com/<%= account.nickname %>"><%= t('follow_on_twitter', name: account.nickname) %></a>
+          </li>
+        <% end %>
+      </dl>
     </div>
     
     <div class="span6" id="scale">
@@ -84,20 +94,29 @@
   
   <div class="row-fluid">
     <div class="span6" id="needs-for-improvement">
-      <h3>Individual Needs for improvement</h3>
-      <dl>
-        <dt>Recovery Habits</dt>
-        <dd>A description list is perfect for defining terms.</dd>
-        <dt>Nutrition</dt>
-        <dd>Vestibulum id ligula porta felis euismod semper eget lacinia odio sem nec elit.</dd>
-        <dd>Donec id elit non mi porta gravida at eget metus.</dd>
-        <dt>Uncontrolables</dt>
-        <dd>Etiam porta sem malesuada magna mollis euismod.</dd>
-      </dl>
+      <h3><%=t ('todays_leaderboard') %></h3>
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th><%=t 'rank' %></th>
+            <th><%=t 'name' %></th>
+            <th><%=t 'score' %></th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @division.users.leaderboard(Date.today,Date.today).each_with_index do |user,i| %>
+            <tr>
+              <td><%= i+1 %></td>
+              <td><%= user %></td>
+              <td><%= user.completed_surveys.where{ date == my{Date.today} }.try(:first).try(:score) %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
     </div>
   
     <div class="span6" id="graph">
-      <h2><%=t 'last_5_days' %><small><a href="#" class="completed-survey-link"><%=t 'see_all' %></small></h2>
+      <h2><%=t 'last_5_days' %><small> <a href="#" class="completed-survey-link"><%=t 'see_all' %></small></h2>
       <div class="graph" data-user_id="<%= current_user.try(:id) %>" data-day_range="5"></div>
     </div>
   </div>

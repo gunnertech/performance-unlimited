@@ -3,10 +3,11 @@ class CompletedSurvey < ActiveRecord::Base
   belongs_to :survey
   
   has_many :selected_responses
+  has_many :questions, through: :survey
   
   validates_uniqueness_of :date, scope: :user_id
   
-  attr_accessible :date, :user, :user_id
+  attr_accessible :date, :user, :user_id, :score
   
   default_scope order('date DESC')
   
@@ -18,7 +19,7 @@ class CompletedSurvey < ActiveRecord::Base
     survey.to_s
   end
   
-  def score
-    selected_responses.map(&:score).inject(:+)
+  def update_score
+    update_attributes(score: selected_responses.map(&:score).inject(:+))
   end
 end

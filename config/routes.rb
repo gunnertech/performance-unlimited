@@ -1,5 +1,9 @@
 Recoverytracker::Application.routes.draw do
+  match '/auth/:provider/callback', to: 'organizations#add_authentication'
+  
   devise_for :users
+  
+  resources :authentications
 
   resources :selected_responses
 

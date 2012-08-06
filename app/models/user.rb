@@ -7,7 +7,9 @@ class User < ActiveRecord::Base
          :recoverable, :rememberable, :trackable, :validatable
 
   # Setup accessible (or protected) attributes for your model
-  attr_accessible :name, :email, :password, :password_confirmation, :remember_me
+  attr_accessible :name, :email, :password, :password_confirmation, :remember_me, :first_name, :last_name
+  
+  before_validation :set_first_name_and_last_name
   
   has_many :assigned_groups
   has_many :groups, through: :assigned_groups
@@ -15,8 +17,26 @@ class User < ActiveRecord::Base
   has_many :divisions, through: :assigned_divisions
   has_many :completed_surveys
   
+  default_scope order("users.last_name ASC")
+  
+  class << self
+    def leaderboard(start_date=nil,end_date=nil)
+      if start_date && end_date
+        joins{ completed_surveys }.where{ completed_surveys.date >> (start_date..end_date) }.order{ completed_surveys.score }
+      else
+        joins{ completed_surveys }.order{ completed_surveys.score }
+      end
+    end
+  end
+  
   def to_s
     name
+  end
+  
+  def set_first_name_and_last_name
+    name_pieces = name.split(" ")
+    self.first_name = name_pieces.first
+    self.last_name = (name_pieces - [name_pieces.first]).join(" ").strip
   end
   
   def assigned_group_for(groupd_id)

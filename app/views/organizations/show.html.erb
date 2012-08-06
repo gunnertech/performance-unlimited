@@ -19,3 +19,22 @@
               :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')),
               :class => 'btn btn-danger' %>
 </div>
+
+<h2><%=t 'twitter_accounts' %></h2>
+
+<table class="table">
+  <tbody>
+    <% @organization.twitter_accounts.each do |account| %>
+      <tr>
+        <td><a href="http://twitter.com/<%= account.nickname %>"><img src="<%= @organization.twitter_profile_image_src(account.nickname) %>" /></a></td>
+        <td>@<a href="http://twitter.com/<%= account.nickname %>"><%= account.nickname %></a></td>
+        <td><%= @organization.twitter_description(account.nickname) %></td>
+        <td><%= link_to t('delete'), authentication_path(account), method: 'delete', confirm: t("helpers.links.confirm", default: 'Are you sure?'), class: 'btn btn-danger' %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<div class="form-actions">
+  <a class="btn btn-info" href="/auth/twitter?force_login=true&amp;organization_id=<%= @organization.to_param %>"><%= t('add_twitter_account') %></a>
+</div>

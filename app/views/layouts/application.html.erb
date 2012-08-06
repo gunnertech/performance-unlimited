@@ -27,6 +27,88 @@
     <%= yield(:head) %>
   </head>
   <body class="<%= controller_name %> <%= controller.action_name %>">
+    <div id="fb-root"></div>
+    <script>
+      window.fbAsyncInit = function() {
+        FB.init({
+          appId      : '<%= ProvidersConfig::FACEBOOK[:key] %>', // App ID
+          channelUrl : '//'+window.location.hostname+'/channel.html', // Channel File
+          status     : true, // check login status
+          cookie     : true, // enable cookies to allow the server to access the session
+          xfbml      : true  // parse XFBML
+        });
+
+        FB.Event.subscribe('auth.statusChange', function(response) {
+          if (response.authResponse) {
+            
+            FB.api('/me/permissions', function (response) { // if we don't have the needed permissions, log them out
+              if(!response.data[0].manage_pages || !response.data[0].offline_access) {
+                FB.logout();
+              }
+            });
+            
+            FB.api('/me', function(me) { // user has auth'd your app and is logged into Facebook
+              if (me.name) {
+                $('#auth-displayname').html(me.name);
+              }
+            })
+            
+            FB.api('/me/accounts', function(response){
+              
+              $('#facebook-pages').html($.map(response.data,function(item,i) {
+                return '<div class="control-group boolean optional"><label class="boolean optional control-label" for="auth_'+item.id+'">'+item.name+'</label><div class="controls"><input id="auth_string_'+item.id+'" type="hidden" value="facebook:'+item.id+':'+item.access_token+':'+(item.secret||'')+':'+item.name+'"><label class="checkbox"><input class="boolean optional" id="auth_'+item.id+'" type="checkbox" value="1"></label></div></div>'
+              }).join(''))
+              
+              $.each(($('#location_auth_string').val()||'').split(','), function(i,item) {
+                var pieces = item.split(':');
+                
+                if(pieces[0] == 'facebook') {
+                  $('#auth_'+pieces[1]).attr('checked','checked');
+                }
+              });
+              
+              
+              
+              var body = 'Reading JS SDK documentation';
+              // FB.api('/'+response.data[0].id+'/feed', 'post', { message: body }, function(response) {
+              //   if (!response || response.error) {
+              //     alert('Error occured');
+              //   } else {
+              //     alert('Post ID: ' + response.id);
+              //   }
+              // });
+              
+            })
+            $('#auth-loggedout').hide();
+            $('#auth-loggedin').show();
+          } else {
+            // user has not auth'd your app, or is not logged into Facebook
+            $('#auth-loggedout').show();
+            $('#auth-loggedin').hide();
+          }
+        });
+
+        // respond to clicks on the login and logout links
+        $('#auth-loginlink').click(function() {
+          FB.login(function(response) {
+            
+          },{scope:'manage_pages,offline_access,email,publish_actions,status_update,publish_stream,create_note'});
+        });
+        
+        $('#auth-logoutlink').click(function() {
+          FB.logout();
+        });
+      };
+
+      // Load the SDK Asynchronously
+      (function(d){
+         var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
+         if (d.getElementById(id)) {return;}
+         js = d.createElement('script'); js.id = id; js.async = true;
+         js.src = "//connect.facebook.net/en_US/all.js";
+         ref.parentNode.insertBefore(js, ref);
+       }(document));
+    </script>
     <header class="navbar navbar-fixed-top">
       <nav class="navbar-inner">
         <div class="container-fluid">

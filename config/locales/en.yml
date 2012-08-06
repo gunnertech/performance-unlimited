@@ -2,6 +2,8 @@
 # See https://github.com/svenfuchs/rails-i18n/tree/master/rails%2Flocale for starting points.
 
 en:
+  todays_leaderboard: "Today's Leaderboard"
+  follow_on_twitter: "Follow @%{name} on Twitter"
   add_question: 'Add Question'
   hello: "Hello world"
   date_slug: "Date Taken"

@@ -158,3 +158,5 @@ uncontrolables_question_1.assigned_questions << uncontrolables_question_1.assign
 uncontrolables_question_2.assigned_questions << uncontrolables_question_2.assigned_questions.create(question_set: pirates_organization_question_set_3) if uncontrolables_question_2.assigned_questions.empty?
 uncontrolables_question_3.assigned_questions << uncontrolables_question_3.assigned_questions.create(question_set: pirates_organization_question_set_3) if uncontrolables_question_3.assigned_questions.empty?
 uncontrolables_question_4.assigned_questions << uncontrolables_question_4.assigned_questions.create(question_set: pirates_organization_question_set_3) if uncontrolables_question_4.assigned_questions.empty?
+
+CompletedSurvey.all.map(&:update_score)
