@@ -4,8 +4,8 @@ end
 Rails.application.config.middleware.use OmniAuth::Builder do
   PROVIDER_CONFIG = YAML.load_file("#{::Rails.root.to_s}/config/providers.yml")[::Rails.env]
   for p in PROVIDER_CONFIG['providers']
-    if p['options']
-      provider p['name'], p['key'], p['secret'], :scope => p['options']
+    if p['scope']
+      provider p['name'], p['key'], p['secret'], scope: p['scope'], access_type: p['access_type'], approval_prompt: p['approval_prompt']
     else
       provider p['name'], p['key'], p['secret']
     end

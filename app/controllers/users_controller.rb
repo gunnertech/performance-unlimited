@@ -19,8 +19,13 @@ class UsersController < InheritedResources::Base
     show! do |success|
       success.html
       success.csv {
+        title = "#{@user.name.parameterize}-#{Date.today}.csv"
         @dates = (30.days.ago.to_date..Date.today).map{ |date| date }
-        response.headers['Content-Disposition'] = "attachment; filename=\"#{@user.name.parameterize}-#{Date.today}.csv\""
+        @user.organizations.each do |organization|
+          organization.upload_spreadsheets(render_to_string(template: 'users/show.csv.erb'), title)
+        end
+        
+        response.headers['Content-Disposition'] = "attachment; filename=\"#{title}\""
       }
     end
   end

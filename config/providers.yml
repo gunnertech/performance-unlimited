@@ -7,6 +7,12 @@ defaults: &defaults
       key: 180930071946269 #aka app_id
       secret: bb7ba4d6aca52226489e1e1a18d8904c
       options: 'email,offline_access,manage_pages,publish_stream'
+    - name: google_oauth2
+      key: "577815670015.apps.googleusercontent.com"
+      secret: "TofSANzWDYGiFOl65zoyVCU0"
+      scope: "https://www.googleapis.com/auth/userinfo.profile https://spreadsheets.google.com/feeds https://docs.google.com/feeds https://docs.googleusercontent.com/"
+      access_type: 'offline'
+      approval_prompt: ''
 
 development:
   <<: *defaults
@@ -23,6 +29,12 @@ staging:
       key: 420173401368728 #aka app_id
       secret: 9ed41b727d3b038188a68abdd7518e24
       options: 'email,offline_access,manage_pages,publish_stream'
+    - name: google_oauth2
+      key: "577815670015-uloeuf4csaa41j8l1sun06d2h26tv0kg.apps.googleusercontent.com"
+      secret: "a9b2_gzbC5O5QB4MzexvkLrj"
+      scope: "https://www.googleapis.com/auth/userinfo.profile https://spreadsheets.google.com/feeds https://docs.google.com/feeds https://docs.googleusercontent.com/"
+      access_type: 'offline'
+      approval_prompt: ''
 
 production:
   providers:
@@ -33,3 +45,9 @@ production:
       key: 365707056833919 #aka app_id
       secret: 0bf6c64c3f5a883b07d0c9f534b34b25
       options: 'email,offline_access,manage_pages,publish_stream'
+    - name: google_oauth2
+      key: "577815670015-uloeuf4csaa41j8l1sun06d2h26tv0kg.apps.googleusercontent.com"
+      secret: "a9b2_gzbC5O5QB4MzexvkLrj"
+      scope: "https://www.googleapis.com/auth/userinfo.profile https://spreadsheets.google.com/feeds https://docs.google.com/feeds https://docs.googleusercontent.com/"
+      access_type: 'offline'
+      approval_prompt: ''

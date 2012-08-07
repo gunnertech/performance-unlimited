@@ -1,4 +1,5 @@
 PAPERCLIP_STORAGE_OPTIONS = { }
+OAUTH_SITE_URL = 'http://localhost:3010'
 
 Recoverytracker::Application.configure do
   # Settings specified here will take precedence over those in config/application.rb

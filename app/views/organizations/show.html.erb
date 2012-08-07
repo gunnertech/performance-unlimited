@@ -38,3 +38,20 @@
 <div class="form-actions">
   <a class="btn btn-info" href="/auth/twitter?force_login=true&amp;organization_id=<%= @organization.to_param %>"><%= t('add_twitter_account') %></a>
 </div>
+
+<h2><%=t 'google_accounts' %></h2>
+
+<table class="table">
+  <tbody>
+    <% @organization.google_accounts.each do |account| %>
+      <tr>
+        <td><%= account.nickname %></td>
+        <td><%= link_to t('delete'), authentication_path(account), method: 'delete', confirm: t("helpers.links.confirm", default: 'Are you sure?'), class: 'btn btn-danger' %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<div class="form-actions">
+  <a class="btn btn-info" href="/auth/google_oauth2?force_login=true&amp;organization_id=<%= @organization.to_param %>"><%= t('add_google_account') %></a>
+</div>

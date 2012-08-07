@@ -18,6 +18,19 @@ class Organization < ActiveRecord::Base
     authentications.where{ provider == 'twitter' }
   end
   
+  def google_accounts
+    authentications.where{ provider == 'google_oauth2' }
+  end
+  
+  def upload_spreadsheets(spreadsheet_as_string, title)
+    client = OAuth2::Client.new(ProvidersConfig::GOOGLEOAUTH2[:key], ProvidersConfig::GOOGLEOAUTH2[:secret], site: OAUTH_SITE_URL)
+    google_accounts.each do |account|
+      session = GoogleDrive.login_with_oauth(OAuth2::AccessToken.new(client,account.token))
+      session.upload_from_string(spreadsheet_as_string, title, convert: true )
+    end
+    
+  end
+  
   def twitter_description(screen_name)
     authentication = authentications.where{ (provider == 'twitter') && (nickname == screen_name) }.first
     if authentication
