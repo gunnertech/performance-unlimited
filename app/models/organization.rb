@@ -31,6 +31,10 @@ class Organization < ActiveRecord::Base
     
   end
   
+  def tweets_for(screen_name)
+    Twitter.user_timeline(screen_name)
+  end
+  
   def twitter_description(screen_name)
     authentication = authentications.where{ (provider == 'twitter') && (nickname == screen_name) }.first
     if authentication

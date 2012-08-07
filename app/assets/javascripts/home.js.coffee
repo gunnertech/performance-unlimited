@@ -3,9 +3,12 @@
 # You can use CoffeeScript in this file: http://jashkenas.github.com/coffee-script/
 
 $('.user.navigate').live('click', (event) ->
+  _this = this
   event.preventDefault()
   $('.navigate.btn-primary').data('user_id', $(this).data('user_id'))
-  $('#graph .graph').data('user_id', $(this).data('user_id'))
+  $('.home.index .graph').each(->
+    $(this).data('user_id', $(_this).data('user_id'))
+  )
 )
 
 $('.navigate.btn-primary').live('click', (event) ->
@@ -66,6 +69,14 @@ $('.home.index .table .btn').live('click', (event) ->
   )
   
   $('#score').html(score)
+  
+  $('.point-legend tr').each( -> 
+    [low, high] = $(this).data('range').split('-')
+    if score <= parseInt(high) && score >= parseInt(low)
+      $(this).addClass('alert')
+    else
+      $(this).removeClass('alert')
+  )
 )
 
 Response.action( ->
