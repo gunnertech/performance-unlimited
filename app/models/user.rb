@@ -25,7 +25,7 @@ class User < ActiveRecord::Base
       if start_date && end_date
         joins{ completed_surveys }.where{ completed_surveys.date >> (start_date..end_date) }.order{ completed_surveys.score }
       else
-        joins{ completed_surveys }.order{ completed_surveys.score }
+        joins{ completed_surveys }.order{ completed_surveys.score.asc }
       end
     end
   end
