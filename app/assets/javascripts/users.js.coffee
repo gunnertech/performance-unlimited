@@ -13,7 +13,7 @@ window.draw_graphs = ->
       $.ajax(url)
       .done((objects, status, jqxhr) ->
         data = []
-        $.each(objects, (i,item) -> data.push([new Date(item.date), item.score]) )
+        $.each(objects, (i,item) -> data.push([Date.parseExact(item.date, "yyyy-M-d"), item.score]) )
         $.plot(
           $el, 
           [{ data: data, label: "" }] 
