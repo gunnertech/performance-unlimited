@@ -23,9 +23,14 @@ class Organization < ActiveRecord::Base
   end
   
   def upload_spreadsheets(spreadsheet_as_string, title)
-    client = OAuth2::Client.new(ProvidersConfig::GOOGLEOAUTH2[:key], ProvidersConfig::GOOGLEOAUTH2[:secret], site: OAUTH_SITE_URL)
+    client = OAuth2::Client.new(ProvidersConfig::GOOGLEOAUTH2[:key], ProvidersConfig::GOOGLEOAUTH2[:secret], site: OAUTH_SITE_URL, token_url:'https://accounts.google.com/o/oauth2/token'); 
+    
     google_accounts.each do |account|
-      session = GoogleDrive.login_with_oauth(OAuth2::AccessToken.new(client,account.token))
+      token = OAuth2::AccessToken.new(client,account.token,refresh_token: account.refresh_token)
+      if token.expired?
+        token = token.refresh!
+      end
+      session = GoogleDrive.login_with_oauth(token)
       session.upload_from_string(spreadsheet_as_string, title, convert: true )
     end
     

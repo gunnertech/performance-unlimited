@@ -15,6 +15,7 @@ class OrganizationsController < InheritedResources::Base
       @organization.authentications.create(
         provider: 'google_oauth2',
         uid: auth_hash[:uid],
+        refresh_token: auth_hash[:credentials][:refresh_token],
         token: auth_hash[:credentials][:token],
         nickname: auth_hash[:info][:name]
       )

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120806190327) do
+ActiveRecord::Schema.define(:version => 20120808201258) do
 
   create_table "assigned_divisions", :force => true do |t|
     t.integer  "division_id"
@@ -75,6 +75,7 @@ ActiveRecord::Schema.define(:version => 20120806190327) do
     t.integer  "authenticationable_id"
     t.datetime "created_at",              :null => false
     t.datetime "updated_at",              :null => false
+    t.string   "refresh_token"
   end
 
   add_index "authentications", ["authenticationable_id", "authenticationable_type"], :name => "a_id_and_a_type_on_authenticiations"
