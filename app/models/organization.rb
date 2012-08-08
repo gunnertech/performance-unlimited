@@ -32,15 +32,15 @@ class Organization < ActiveRecord::Base
   end
   
   def tweets_for(screen_name)
-    tweets = []
-    begin
+    tweets = Twitter.user_timeline(screen_name) rescue nil
+    
+    if tweets
       Rails.cache.fetch("tweets_for", expires_in: 1.hour) do
-        tweets = Twitter.user_timeline(screen_name)
+        tweets
       end
-    rescue
-      tweets = []
+    else
+      []
     end
-    tweets
   end
   
   def twitter_description(screen_name)
