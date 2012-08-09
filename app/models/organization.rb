@@ -30,8 +30,14 @@ class Organization < ActiveRecord::Base
       if token.expired?
         token = token.refresh!
       end
-      session = GoogleDrive.login_with_oauth(token)
-      session.upload_from_string(spreadsheet_as_string, title, convert: true )
+      begin
+        session = GoogleDrive.login_with_oauth(token)
+        session.upload_from_string(spreadsheet_as_string, title, convert: true )
+      rescue
+        token = token.refresh!
+        session = GoogleDrive.login_with_oauth(token)
+        session.upload_from_string(spreadsheet_as_string, title, convert: true )
+      end
     end
     
   end
