@@ -25,7 +25,7 @@ pittsburgh_pirates = pirates_organization.divisions.find_or_create_by_name('Pitt
 brendon_huttmann.add_role('admin',brendon_huttmann.assigned_divisions.create(division: pittsburgh_pirates)) if brendon_huttmann.assigned_divisions.empty?
 brendon_huttmann.add_role 'admin', pirates_organization
 
-user.add_role('admin',brendon_huttmann.assigned_divisions.create(division: pittsburgh_pirates)) if brendon_huttmann.assigned_divisions.empty?
+user.add_role('admin',brendon_huttmann.assigned_divisions.first) if user.assigned_divisions.empty?
 user.add_role 'admin', pirates_organization
 
 

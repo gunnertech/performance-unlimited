@@ -2,6 +2,8 @@ class AssignedQuestionSet < ActiveRecord::Base
   belongs_to :question_set
   belongs_to :survey
   
+  has_one :organization, through: :question_set
+  
   has_many :questions, through: :question_set
   
   acts_as_list scope: :survey

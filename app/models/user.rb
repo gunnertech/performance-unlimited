@@ -47,7 +47,7 @@ class User < ActiveRecord::Base
   end
   
   def update_score
-    update_attributes(score: completed_surveys.map(&:score).inject(:+))
+    update_attributes(score: completed_surveys.map(&:score).inject(:+)) rescue nil
   end
   
 end

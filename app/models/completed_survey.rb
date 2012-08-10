@@ -2,6 +2,8 @@ class CompletedSurvey < ActiveRecord::Base
   belongs_to :user
   belongs_to :survey
   
+  has_one :organization, through: :survey
+  
   after_save :update_user_score
   
   has_many :selected_responses
