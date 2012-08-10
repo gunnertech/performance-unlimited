@@ -43,7 +43,15 @@ class Organization < ActiveRecord::Base
   end
   
   def tweets_for(screen_name)
-    tweets = Twitter.user_timeline(screen_name) rescue nil
+    tweets = nil
+    authentication = authentications.where{ (provider == 'twitter') && (nickname == screen_name) }.first
+    if authentication
+      @client = Twitter::Client.new(
+        oauth_token: authentication.token,
+        oauth_token_secret: authentication.secret
+      )
+      tweets = @client.user_timeline(screen_name, count: 5) rescue nil
+    end
     
     if tweets
       Rails.cache.fetch("tweets_for", expires_in: 1.hour) do

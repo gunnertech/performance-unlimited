@@ -134,9 +134,7 @@
       <% @survey.organization.twitter_accounts.each do |account| %>
         <ul>
           <% @survey.organization.tweets_for(account.nickname).each_with_index do |tweet,i| %>
-            <% if i < 5 %>
-              <li><%= simple_format auto_link(tweet.text) %></li>
-            <% end %>
+            <li><%= simple_format auto_link(tweet.text) %></li>
           <% end %>
         </ul>
       <% end %>
