@@ -46,8 +46,8 @@ production:
       secret: 0bf6c64c3f5a883b07d0c9f534b34b25
       options: 'email,offline_access,manage_pages,publish_stream'
     - name: google_oauth2
-      key: "577815670015-uloeuf4csaa41j8l1sun06d2h26tv0kg.apps.googleusercontent.com"
-      secret: "a9b2_gzbC5O5QB4MzexvkLrj"
+      key: "577815670015-lijjudtm33m390m5hfoa3bkfq07juv27.apps.googleusercontent.com"
+      secret: "VXlos9pmiBWxMSrT3g-0j2Jn"
       scope: "https://www.googleapis.com/auth/userinfo.profile https://spreadsheets.google.com/feeds https://docs.google.com/feeds https://docs.googleusercontent.com/"
       access_type: 'offline'
       approval_prompt: ''
