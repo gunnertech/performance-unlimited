@@ -1,4 +1,6 @@
 class HomeController < ApplicationController
+  skip_load_and_authorize_resource
+  
   def index
     if signed_in?
       if @organization = Organization.with_role('admin', current_user).first

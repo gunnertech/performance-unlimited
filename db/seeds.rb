@@ -6,7 +6,7 @@
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 puts 'SETTING UP DEFAULT USER LOGIN'
-user = User.find_or_create_by_email :name => 'First User', :email => 'user@example.com', :password => 'please', :password_confirmation => 'please'
+user = User.find_or_create_by_email :name => 'Cody Swann', :email => 'cody@gunnertech.com', :password => 'please', :password_confirmation => 'please'
 puts 'New user created: ' << user.name
 brendon_huttmann = User.find_or_create_by_email :name => 'Brendon Huttmann', :email => 'huttmannb@gmail.com', :password => 'please', :password_confirmation => 'please'
 puts 'New user created: ' << brendon_huttmann.name
@@ -15,7 +15,6 @@ user.add_role 'admin'
 a_j_burnett = User.find_or_create_by_email name: 'A.J. Burnett', email: 'a_j_burnett@example.com', password: 'please', password_confirmation: 'please'
 rod_barajas = User.find_or_create_by_email name: 'Rod Barajas', email: 'rod_barajas@example.com', password: 'please', password_confirmation: 'please'
 pedro_alvarez = User.find_or_create_by_email name: 'Pedro Alvarez', email: 'pedro_alvarez@example.com', password: 'please', password_confirmation: 'please'
-gorkys_hernandez = User.find_or_create_by_email name: 'Gorkys Hernandez', email: 'gorkys_hernandez@example.com', password: 'please', password_confirmation: 'please'
 
 
 
@@ -26,11 +25,13 @@ pittsburgh_pirates = pirates_organization.divisions.find_or_create_by_name('Pitt
 brendon_huttmann.add_role('admin',brendon_huttmann.assigned_divisions.create(division: pittsburgh_pirates)) if brendon_huttmann.assigned_divisions.empty?
 brendon_huttmann.add_role 'admin', pirates_organization
 
+user.add_role('admin',brendon_huttmann.assigned_divisions.create(division: pittsburgh_pirates)) if brendon_huttmann.assigned_divisions.empty?
+user.add_role 'admin', pirates_organization
+
 
 a_j_burnett.add_role 'athlete', pittsburgh_pirates
 rod_barajas.add_role 'athlete', pittsburgh_pirates
 pedro_alvarez.add_role 'athlete', pittsburgh_pirates
-gorkys_hernandez.add_role 'athlete', pittsburgh_pirates
 
 pittsburgh_pirates_pitchers = pittsburgh_pirates.groups.find_or_create_by_name("Pitchers")
 pittsburgh_pirates_catchers = pittsburgh_pirates.groups.find_or_create_by_name("Catchers")
@@ -40,10 +41,10 @@ pittsburgh_pirates_outfielders = pittsburgh_pirates.groups.find_or_create_by_nam
 pittsburgh_pirates_pitchers.users << a_j_burnett unless pittsburgh_pirates_pitchers.users.include?(a_j_burnett)
 pittsburgh_pirates_catchers.users << rod_barajas unless pittsburgh_pirates_catchers.users.include?(rod_barajas)
 pittsburgh_pirates_infielders.users << pedro_alvarez unless pittsburgh_pirates_infielders.users.include?(pedro_alvarez)
-pittsburgh_pirates_outfielders.users << gorkys_hernandez unless pittsburgh_pirates_outfielders.users.include?(gorkys_hernandez)
 
 pirates_organization_survey = pirates_organization.surveys.find_or_create_by_name('Recovery Survey')
 brendon_huttmann.add_role 'admin', pirates_organization_survey
+user.add_role 'admin', pirates_organization_survey
 
 pittsburgh_pirates.surveys << pirates_organization_survey unless pittsburgh_pirates.surveys.include?(pirates_organization_survey)
 

@@ -7,6 +7,7 @@ class Organization < ActiveRecord::Base
   has_many :question_sets
   has_many :questions
   has_many :authentications, as: :authenticationable
+  has_many :users, through: :divisions
   
   attr_accessible :name, :logo
   
