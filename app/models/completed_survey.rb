@@ -2,6 +2,8 @@ class CompletedSurvey < ActiveRecord::Base
   belongs_to :user
   belongs_to :survey
   
+  after_save :update_user_score
+  
   has_many :selected_responses
   has_many :questions, through: :survey
   
@@ -21,5 +23,9 @@ class CompletedSurvey < ActiveRecord::Base
   
   def update_score
     update_attributes(score: selected_responses.map(&:score).inject(:+))
+  end
+  
+  def update_user_score
+    user.update_score
   end
 end

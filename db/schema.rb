@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120808201258) do
+ActiveRecord::Schema.define(:version => 20120810011451) do
 
   create_table "assigned_divisions", :force => true do |t|
     t.integer  "division_id"
@@ -214,6 +214,7 @@ ActiveRecord::Schema.define(:version => 20120808201258) do
     t.string   "name"
     t.string   "first_name"
     t.string   "last_name"
+    t.integer  "score"
   end
 
   add_index "users", ["email"], :name => "index_users_on_email", :unique => true

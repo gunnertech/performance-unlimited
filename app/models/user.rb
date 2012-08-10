@@ -7,7 +7,7 @@ class User < ActiveRecord::Base
          :recoverable, :rememberable, :trackable, :validatable
 
   # Setup accessible (or protected) attributes for your model
-  attr_accessible :name, :email, :password, :password_confirmation, :remember_me, :first_name, :last_name
+  attr_accessible :name, :email, :password, :password_confirmation, :remember_me, :first_name, :last_name, :score
   
   before_validation :set_first_name_and_last_name
   
@@ -44,6 +44,10 @@ class User < ActiveRecord::Base
   
   def assigned_group_for(groupd_id)
     assigned_groups.where{ group_id == my{groupd_id} }.first
+  end
+  
+  def update_score
+    update_attributes(score: completed_surveys.map(&:score).inject(:+))
   end
   
 end
