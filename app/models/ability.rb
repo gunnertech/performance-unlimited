@@ -14,6 +14,10 @@ class Ability
       end
     end
     
+    can :manage, User do |u|
+      u.new_record? ||  u.organizations.any? { |organization| user.has_role 'admin', organization }
+    end
+    
     can :manage, Authentication do |authentication|
       if authentication.authenticationable.isa?(Organization)
         user.has_role 'admin', authentication.authenticationable
