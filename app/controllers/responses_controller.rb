@@ -11,6 +11,14 @@ class ResponsesController < InheritedResources::Base
     
   end
   
+  def update
+    if @assigned_question_set && @assigned_question
+      update!{ [@assigned_question_set, @assigned_question] }
+    else
+      update!
+    end
+  end
+  
   def destroy
     if @assigned_question_set && @assigned_question
       destroy!{ [@assigned_question_set, @assigned_question] }

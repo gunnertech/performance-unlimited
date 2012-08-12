@@ -7,6 +7,7 @@ class UsersController < InheritedResources::Base
       @user = User.create(params[:user])
       if @user.valid?
         parent.users << @user
+        @user.add_role 'athlete', parent.division
       end
       create!{ [parent.division, parent] }
     else

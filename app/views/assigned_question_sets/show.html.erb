@@ -25,9 +25,9 @@
             </a>
             <ul class="dropdown-menu">
               <% assigned_question.question.responses.each do |response| %>
-                <li><%= link_to raw(response.to_s), edit_question_response_path(assigned_question.question,response) %></li>
+                <li><%= link_to raw(response.to_s), edit_question_response_path(assigned_question.question,response, assigned_question_id: assigned_question.id, assigned_question_set_id: @assigned_question_set.id) %></li>
               <% end %>
-              <li><%= link_to t('add_response'), new_question_response_path(assigned_question.question) %></li>
+              <li><%= link_to t('add_response'), new_question_response_path(assigned_question.question,assigned_question_id: assigned_question.id, assigned_question_set_id: @assigned_question_set.id) %></li>
             </ul>
           </div>
         </td>
