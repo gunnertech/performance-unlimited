@@ -36,7 +36,7 @@
         </tr>
       </thead>
       <tbody>
-        <% @division.users.where{ score != nil }.unscoped.order{ score.desc }.each_with_index do |user,i| %>
+        <% @division.users.unscoped.where{ score != nil }.order{ score.desc }.each_with_index do |user,i| %>
           <tr>
             <td><%= i+1 %></td>
             <td><%= user %></td>
