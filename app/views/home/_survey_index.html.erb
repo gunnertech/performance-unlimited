@@ -108,15 +108,21 @@
   </div>
   
   <div class="row-fluid">
-    <div class="span4">
+    <div class="span12">
       <h2><%=t 'last_5_days' %></h2>
       <div class="graph" data-user_id="<%= current_user.try(:id) %>" data-day_range="5"></div>
     </div>
-    <div class="span4">
+  </div>
+  
+  <div class="row-fluid">
+    <div class="span12">
       <h2><%=t 'last_10_days' %></h2>
       <div class="graph" data-user_id="<%= current_user.try(:id) %>" data-day_range="10"></div>
     </div>
-    <div class="span4">
+  </div>
+  
+  <div class="row-fluid">
+    <div class="span12">
       <h2><%=t 'last_15_days' %></h2>
       <div class="graph" data-user_id="<%= current_user.try(:id) %>" data-day_range="15"></div>
     </div>
