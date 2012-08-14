@@ -16,24 +16,28 @@
 </dl>
 
 <section class="row-fluid">
-  <div class="span6">
+  <div class="span12">
     <h2><%=t 'last_5_days' %></h2>
     <div class="group-graph" data-group_id="<%= @group.id %>" data-day_range="5"></div>
   </div>
-  
-  <div class="span6">
+</section>
+
+<section class="row-fluid">
+  <div class="span12">
     <h2><%=t 'last_10_days' %></h2>
     <div class="group-graph" data-group_id="<%= @group.id %>" data-day_range="10"></div>
   </div>
 </section>
 
 <section class="row-fluid">
-  <div class="span6">
+  <div class="span12">
     <h2><%=t 'last_15_days' %></h2>
     <div class="group-graph" data-group_id="<%= @group.id %>" data-day_range="15"></div>
   </div>
+</section>  
   
-  <div class="span6">
+<section class="row-fluid">
+  <div class="span12">
     <h2><%=t 'last_30_days' %></h2>
     <div class="group-graph" data-group_id="<%= @group.id %>" data-day_range="30"></div>
   </div>
