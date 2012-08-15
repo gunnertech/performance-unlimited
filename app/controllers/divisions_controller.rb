@@ -1,4 +1,5 @@
 class DivisionsController < InheritedResources::Base
+  belongs_to :organization, optional: true
   
   def create
     @division = Division.create(params[:division])

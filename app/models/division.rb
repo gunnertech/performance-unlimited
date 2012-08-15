@@ -12,10 +12,14 @@ class Division < ActiveRecord::Base
   has_many :assigned_surveys
   has_many :surveys, through: :assigned_surveys
   
-  attr_accessible :name, :organization, :organization_id
+  attr_accessible :name, :organization, :organization_id, :time_zone
   
   def to_s
     name
+  end
+  
+  def today
+    Time.now.in_time_zone((self.time_zone)||'Eastern Time (US & Canada)').to_date
   end
   
   def grouped_users

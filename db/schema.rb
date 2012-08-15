@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120811030601) do
+ActiveRecord::Schema.define(:version => 20120815204044) do
 
   create_table "assigned_divisions", :force => true do |t|
     t.integer  "division_id"
@@ -99,6 +99,7 @@ ActiveRecord::Schema.define(:version => 20120811030601) do
     t.integer  "organization_id"
     t.datetime "created_at",      :null => false
     t.datetime "updated_at",      :null => false
+    t.string   "time_zone"
   end
 
   add_index "divisions", ["organization_id"], :name => "index_divisions_on_organization_id"
@@ -217,6 +218,7 @@ ActiveRecord::Schema.define(:version => 20120811030601) do
     t.string   "first_name"
     t.string   "last_name"
     t.integer  "score"
+    t.float    "average"
   end
 
   add_index "users", ["email"], :name => "index_users_on_email", :unique => true

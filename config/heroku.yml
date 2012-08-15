@@ -48,6 +48,7 @@ domains:
 
 addons:
   all:
+    - pgbackups:auto-month
     - custom_domains:basic
     - heroku-postgresql:dev
     - sendgrid:starter

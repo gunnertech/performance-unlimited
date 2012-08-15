@@ -5,15 +5,19 @@ class CompletedSurveysController < InheritedResources::Base
   
   def index
     if parent?
-      start_date = params[:day_range].to_i.days.ago
-      end_date = Date.today
+      # end_date = Date.today
+      # start_date = params[:day_range].to_i.days.ago
+      end_date = Time.now.in_time_zone(parent.time_zone).to_date
+      start_date = end_date - params[:day_range].to_i.days
+      
       @completed_surveys = parent.completed_surveys.where{ date >> (start_date..end_date)  }
     end
     index!
   end
   
   def create
-    @completed_survey = parent.completed_surveys.create(user_id: params[:taker_id].to_i, date: Date.today)
+    today = Time.now.in_time_zone(parent.time_zone).to_date
+    @completed_survey = parent.completed_surveys.create(user_id: params[:taker_id].to_i, date: today)
     
     if @completed_survey.valid?
       @user = User.find(params[:taker_id])
@@ -22,8 +26,8 @@ class CompletedSurveysController < InheritedResources::Base
         @completed_survey.selected_responses.create(user_id: params[:taker_id], response_id: response_id)
       end
     
-      title = "#{@user.name.parameterize}-#{Date.today}.csv"
-      @dates = (30.days.ago.to_date..Date.today).map{ |date| date }
+      title = "#{@user.name.parameterize}-#{today}.csv"
+      @dates = ((today-30.days)..today).map{ |date| date }
       @user.organizations.each do |organization|
         organization.upload_spreadsheets(render_to_string(template: 'users/show.csv.erb'), title)
       end

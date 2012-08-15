@@ -6,8 +6,9 @@ class GroupsController < InheritedResources::Base
     show! do |success|
       success.html
       success.csv {
-        @dates = (30.days.ago.to_date..Date.today).map{ |date| date }
-        response.headers['Content-Disposition'] = "attachment; filename=\"#{parent.name.parameterize}-#{@group.name.parameterize}-#{Date.today}.csv\""
+        today = Time.now.in_time_zone(parent.time_zone).to_date
+        @dates = ((today-30.days)..today).map{ |date| date }
+        response.headers['Content-Disposition'] = "attachment; filename=\"#{parent.name.parameterize}-#{@group.name.parameterize}-#{today}.csv\""
       }
     end
   end

@@ -20,8 +20,9 @@ class UsersController < InheritedResources::Base
     show! do |success|
       success.html
       success.csv {
-        title = "#{@user.name.parameterize}-#{Date.today}.csv"
-        @dates = (30.days.ago.to_date..Date.today).map{ |date| date }
+        today = Time.now.in_time_zone(@user.time_zone).to_date
+        title = "#{@user.name.parameterize}-#{today}.csv"
+        @dates = ((today-30.days)..today).map{ |date| date }
         @user.organizations.each do |organization|
           organization.upload_spreadsheets(render_to_string(template: 'users/show.csv.erb'), title)
         end

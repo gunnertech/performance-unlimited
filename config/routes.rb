@@ -40,7 +40,9 @@ Recoverytracker::Application.routes.draw do
     resources :groups
   end
 
-  resources :organizations
+  resources :organizations do
+    resources :divisions
+  end
   
   resources :assigned_divisions #TODO: REMOVE
   resources :completed_surveys #TODO: REMOVE

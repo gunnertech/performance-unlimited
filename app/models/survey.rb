@@ -10,10 +10,15 @@ class Survey < ActiveRecord::Base
   has_many :assigned_surveys
   has_many :point_ranges, through: :assigned_surveys
   has_many :completed_surveys
+  has_many :divisions, through: :organization
   
   attr_accessible :name
   
   def to_s
     name
+  end
+  
+  def time_zone
+    divisions.first.time_zone || 'Eastern Time (US & Canada)'
   end
 end

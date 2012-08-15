@@ -95,11 +95,11 @@
           </tr>
         </thead>
         <tbody>
-          <% @division.users.unscoped.leaderboard(Date.today,Date.today).each_with_index do |user,i| %>
+          <% @division.users.unscoped.leaderboard(@division.today,@division.today).each_with_index do |user,i| %>
             <tr>
               <td><%= i+1 %></td>
               <td><%= user %></td>
-              <td><%= user.completed_surveys.where{ date == my{Date.today} }.try(:first).try(:score) %></td>
+              <td><%= user.completed_surveys.where{ date == my{@division.today} }.try(:first).try(:score) %></td>
             </tr>
           <% end %>
         </tbody>
@@ -109,7 +109,7 @@
   
   <div class="row-fluid">
     <div class="span12">
-      <h2><%=t 'last_15_days' %></h2>
+      <h2><%=t 'last_30_days' %></h2>
       <div class="graph" data-user_id="<%= current_user.try(:id) %>" data-day_range="30"></div>
     </div>
   </div>
