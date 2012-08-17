@@ -41,7 +41,7 @@
           <tr>
             <td><%= i+1 %></td>
             <td><%= user %></td>
-            <td><%= user.average %></td>
+            <td><%= number_with_precision(user.average||0.00,precision: 2) %></td>
             <td><%= user.score %></td>
           </tr>
         <% end %>
