@@ -3,7 +3,7 @@ window.draw_group_graphs = ->
     $el = $(this)
     if $(this).width() && $(this).data('day_range')
       if $(this).data('group_id')
-        url = "/groups/#{$(this).data('group_id')}.json"
+        url = "/divisions/#{$(this).data('division_id')}/groups/#{$(this).data('group_id')}.json"
       
       day_range = $(this).data('day_range')
       $.ajax(url)
