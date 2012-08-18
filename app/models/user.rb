@@ -31,7 +31,7 @@ class User < ActiveRecord::Base
   end
   
   def time_zone
-    divisions.first.time_zone || 'Eastern Time (US & Canada)'
+    divisions.first.try(:time_zone) || 'Eastern Time (US & Canada)'
   end
   
   def to_s
