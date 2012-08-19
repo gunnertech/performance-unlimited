@@ -11,7 +11,7 @@ csv_output = csv_lib.generate(headers: true) do |csv|
   
   last_survey.questions.each do |question|
     arr = [question.short_text]
-    @dates.each do |date|
+    @dates.reverse.each do |date|
       completed_survey = @user.completed_surveys.find_by_date(date)
       if completed_survey.nil?
         arr << 'NA'
