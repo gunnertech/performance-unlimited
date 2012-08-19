@@ -3,7 +3,7 @@ require 'csv'
 csv_lib = RUBY_VERSION =~ /^1.8/ ? FasterCSV : CSV
  
 csv_output = csv_lib.generate(headers: true) do |csv|
-  csv << ["Question", @dates.map(&:to_s) ].flatten
+  csv << ["Question", @dates.reverse.map(&:to_s) ].flatten
   
   max_responses = @user.completed_surveys.where{ date >> my{@dates}}.max_by{ |completed_survey| completed_survey.selected_responses.count }.try(:selected_responses).try(:count) || 0
   
