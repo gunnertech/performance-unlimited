@@ -37,7 +37,7 @@
         </tr>
       </thead>
       <tbody>
-        <% @division.users.unscoped.where{ average != nil }.order{ [average.desc,score.desc] }.each_with_index do |user,i| %>
+        <% @division.users.unscoped.active.where{ average != nil }.order{ [average.desc,score.desc] }.each_with_index do |user,i| %>
           <tr>
             <td><%= i+1 %></td>
             <td><%= user %></td>

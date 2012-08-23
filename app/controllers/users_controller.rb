@@ -15,6 +15,17 @@ class UsersController < InheritedResources::Base
     end
   end
   
+  def update
+    @user = User.find(params[:id])
+    if params[:password].blank?
+      @user.update_without_password(params[:user])
+    else
+      @user.update(params[:user])
+    end
+    
+    update!
+  end
+  
   
   def show
     show! do |success|

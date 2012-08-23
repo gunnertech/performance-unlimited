@@ -16,7 +16,6 @@ class HomeController < ApplicationController
       
       if @division
         @groups = @division.groups
-        @users = @division.users
         @grouped_users = @division.grouped_users
         @survey = @division.surveys.first
       end

@@ -29,13 +29,13 @@ class Division < ActiveRecord::Base
       return grouped_users
     end
     
-    biggest_group = groups.max_by{ |group| group.users.count }
+    biggest_group = groups.max_by{ |group| group.users.active.count }
     
-    0.upto(biggest_group.users.count-1).each do |row|
+    0.upto(biggest_group.users.active.count-1).each do |row|
       grouped_users[row] ||= []
       groups.each_with_index do |group,i|
         grouped_users[row][i] ||= []
-        grouped_users[row][i].push(users.joins{ groups }.where{ groups.id >> group.id }.to_a)
+        grouped_users[row][i].push(users.active.joins{ groups }.where{ groups.id >> group.id }.to_a)
         grouped_users[row][i].flatten!
       end
     end
