@@ -1,7 +1,8 @@
 <%- model_class = User -%>
-<div class="page-header clearfix clearfix">
-  <h1 class="pull-left"><%= @user %> <small>(<%= @user.groups.map{|group| link_to(group,[group.division,group])}.join(',').html_safe %>)</small></h1>
-  <%= link_to t('download_last_30_days'), user_path(@user,format:'csv'), class: 'btn btn-primary btn-large pull-right' %>
+<div class="page-header clearfix clearfix row-fluid">
+  <h1 class="span8"><%= @user %> <small>(<%= @user.groups.map{|group| link_to(group,[group.division,group])}.join(',').html_safe %>)</small></h1>
+  <%= link_to t('download_csv'), user_path(@user,format:'csv'), class: 'btn btn-primary btn-large span2' %>
+  <%= link_to t('.edit', :default => t("helpers.links.edit")), edit_user_path(@user), :class => 'btn btn-large span2' %>
 </div>
 
 <section>
@@ -53,8 +54,3 @@
     <div class="graph" data-user_id="<%= @user.id %>" data-day_range="30"></div>
   </div>
 </section>
-
-<div class="form-actions">
-  <%= link_to t('.edit', :default => t("helpers.links.edit")),
-              edit_user_path(@user), :class => 'btn' %>
-</div>
