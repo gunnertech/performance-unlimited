@@ -1,4 +1,7 @@
 Recoverytracker::Application.routes.draw do
+
+  resources :metric_types
+
   match '/auth/:provider/callback', to: 'organizations#add_authentication'
   
   devise_for :users
@@ -41,6 +44,7 @@ Recoverytracker::Application.routes.draw do
   end
 
   resources :organizations do
+    resources :metrics
     resources :divisions
   end
   
@@ -51,6 +55,7 @@ Recoverytracker::Application.routes.draw do
     resources :assigned_divisions
     resources :completed_surveys
     resources :assigned_groups
+    resources :recorded_metrics
   end
 
   

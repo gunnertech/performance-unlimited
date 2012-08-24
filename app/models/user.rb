@@ -17,6 +17,7 @@ class User < ActiveRecord::Base
   has_many :divisions, through: :groups
   has_many :organizations, through: :divisions
   has_many :completed_surveys
+  has_many :recorded_metrics
   
   default_scope order("users.last_name ASC")
   

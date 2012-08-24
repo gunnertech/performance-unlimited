@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120821175513) do
+ActiveRecord::Schema.define(:version => 20120824165906) do
 
   create_table "assigned_divisions", :force => true do |t|
     t.integer  "division_id"
@@ -114,6 +114,24 @@ ActiveRecord::Schema.define(:version => 20120821175513) do
 
   add_index "groups", ["division_id"], :name => "index_groups_on_division_id"
 
+  create_table "metric_types", :force => true do |t|
+    t.string   "name"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  create_table "metrics", :force => true do |t|
+    t.integer  "metric_type_id"
+    t.integer  "organization_id"
+    t.string   "name"
+    t.integer  "decimal_places"
+    t.datetime "created_at",      :null => false
+    t.datetime "updated_at",      :null => false
+  end
+
+  add_index "metrics", ["metric_type_id"], :name => "index_metrics_on_metric_type_id"
+  add_index "metrics", ["organization_id"], :name => "index_metrics_on_organization_id"
+
   create_table "organizations", :force => true do |t|
     t.string   "name"
     t.datetime "created_at",        :null => false
@@ -156,6 +174,18 @@ ActiveRecord::Schema.define(:version => 20120821175513) do
   end
 
   add_index "questions", ["organization_id"], :name => "index_questions_on_organization_id"
+
+  create_table "recorded_metrics", :force => true do |t|
+    t.integer  "user_id"
+    t.string   "value"
+    t.date     "recorded_on"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
+    t.integer  "metric_id"
+  end
+
+  add_index "recorded_metrics", ["metric_id"], :name => "index_recorded_metrics_on_metric_id"
+  add_index "recorded_metrics", ["user_id"], :name => "index_recorded_metrics_on_user_id"
 
   create_table "responses", :force => true do |t|
     t.integer  "question_id"

@@ -8,14 +8,18 @@ class Ability
     
     can :manage, AssignedDivision, :id => AssignedDivision.with_role('admin', user).map{ |assigned_division| assigned_division.id }
     
-    [AssignedDivision, AssignedGroup, AssignedQuestion, AssignedQuestionSet, AssignedSurvey, CompletedSurvey, Division, Group, PointRange, Question, QuestionSet, Response, SelectedResponse, Survey].each do |clazz|
+    [Metric, AssignedDivision, AssignedGroup, AssignedQuestion, AssignedQuestionSet, AssignedSurvey, CompletedSurvey, Division, Group, PointRange, Question, QuestionSet, Response, SelectedResponse, Survey].each do |clazz|
       can :manage, clazz do |resource|
         user.has_role 'admin', resource.organization
       end
     end
     
     can :manage, User do |u|
-      u.new_record? ||  u.organizations.any? { |organization| user.has_role 'admin', organization }
+      !user.new_record? && (u.new_record? ||  u.organizations.any? { |organization| user.has_role 'admin', organization })
+    end
+    
+    can :manage, RecordedMetric do |rm|
+      !user.new_record? && (rm.new_record? ||  rm.user.organizations.any? { |organization| user.has_role 'admin', organization })
     end
     
     can :manage, Authentication do |authentication|

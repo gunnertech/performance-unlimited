@@ -54,3 +54,33 @@
     <div class="graph" data-user_id="<%= @user.id %>" data-day_range="30"></div>
   </div>
 </section>
+
+
+<section>
+  <h2><%=t 'metrics' %></h2>
+  
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th><%=t 'metric' %></th>
+        <th><%=t 'value' %></th>
+        <th><%=t 'recorded_on' %></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @user.organizations.each do |organization| %>
+        <% organization.metrics.each do |metric| %>
+          <tr>
+            <td><%= metric %></td>
+            <td><%= @user.recorded_metrics.current_for(metric.id).first.try(:value) || 'N/A' %></td>
+            <td><%= @user.recorded_metrics.current_for(metric.id).first.try(:recorded_on) || 'N/A' %></td>
+          </tr>
+        <% end %>
+      <% end %>
+    </tbody>
+  </table>
+  
+  <div class="form-actions">
+    <%= link_to t('record_metric'), new_user_recorded_metric_path(resource), :class => 'btn btn-info' %>
+  </div>
+</section>
