@@ -71,7 +71,7 @@
 <section id="summary">
   <div class="row-fluid">
     <div class="span6" id="final-score">
-      <h1><%=t 'your_score' %>: <span id="score">0</span></h1>
+      <h1><%=t 'your_score' %>: <span id="score">0</span> <small><%= link_to t('history'), "/users/user_id", class: "completed-survey-link" %></small></h1>
       
       <h3>Scale</h3>
       <table class="table table-bordered point-legend">

@@ -20,6 +20,7 @@ $('.navigate.btn-primary').live('click', (event) ->
   
   response_string = response_string.replace(/^,/,'')
   _this = this
+  $(".completed-survey-link").attr('href',"/users/#{$(_this).data('user_id')}")
   $.ajax(
     $(this).data('sumbission-uri'),
     type: 'POST',
@@ -29,7 +30,6 @@ $('.navigate.btn-primary').live('click', (event) ->
       taker_id: $(this).data('user_id')
   )
   .always((objects,status,xhr) ->
-    $(".completed-survey-link").attr('href',"/users/#{$(_this).data('user_id')}")
     window.draw_graphs()
   )
 )
