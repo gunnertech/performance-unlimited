@@ -28,6 +28,7 @@ class UsersController < InheritedResources::Base
   
   
   def show
+    @completed_surveys = resource.completed_surveys.paginate(:page => params[:page])
     show! do |success|
       success.html
       success.csv {

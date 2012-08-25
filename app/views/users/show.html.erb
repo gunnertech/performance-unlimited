@@ -16,7 +16,7 @@
       </tr>
     </thead>
     <tbody>
-      <% @user.completed_surveys.each do |completed_survey| %>
+      <% @completed_surveys.each do |completed_survey| %>
         <tr>
           <td><%= completed_survey.date %></td>
           <td><%= completed_survey %></td>
@@ -25,6 +25,7 @@
       <% end %>
     </tbody>
   </table>
+  <%= will_paginate @completed_surveys %>
 </section>
 
 <section class="row-fluid">

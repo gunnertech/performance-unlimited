@@ -1,4 +1,6 @@
 class CompletedSurvey < ActiveRecord::Base
+  self.per_page = 10
+  
   belongs_to :user
   belongs_to :survey
   
