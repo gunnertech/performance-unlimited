@@ -16,6 +16,8 @@ class CompletedSurveysController < InheritedResources::Base
   end
   
   def create
+    I18n.locale = :en
+    
     today = Time.now.in_time_zone(parent.time_zone).to_date
     @completed_survey = parent.completed_surveys.create(user_id: params[:taker_id].to_i, date: today)
     
