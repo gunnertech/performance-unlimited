@@ -6,8 +6,8 @@ class HomeController < ApplicationController
       if @organization = Organization.with_role('admin', current_user).first
         if @organization.divisions.count == 1
           @division = @organization.divisions.find_by_name('Pittsburgh Pirates')
-        elsif params[:organization_id]
-          @division = @organization.divisions.find(params[:organization_id])
+        elsif params[:division_id]
+          @division = @organization.divisions.find(params[:division_id])
         end
       else
         @division = Division.with_role('athlete', current_user).first

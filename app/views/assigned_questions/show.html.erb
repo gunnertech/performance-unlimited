@@ -36,9 +36,9 @@
   <%= link_to t('.back', :default => t("helpers.links.back")),
               [resource.assigned_question_sets.first.survey,resource.assigned_question_sets.first], :class => 'btn'  %>
   <%= link_to t('.edit', :default => t("helpers.links.edit")),
-              edit_assigned_question_path(@assigned_question), :class => 'btn' %>
+              [:edit,parent,resource], :class => 'btn' %>
   <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
-              assigned_question_path(@assigned_question),
+              [parent,resource],
               :method => 'delete',
               :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')),
               :class => 'btn btn-danger' %>

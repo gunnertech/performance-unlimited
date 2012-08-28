@@ -19,6 +19,6 @@ class AssignedQuestionSet < ActiveRecord::Base
   end
   
   def name
-    question_set.name
+    question_set.name || 'Translation Unavailable'
   end
 end

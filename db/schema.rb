@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120824165906) do
+ActiveRecord::Schema.define(:version => 20120827172336) do
 
   create_table "assigned_divisions", :force => true do |t|
     t.integer  "division_id"
@@ -33,6 +33,16 @@ ActiveRecord::Schema.define(:version => 20120824165906) do
 
   add_index "assigned_groups", ["group_id"], :name => "index_assigned_groups_on_group_id"
   add_index "assigned_groups", ["user_id"], :name => "index_assigned_groups_on_user_id"
+
+  create_table "assigned_locales", :force => true do |t|
+    t.integer  "locale_id"
+    t.integer  "organization_id"
+    t.datetime "created_at",      :null => false
+    t.datetime "updated_at",      :null => false
+  end
+
+  add_index "assigned_locales", ["locale_id"], :name => "index_assigned_locales_on_locale_id"
+  add_index "assigned_locales", ["organization_id"], :name => "index_assigned_locales_on_organization_id"
 
   create_table "assigned_question_sets", :force => true do |t|
     t.integer  "question_set_id"
@@ -114,6 +124,13 @@ ActiveRecord::Schema.define(:version => 20120824165906) do
 
   add_index "groups", ["division_id"], :name => "index_groups_on_division_id"
 
+  create_table "locales", :force => true do |t|
+    t.string   "code"
+    t.string   "name"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
   create_table "metric_types", :force => true do |t|
     t.string   "name"
     t.datetime "created_at", :null => false
@@ -155,6 +172,18 @@ ActiveRecord::Schema.define(:version => 20120824165906) do
   add_index "point_ranges", ["assigned_survey_id"], :name => "index_point_ranges_on_assigned_survey_id"
   add_index "point_ranges", ["name"], :name => "index_point_ranges_on_name"
 
+  create_table "question_set_translations", :force => true do |t|
+    t.integer  "question_set_id"
+    t.string   "locale"
+    t.string   "name"
+    t.text     "description"
+    t.datetime "created_at",      :null => false
+    t.datetime "updated_at",      :null => false
+  end
+
+  add_index "question_set_translations", ["locale"], :name => "index_question_set_translations_on_locale"
+  add_index "question_set_translations", ["question_set_id"], :name => "index_27164766fcab2655b2334a8cb601370f4fbbcec2"
+
   create_table "question_sets", :force => true do |t|
     t.string   "name"
     t.text     "description"
@@ -164,6 +193,18 @@ ActiveRecord::Schema.define(:version => 20120824165906) do
   end
 
   add_index "question_sets", ["organization_id"], :name => "index_question_sets_on_organization_id"
+
+  create_table "question_translations", :force => true do |t|
+    t.integer  "question_id"
+    t.string   "locale"
+    t.string   "short_text"
+    t.text     "long_text"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
+  end
+
+  add_index "question_translations", ["locale"], :name => "index_question_translations_on_locale"
+  add_index "question_translations", ["question_id"], :name => "index_question_translations_on_question_id"
 
   create_table "questions", :force => true do |t|
     t.string   "short_text"
@@ -186,6 +227,18 @@ ActiveRecord::Schema.define(:version => 20120824165906) do
 
   add_index "recorded_metrics", ["metric_id"], :name => "index_recorded_metrics_on_metric_id"
   add_index "recorded_metrics", ["user_id"], :name => "index_recorded_metrics_on_user_id"
+
+  create_table "response_translations", :force => true do |t|
+    t.integer  "response_id"
+    t.string   "locale"
+    t.string   "short_text"
+    t.text     "long_text"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
+  end
+
+  add_index "response_translations", ["locale"], :name => "index_response_translations_on_locale"
+  add_index "response_translations", ["response_id"], :name => "index_response_translations_on_response_id"
 
   create_table "responses", :force => true do |t|
     t.integer  "question_id"
@@ -221,6 +274,17 @@ ActiveRecord::Schema.define(:version => 20120824165906) do
   add_index "selected_responses", ["completed_survey_id"], :name => "index_selected_responses_on_completed_survey_id"
   add_index "selected_responses", ["response_id"], :name => "index_selected_responses_on_response_id"
   add_index "selected_responses", ["user_id"], :name => "index_selected_responses_on_user_id"
+
+  create_table "survey_translations", :force => true do |t|
+    t.integer  "survey_id"
+    t.string   "locale"
+    t.string   "name"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  add_index "survey_translations", ["locale"], :name => "index_survey_translations_on_locale"
+  add_index "survey_translations", ["survey_id"], :name => "index_survey_translations_on_survey_id"
 
   create_table "surveys", :force => true do |t|
     t.string   "name"

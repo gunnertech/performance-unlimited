@@ -36,6 +36,7 @@ GEM
       json (~> 1.4)
       nokogiri (>= 1.4.4)
       uuidtools (~> 2.1)
+    batch_translations (0.1.2)
     bcrypt-ruby (3.0.1)
     bootstrap-will_paginate (0.0.7)
       will_paginate
@@ -102,6 +103,10 @@ GEM
     geokit-rails3 (0.1.5)
       geokit (~> 1.5)
       rails (~> 3.0)
+    globalize3 (0.2.0)
+      activemodel (>= 3.0.0)
+      activerecord (>= 3.0.0)
+      paper_trail (~> 2)
     google_drive (0.3.1)
       nokogiri (>= 1.4.4, != 1.5.2, != 1.5.1)
       oauth (>= 0.3.6)
@@ -199,6 +204,9 @@ GEM
       multi_json (~> 1.3)
       omniauth-oauth (~> 1.0)
     orm_adapter (0.4.0)
+    paper_trail (2.6.3)
+      activerecord (~> 3.0)
+      railties (~> 3.0)
     paperclip (3.1.4)
       activemodel (>= 3.0.0)
       activerecord (>= 3.0.0)
@@ -325,6 +333,7 @@ PLATFORMS
 DEPENDENCIES
   acts_as_list
   aws-sdk
+  batch_translations
   bootstrap-will_paginate
   cancan (>= 1.6.8)
   capybara
@@ -336,6 +345,7 @@ DEPENDENCIES
   factory_girl_rails (>= 3.5.0)
   geokit
   geokit-rails3
+  globalize3
   google_drive
   growl
   guard (>= 0.6.2)

@@ -12,7 +12,10 @@ class Division < ActiveRecord::Base
   has_many :assigned_surveys
   has_many :surveys, through: :assigned_surveys
   
-  attr_accessible :name, :organization, :organization_id, :time_zone
+  attr_accessible :name, :organization, :organization_id, :time_zone, :creator
+  attr_accessor :creator
+  
+  after_create :set_organization
   
   def to_s
     name
@@ -41,5 +44,9 @@ class Division < ActiveRecord::Base
     end
     
     grouped_users
+  end
+  
+  def set_organization
+    self.update_attributes(organization: Organization.with_role('admin', creator).first)
   end
 end

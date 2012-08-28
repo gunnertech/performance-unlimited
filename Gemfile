@@ -29,6 +29,8 @@ gem 'omniauth-facebook'
 gem 'omniauth-google-oauth2'
 gem 'google_drive'
 gem 'rails_autolink', :require => 'rails_autolink'
+gem 'globalize3'
+gem 'batch_translations'
 
 group :assets do
   gem 'sass-rails',   '~> 3.2.3'

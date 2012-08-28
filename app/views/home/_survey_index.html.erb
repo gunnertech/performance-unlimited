@@ -55,15 +55,15 @@
     </table>
     
     <% if assigned_question_set == @survey.assigned_question_sets.first %>
-      <a href="#current-roster" class="navigate btn btn-inverse pull-left">Prev</a>
+      <a href="#current-roster" class="navigate btn btn-inverse pull-left"><%=t 'prev' %></a>
     <% else %>
-      <a href="#<%= @survey.assigned_question_sets[i-1].to_s.parameterize %>" class="navigate btn btn-inverse pull-left">Prev</a>
+      <a href="#<%= @survey.assigned_question_sets[i-1].to_s.parameterize %>" class="navigate btn btn-inverse pull-left"><%=t 'prev' %></a>
     <% end %>
     
     <% if assigned_question_set == @survey.assigned_question_sets.last %>
       <a href="#summary" data-user_id="<%= current_user.try(:id) %>" data-sumbission-uri="<%= survey_completed_surveys_path(@survey) %>" class="navigate btn btn-primary pull-right next disabled">Submit Answers</a>
     <% else %>
-      <a href="#<%= @survey.assigned_question_sets[i+1].to_s.parameterize %>" class="navigate btn btn-inverse pull-right next disabled">Next</a>
+      <a href="#<%= @survey.assigned_question_sets[i+1].to_s.parameterize %>" class="navigate btn btn-inverse pull-right next disabled"><%=t 'next' %></a>
     <% end %>
   </section>
 <% end %>
@@ -89,7 +89,7 @@
       <table class="table table-striped">
         <thead>
           <tr>
-            <th><%=t 'rank' %></th>
+            <th><% 'rank' %></th>
             <th><%=t 'name' %></th>
             <th><%=t 'score' %></th>
           </tr>

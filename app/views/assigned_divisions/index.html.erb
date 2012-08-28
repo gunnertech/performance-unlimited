@@ -1,10 +1,10 @@
 <%- model_class = AssignedDivision -%>
 <div class="page-header clearfix">
-  <h1><%=t '.title', :default => model_class.model_name.human.pluralize %></h1>
+  <h1><%=t 'divisions' %></h1>
 </div>
 
 <% @assigned_divisions.each do |assigned_division| %>
-  <h2><%= link_to assigned_division, assigned_division.division %> Members</h2>
+  <h2><%= link_to assigned_division, assigned_division.division %></h2>
   <table class="table table-striped">
     <thead>
       <tr>

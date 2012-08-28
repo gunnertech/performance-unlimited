@@ -12,6 +12,6 @@ class AssignedQuestion < ActiveRecord::Base
   accepts_nested_attributes_for :question
   
   def to_s
-    question.to_s
+    question.to_s || 'Translation Unavilable'
   end
 end

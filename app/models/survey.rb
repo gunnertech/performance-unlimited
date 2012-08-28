@@ -1,4 +1,8 @@
 class Survey < ActiveRecord::Base
+  translates :name
+  accepts_nested_attributes_for :translations
+  attr_accessible :translations_attributes
+  
   resourcify
   
   belongs_to :organization
@@ -21,4 +25,8 @@ class Survey < ActiveRecord::Base
   def time_zone
     divisions.first.time_zone || 'Eastern Time (US & Canada)'
   end
+end
+
+Survey::Translation.class_eval do
+  attr_accessible :locale, :name
 end

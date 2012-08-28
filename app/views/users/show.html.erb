@@ -1,7 +1,7 @@
 <%- model_class = User -%>
 <div class="page-header clearfix clearfix row-fluid">
   <h1 class="span8"><%= @user %> <small>(<%= @user.groups.map{|group| link_to(group,[group.division,group])}.join(',').html_safe %>)</small></h1>
-  <%= link_to t('download_csv'), user_path(@user,format:'csv'), class: 'btn btn-primary btn-large span2' %>
+  <%= link_to t('download'), user_path(@user,format:'csv'), class: 'btn btn-primary btn-large span2' %>
   <%= link_to t('.edit', :default => t("helpers.links.edit")), edit_user_path(@user), :class => 'btn btn-large span2' %>
 </div>
 
@@ -10,7 +10,7 @@
   <table class="table table-striped">
     <thead>
       <tr>
-        <th><%=t 'date_slug' %></th>
+        <th><%=t 'date_taken' %></th>
         <th><%=t 'name' %></th>
         <th><%=t 'score' %></th>
       </tr>
@@ -30,28 +30,28 @@
 
 <section class="row-fluid">
   <div class="span12">
-    <h2><%=t 'last_5_days' %></h2>
+    <h2><%=t 'last_x_days', number: '5' %></h2>
     <div class="graph" data-user_id="<%= @user.id %>" data-day_range="5"></div>
   </div>
 </section>
 
 <section class="row-fluid">  
   <div class="span12">
-    <h2><%=t 'last_10_days' %></h2>
+    <h2><%=t 'last_x_days', number: '10' %></h2>
     <div class="graph" data-user_id="<%= @user.id %>" data-day_range="10"></div>
   </div>
 </section>
 
 <section class="row-fluid">
   <div class="span12">
-    <h2><%=t 'last_15_days' %></h2>
+    <h2><%=t 'last_x_days', number: '15' %></h2>
     <div class="graph" data-user_id="<%= @user.id %>" data-day_range="15"></div>
   </div>
 </section>
 
 <section class="row-fluid">  
   <div class="span12">
-    <h2><%=t 'last_30_days' %></h2>
+    <h2><%=t 'last_x_days', number: '30' %></h2>
     <div class="graph" data-user_id="<%= @user.id %>" data-day_range="30"></div>
   </div>
 </section>

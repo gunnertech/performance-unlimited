@@ -1,6 +1,13 @@
 <%= simple_form_for [parent,@response], :html => { :class => 'form-horizontal' } do |f| %>
-  <%= f.input :short_text %>
-  <%= f.input :long_text %>
+
+  <% resource.organization.locales.each do |l| %>
+    <h4><%=t l.name %></h4>
+    <%= f.globalize_fields_for l.code.to_sym do |g| %>
+      <%= g.input :short_text %>
+      <%= g.input :long_text, input_html: {rows: "", cols: ""} %>
+    <% end %>
+  <% end %>
+
   <%= f.input :points %>
   <%= f.input :position, input_html: { value: (resource.position || (parent.responses.last ? (parent.responses.last.position || 0) + 1 : 1)) }, hint: t('position_hint') %>
   

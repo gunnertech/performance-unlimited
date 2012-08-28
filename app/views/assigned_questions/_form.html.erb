@@ -1,7 +1,13 @@
 <%= simple_form_for [parent,@assigned_question], :html => { :class => 'form-horizontal' } do |f| %>
   <%= f.simple_fields_for :question do |question_form| %>
-    <%= question_form.input :short_text %>
-    <%= question_form.input :long_text, input_html: {rows: "", cols: ""} %>
+  
+    <% resource.organization.locales.each do |l| %>
+      <h4><%=t l.name %></h4>
+      <%= question_form.globalize_fields_for l.code.to_sym do |g| %>
+        <%= g.input :short_text %>
+        <%= g.input :long_text, input_html: {rows: "", cols: ""} %>
+      <% end %>
+    <% end %>
   <% end %>
 
   <%= f.input :position, input_html: { value: (resource.position || (parent.assigned_questions.last ? (parent.assigned_questions.last.position || 0) + 1 : 1)) }, hint: t('position_hint') %>

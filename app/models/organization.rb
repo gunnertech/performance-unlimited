@@ -9,6 +9,8 @@ class Organization < ActiveRecord::Base
   has_many :authentications, as: :authenticationable
   has_many :users, through: :divisions
   has_many :metrics
+  has_many :assigned_locales
+  has_many :locales, through: :assigned_locales
   
   attr_accessible :name, :logo
   

@@ -163,6 +163,13 @@
 # CompletedSurvey.all.map(&:update_score)
 # User.all.map(&:update_score)
 
+english = Locale.find_or_create_by_code(code: "en", name: 'English')
+spanish = Locale.find_or_create_by_code(code: "es", name: 'Spanish')
+
+Organization.first.assigned_locales.create(locale: english) if Organization.first.locales.where{ code == 'en' }.count == 0
+Organization.first.assigned_locales.create(locale: spanish) if Organization.first.locales.where{ code == 'es' }.count == 0
+
+
 ['Text', 'Number', 'Decimal', 'Percentage'].each do |metric_type|
   MetricType.create(name: metric_type)
 end

@@ -6,6 +6,14 @@ class AssignedQuestionSetsController < InheritedResources::Base
     @assigned_question_set.question_set = QuestionSet.new
   end
   
+  # def edit
+  #   resource.organization.locales.each do |locale|
+  #     resource.question_set.translations.build locale: locale.code
+  #   end
+  #   
+  #   edit!
+  # end
+  
   def create
     create!{ parent }
   end

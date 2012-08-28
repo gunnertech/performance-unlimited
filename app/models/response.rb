@@ -1,4 +1,8 @@
 class Response < ActiveRecord::Base
+  translates :short_text, :long_text
+  accepts_nested_attributes_for :translations
+  attr_accessible :translations_attributes
+  
   belongs_to :question
   has_one :organization, through: :question
   attr_accessible :long_text, :points, :short_text, :position
@@ -8,4 +12,8 @@ class Response < ActiveRecord::Base
   def to_s
     short_text
   end
+end
+
+Response::Translation.class_eval do
+  attr_accessible :locale, :short_text, :long_text
 end

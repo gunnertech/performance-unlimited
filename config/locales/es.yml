@@ -1,0 +1,49 @@
+es:
+  surveys: Encuestas
+  divisions: Divisiones
+  language: Idioma
+  edit_account: Editar Cuenta
+  log_in: Iniciar la Sesión
+  log_out: Finalizar la Sesión
+  english: Inglés
+  spanish: Español
+  next: Próximo
+  prev: Anterior
+  download: Descargar
+  leaderboards: Tablas de Clasificación
+  your_score: Su Resultado
+  rank: Rango
+  score: Resultado
+  name: Nombre
+  follow_us: Siguenos
+  latest_tweets: Ultimo Tweets
+  history: Historia
+  view_leaderboards: Ver Rablas de Clasificación
+  follow_on_twitter: Seguir en Twitter
+  alltime_leaderboard: Tablas de Clasificación de Todos los Tiempos
+  todays_leaderboard: Tablas de Clasificación de Hoy
+  follow_on_twitter: Seguir en Twitter
+  add_question: Agregar Rregunta
+  hello: Hola
+  date_taken: Recha Tomada
+  position_hint: Posición Indirecta
+  record_metric: Grabar Métrico
+  completed_surveys: Encuestas Completadas
+  last_x_days: 'Ultimo %{number} Días'
+  metrics: Métrica
+  metric: Métrica
+  value: Valor
+  recorded_on: Grabar En
+  helpers:
+    links: 
+      edit: Editar
+  time:
+    formats:
+      picker: "%m/%d/%Y"
+      default: '%B %d, %Y'
+      month_day: '%B %d'
+      day_year: '%d, %Y'
+      day_year_time: '%d, %Y %l %p'
+      time_only: '%l %p'
+      long: '%B %d, %Y %l %p'
+      input: '%m/%d/%Y %I:%M %p'
