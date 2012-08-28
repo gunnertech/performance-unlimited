@@ -173,3 +173,5 @@ Organization.first.assigned_locales.create(locale: spanish) if Organization.firs
 ['Text', 'Number', 'Decimal', 'Percentage'].each do |metric_type|
   MetricType.create(name: metric_type)
 end
+
+User.all.each{|user| user.update_attributes(language: 'en') if user.language.blank? }
