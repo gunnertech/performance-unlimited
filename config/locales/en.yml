@@ -20,7 +20,6 @@ en:
   rank: "Rank"
   score: "Score"
   name: "Name"
-  last_30_days: "Last 30 Days"
   follow_us: "Follow Us"
   latest_tweets: "Latest Tweets"
   history: "History"
@@ -30,7 +29,6 @@ en:
   todays_leaderboard: "Today's Leaderboard"
   follow_on_twitter: "Follow @%{name} on Twitter"
   add_question: 'Add Question'
-  hello: "Hello world"
   date_taken: "Date Taken"
   position_hint: "The order you'd like this to appear in"
   record_metric: "Record Metric"
@@ -40,6 +38,9 @@ en:
   metric: "Metric"
   value: "Value"
   recorded_on: "Recorded On"
+  current_members: Current Members
+  admin: Admin
+  signed_in_as: Signed in as
   helpers:
     links:
       edit: "Edit"

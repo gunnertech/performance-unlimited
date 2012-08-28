@@ -1,7 +1,7 @@
 <% if current_user.has_role? 'admin', @survey %>
   <section id="current-roster">
     <h1>
-      <%=t 'current_roster' %>
+      <%=t 'current_members' %>
       <%= link_to t('leaderboards'), @division, class: 'btn btn-large pull-right' %>
     </h1>
     <table class="table table-striped">

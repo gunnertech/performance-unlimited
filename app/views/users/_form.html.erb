@@ -4,6 +4,7 @@
   <%= f.input :password %>
   <%= f.input :password_confirmation %>
   <%= f.input :active %>
+  <%= f.input :language, collection: Locale.all.map{ |locale| [locale.name,locale.code] }, include_blank: false %>
   
   
   <div class="form-actions">
