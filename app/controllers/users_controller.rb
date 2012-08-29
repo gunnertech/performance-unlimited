@@ -32,6 +32,7 @@ class UsersController < InheritedResources::Base
     show! do |success|
       success.html
       success.csv {
+        I18n.locale = :en
         today = Time.now.in_time_zone(@user.time_zone).to_date
         title = "#{@user.name.parameterize}-#{today}.csv"
         @dates = ((today-30.days)..today).map{ |date| date }
