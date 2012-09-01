@@ -2,7 +2,7 @@
 <div class="page-header clearfix clearfix row-fluid">
   <h1 class="span8"><%= @user %> <small>(<%= @user.groups.map{|group| link_to(group,[group.division,group])}.join(',').html_safe %>)</small></h1>
   <%= link_to t('download'), user_path(@user,format:'csv'), class: 'btn btn-primary btn-large span2' %>
-  <%= link_to t('.edit', :default => t("helpers.links.edit")), edit_user_path(@user), :class => 'btn btn-large span2' %>
+  <%= link_to t('.edit', :default => t("helpers.links.edit")), edit_user_path(@user), :class => 'btn btn-large span2' if can?(:update, @user.organizations.first) %>
 </div>
 
 <section>
@@ -81,7 +81,9 @@
     </tbody>
   </table>
   
-  <div class="form-actions">
-    <%= link_to t('record_metric'), new_user_recorded_metric_path(resource), :class => 'btn btn-info' %>
-  </div>
+  <% if can?(:create, Metric) %>
+    <div class="form-actions">
+      <%= link_to t('record_metric'), new_user_recorded_metric_path(resource), :class => 'btn btn-info' %>
+    </div>
+  <% end %>
 </section>
