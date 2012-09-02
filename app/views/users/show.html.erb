@@ -1,6 +1,11 @@
 <%- model_class = User -%>
 <div class="page-header clearfix clearfix row-fluid">
-  <h1 class="span8"><%= @user %> <small>(<%= @user.groups.map{|group| link_to(group,[group.division,group])}.join(',').html_safe %>)</small></h1>
+  <h1 class="span8">
+    <%= @user %> 
+    <% if can?(:manage, @user.organizations.first) %>
+      <small>(<%= @user.groups.map{|group| link_to(group,[group.division,group])}.join(',').html_safe %>)</small>
+    <% end %>
+  </h1>
   <%= link_to t('download'), user_path(@user,format:'csv'), class: 'btn btn-primary btn-large span2' %>
   <%= link_to t('.edit', :default => t("helpers.links.edit")), edit_user_path(@user), :class => 'btn btn-large span2' if can?(:update, @user.organizations.first) %>
 </div>
