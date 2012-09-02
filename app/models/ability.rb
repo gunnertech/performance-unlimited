@@ -10,23 +10,23 @@ class Ability
     
     [Metric, AssignedDivision, AssignedGroup, AssignedQuestion, AssignedQuestionSet, AssignedSurvey, CompletedSurvey, Division, Group, PointRange, Question, QuestionSet, Response, SelectedResponse, Survey].each do |clazz|
       can :manage, clazz do |resource|
-        user.has_role 'admin', resource.organization
+        user.has_role? 'admin', resource.organization
       end
     end
     
     can :manage, User do |u|
-      !user.new_record? && (u.new_record? ||  u.organizations.any? { |organization| user.has_role 'admin', organization })
+      !user.new_record? && (u.new_record? ||  u.organizations.any? { |organization| user.has_role? 'admin', organization })
     end
     
     can :manage, RecordedMetric do |rm|
-      !user.new_record? && (rm.new_record? ||  rm.user.organizations.any? { |organization| user.has_role 'admin', organization })
+      !user.new_record? && (rm.new_record? ||  rm.user.organizations.any? { |organization| user.has_role? 'admin', organization })
     end
     
     can :manage, Authentication do |authentication|
       if authentication.authenticationable.isa?(Organization)
-        user.has_role 'admin', authentication.authenticationable
+        user.has_role? 'admin', authentication.authenticationable
       else
-        user.has_role 'admin', authentication.authenticationable.organization
+        user.has_role? 'admin', authentication.authenticationable.organization
       end
     end
     
