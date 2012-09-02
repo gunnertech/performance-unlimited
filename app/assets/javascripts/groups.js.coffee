@@ -14,8 +14,9 @@ window.draw_group_graphs = ->
           user_data = []
           $.ajax("/users/#{user.id}/completed_surveys.json?day_range=#{day_range}")
           .done((objects, status, jqxhr) ->
-            $.each(objects, (i,item) -> user_data.push([new Date(item.date), item.score]) )
-            group_data.push({data: user_data, label: user.name})
+            if objects.length > 1
+              $.each(objects, (i,item) -> user_data.push([new Date(item.date), item.score]) )
+              group_data.push({data: user_data, label: user.name})
             
             $.plot(
               $el, 
