@@ -4,16 +4,18 @@
   <%= link_to t('download_last_30_days'), division_group_path(parent,@group,format:'csv'), class: 'btn btn-primary btn-large pull-right' %>
 </div>
 
-<dl class="dl-horizontal">
-  <% @group.users.each do |user| %>
-    <dt><strong><%= link_to(user,user) %></strong></dt>
-    <dd><%= link_to t('remove'),
-                [user,user.assigned_group_for(@group.id)],
-                :method => :delete,
-                :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure? This will this person as a member of the group.')),
-                :class => 'btn btn-mini btn-danger' %></dd>
-  <% end %>
-</dl>
+<% if can?(:mange, @group) %>
+  <dl class="dl-horizontal">
+    <% @group.users.each do |user| %>
+      <dt><strong><%= link_to(user,user) %></strong></dt>
+      <dd><%= link_to t('remove'),
+                  [user,user.assigned_group_for(@group.id)],
+                  :method => :delete,
+                  :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure? This will this person as a member of the group.')),
+                  :class => 'btn btn-mini btn-danger' %></dd>
+    <% end %>
+  </dl>
+<% end %>
 
 <section class="row-fluid">
   <div class="span12">
