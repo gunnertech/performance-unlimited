@@ -7,7 +7,12 @@
     <% end %>
   </h1>
   <%= link_to t('download'), user_path(@user,format:'csv'), class: 'btn btn-primary btn-large span2' %>
-  <%= link_to t('.edit', :default => t("helpers.links.edit")), edit_user_path(@user), :class => 'btn btn-large span2' if can?(:update, @user.organizations.first) %>
+  <% if can?(:update, @user.organizations.first)
+ %>
+    <%= link_to t('.edit', :default => t("helpers.links.edit")), edit_user_path(@user), :class => 'btn btn-large span2' %>
+  <% else %>
+    <%= link_to t('leaderboards'), @user.divisions.first, class: 'btn btn-large span2' %>
+  <% end %>
 </div>
 
 <section>
@@ -86,7 +91,7 @@
     </tbody>
   </table>
   
-  <% if can?(:create, Metric) %>
+  <% if can?(:manage, @user.organizations.first) %>
     <div class="form-actions">
       <%= link_to t('record_metric'), new_user_recorded_metric_path(resource), :class => 'btn btn-info' %>
     </div>
