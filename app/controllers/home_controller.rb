@@ -11,7 +11,7 @@ class HomeController < ApplicationController
         end
       else
         @division = Division.with_role('athlete', current_user).first
-        @organization = @division.organization
+        @organization = @division.try(:organization)
       end
       
       if @division
