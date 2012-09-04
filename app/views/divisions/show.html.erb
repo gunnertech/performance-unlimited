@@ -1,6 +1,7 @@
 <%- model_class = Division -%>
-<div class="page-header clearfix">
-  <h1><%= @division.name %></h1>
+<div class="page-header clearfix clearfix row-fluid">
+  <h1 class="span8"><%= @division.name %></h1>
+  <%= link_to t('history'), current_user, class: 'btn btn-large span2 offset2' %>
 </div>
 
 <div class="row-fluid">
