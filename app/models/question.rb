@@ -9,10 +9,19 @@ class Question < ActiveRecord::Base
   has_many :question_sets, through: :assigned_questions
   has_many :responses, order: :position
   
-  attr_accessible :long_text, :short_text
+  attr_accessible :long_text, :short_text, :organization, :organization_id
+  
+  after_save :set_organization
   
   def to_s
     short_text
+  end
+  
+  protected
+  
+  def set_organization
+    self.update_attributes(organization: assigned_questions.first.try(:organization)) unless self.organization
+    true
   end
 end
 
