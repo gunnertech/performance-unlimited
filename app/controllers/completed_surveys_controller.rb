@@ -10,7 +10,7 @@ class CompletedSurveysController < InheritedResources::Base
       end_date = Time.now.in_time_zone(parent.time_zone).to_date
       start_date = end_date - params[:day_range].to_i.days
       
-      @completed_surveys = parent.completed_surveys.where{ date >> (start_date..end_date)  }
+      @completed_surveys = parent.completed_surveys.joins{ survey }.where{ survey.active == true }.where{ date >> (start_date..end_date)  }
     end
     index!
   end

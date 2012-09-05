@@ -16,7 +16,9 @@ class Survey < ActiveRecord::Base
   has_many :completed_surveys
   has_many :divisions, through: :organization
   
-  attr_accessible :name
+  attr_accessible :name, :active
+  
+  # default_scope where{ active == true }
   
   def to_s
     name
