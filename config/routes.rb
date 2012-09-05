@@ -24,8 +24,6 @@ Recoverytracker::Application.routes.draw do
 
   resources :point_ranges
 
-  resources :assigned_surveys
-
   resources :surveys do
     resources :completed_surveys
     resources :assigned_question_sets
@@ -41,6 +39,7 @@ Recoverytracker::Application.routes.draw do
   
   resources :divisions do
     resources :groups
+    resources :assigned_surveys
   end
 
   resources :organizations do

@@ -5,5 +5,5 @@ class AssignedSurvey < ActiveRecord::Base
   has_one :organization, through: :division
   
   has_many :point_ranges
-  # attr_accessible :title, :body
+  attr_accessible :survey, :survey_id, :division, :division_id
 end

@@ -46,6 +46,4 @@
 </div>
 
 
-<%= link_to t('create_new_division'),
-            new_division_path,
-            :class => 'btn btn-primary' %>
+<%= link_to t('create_new_division'), new_division_path, :class => 'btn btn-primary' if can?(:manage, parent.organization) %>
