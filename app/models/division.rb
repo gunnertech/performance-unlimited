@@ -9,7 +9,7 @@ class Division < ActiveRecord::Base
   has_many :assigned_groups, through: :groups, order: :position
   has_many :users, through: :groups
   
-  has_many :assigned_surveys
+  has_many :assigned_surveys, dependent: :destroy
   has_many :surveys, through: :assigned_surveys
   
   attr_accessible :name, :organization, :organization_id, :time_zone, :creator
