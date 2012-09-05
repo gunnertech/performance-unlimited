@@ -6,7 +6,15 @@ class AssignedDivision < ActiveRecord::Base
   
   attr_accessible :user, :division
   
+  after_update :clean_up
+  
   def to_s
     division.to_s
+  end
+  
+  protected
+  
+  def clean_up
+    self.destroy if self.division.nil?
   end
 end
