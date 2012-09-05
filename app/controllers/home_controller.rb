@@ -17,7 +17,7 @@ class HomeController < ApplicationController
       if @division
         @groups = @division.groups
         @grouped_users = @division.grouped_users
-        @survey = @division.surveys.first
+        @survey = @division.surveys.where{ active == true }.first
       end
     end
   end
