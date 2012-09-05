@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120905004824) do
+ActiveRecord::Schema.define(:version => 20120905154018) do
 
   create_table "assigned_divisions", :force => true do |t|
     t.integer  "division_id"
@@ -235,6 +235,7 @@ ActiveRecord::Schema.define(:version => 20120905004824) do
     t.text     "long_text"
     t.datetime "created_at",  :null => false
     t.datetime "updated_at",  :null => false
+    t.text     "suggestion"
   end
 
   add_index "response_translations", ["locale"], :name => "index_response_translations_on_locale"
@@ -248,6 +249,7 @@ ActiveRecord::Schema.define(:version => 20120905004824) do
     t.datetime "created_at",  :null => false
     t.datetime "updated_at",  :null => false
     t.integer  "position"
+    t.text     "suggestion"
   end
 
   add_index "responses", ["question_id"], :name => "index_responses_on_question_id"

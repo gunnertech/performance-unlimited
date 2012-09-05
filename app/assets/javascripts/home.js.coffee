@@ -55,6 +55,7 @@ $('.navigate').live('click', (event) ->
 
 $('.home.index .table .btn').live('click', (event) ->
   score = 0
+  suggestions = ''
   event.preventDefault()
   $(this).parents('tr').find('.btn').removeClass('active')
   $(this).addClass('active')
@@ -66,7 +67,10 @@ $('.home.index .table .btn').live('click', (event) ->
   
   $('table .active').each( -> 
     score += $(this).data('value')
+    suggestions += "<dt>#{$(this).parents('tr').find('strong').html()}</dt><dd>#{$(this).data('suggestion')}</dd>" if $(this).data('suggestion')
   )
+  
+  $('#suggestions').html(suggestions)
   
   $('#score').html(score)
   

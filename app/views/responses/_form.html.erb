@@ -5,6 +5,7 @@
     <%= f.globalize_fields_for l.code.to_sym do |g| %>
       <%= g.input :short_text %>
       <%= g.input :long_text, input_html: {rows: "", cols: ""} %>
+      <%= g.input :suggestion, input_html: {rows: "", cols: ""} %>
     <% end %>
   <% end %>
 

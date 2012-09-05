@@ -1,11 +1,11 @@
 class Response < ActiveRecord::Base
-  translates :short_text, :long_text
+  translates :short_text, :long_text, :suggestion
   accepts_nested_attributes_for :translations
   attr_accessible :translations_attributes
   
   belongs_to :question
   has_one :organization, through: :question
-  attr_accessible :long_text, :points, :short_text, :position
+  attr_accessible :long_text, :points, :short_text, :position, :suggestion
   
   acts_as_list scope: :question
   
@@ -15,5 +15,5 @@ class Response < ActiveRecord::Base
 end
 
 Response::Translation.class_eval do
-  attr_accessible :locale, :short_text, :long_text
+  attr_accessible :locale, :short_text, :long_text, :suggestion
 end

@@ -16,11 +16,11 @@
 
 <div class="form-actions">
   <%= link_to t('.back', :default => t("helpers.links.back")),
-              responses_path, :class => 'btn'  %>
+              [parent,resource], :class => 'btn'  %>
   <%= link_to t('.edit', :default => t("helpers.links.edit")),
-              edit_response_path(@response), :class => 'btn' %>
+              [:edit,parent,resource], :class => 'btn' %>
   <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
-              response_path(@response),
+              [parent,resource],
               :method => 'delete',
               :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')),
               :class => 'btn btn-danger' %>
