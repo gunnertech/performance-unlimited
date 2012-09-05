@@ -39,6 +39,10 @@ class User < ActiveRecord::Base
     divisions.first.try(:time_zone) || 'Eastern Time (US & Canada)'
   end
   
+  def organization
+    Organization.with_role('admin', self).first || organizations.first
+  end
+  
   def to_s
     name
   end

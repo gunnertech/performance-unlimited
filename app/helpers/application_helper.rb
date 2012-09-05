@@ -3,7 +3,11 @@ module ApplicationHelper
     if @organization
       image_tag(@organization.logo.url)
     else
-      image_tag(resource.organization.logo.url) rescue nil
+      begin
+        image_tag(resource.organization.logo.url)
+      rescue
+        image_tag(parent.organization.logo.url) rescue nil
+      end
     end
   end
 end
