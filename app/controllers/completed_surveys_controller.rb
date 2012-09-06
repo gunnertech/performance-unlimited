@@ -28,7 +28,8 @@ class CompletedSurveysController < InheritedResources::Base
         @completed_survey.selected_responses.create(user_id: params[:taker_id], response_id: response_id)
       end
     
-      title = "#{@user.name.parameterize}-#{today}.csv"
+      # title = "#{@user.name.parameterize}-#{today}.csv"
+      title = "#{@completed_survey.to_s}-#{@user.name.parameterize}.csv"
       @dates = ((today-30.days)..today).map{ |date| date }
       @user.organizations.each do |organization|
         organization.upload_spreadsheets(render_to_string(template: 'users/show.csv.erb'), title)

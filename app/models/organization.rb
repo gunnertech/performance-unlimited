@@ -26,7 +26,7 @@ class Organization < ActiveRecord::Base
     authentications.where{ provider == 'google_oauth2' }
   end
   
-  def upload_spreadsheets(spreadsheet_as_string, title)
+  def upload_spreadsheets(spreadsheet_as_string, title, delete_last = true)
     client = OAuth2::Client.new(ProvidersConfig::GOOGLEOAUTH2[:key], ProvidersConfig::GOOGLEOAUTH2[:secret], site: OAUTH_SITE_URL, token_url:'https://accounts.google.com/o/oauth2/token'); 
     
     google_accounts.each do |account|
@@ -36,10 +36,20 @@ class Organization < ActiveRecord::Base
       end
       begin
         session = GoogleDrive.login_with_oauth(token)
+        
+        if delete_last
+          session.spreadsheet_by_title(title).delete rescue nil
+        end
+        
         session.upload_from_string(spreadsheet_as_string, title, convert: true )
       rescue
         token = token.refresh!
         session = GoogleDrive.login_with_oauth(token)
+        
+        if delete_last
+          session.spreadsheet_by_title(title).delete rescue nil
+        end
+        
         session.upload_from_string(spreadsheet_as_string, title, convert: true )
       end
     end
