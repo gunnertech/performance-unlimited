@@ -1,0 +1,18 @@
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th><% 'rank' %></th>
+      <th><%=t 'name' %></th>
+      <th><%=t 'score' %></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @division.users.unscoped.active.leaderboard(@division.today,@division.today).each_with_index do |user,i| %>
+      <tr id="user-<%= user.id %>">
+        <td><%= i+1 %></td>
+        <td><%= user %></td>
+        <td><%= user.completed_surveys.where{ date == my{@division.today} }.try(:first).try(:score) %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

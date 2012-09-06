@@ -38,6 +38,9 @@ Recoverytracker::Application.routes.draw do
   resources :groups #TODO: REMOVE
   
   resources :divisions do
+    member do
+      get 'leaderboard'
+    end
     resources :groups
     resources :assigned_surveys
   end

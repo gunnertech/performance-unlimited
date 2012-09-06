@@ -6,6 +6,7 @@ $('.user.navigate').live('click', (event) ->
   _this = this
   event.preventDefault()
   $('.navigate.btn-primary').data('user_id', $(this).data('user_id'))
+  $('#leaderboard').data('user_id', $(this).data('user_id'))
   $('.home.index .graph').each(->
     $(this).data('user_id', $(_this).data('user_id'))
   )
@@ -31,6 +32,13 @@ $('.navigate.btn-primary').live('click', (event) ->
   )
   .always((objects,status,xhr) ->
     window.draw_graphs()
+    $.ajax(
+      "/divisions/#{$('#leaderboard').data('division_id')}/leaderboard",
+    )
+    .done((html,status,xhr) ->
+      $('#leaderboard .attach-point').html(html)
+      $("#user-#{$('#leaderboard').data('user_id')}").addClass('alert')
+    )
   )
 )
 
@@ -72,7 +80,6 @@ $('.home.index .table .btn').live('click', (event) ->
   
   $('#suggestions').html(suggestions)
   
-  $('#score').html(score)
   
   $('.point-legend tr').each( -> 
     [low, high] = $(this).data('range').split('-')
@@ -81,6 +88,9 @@ $('.home.index .table .btn').live('click', (event) ->
     else
       $(this).removeClass('alert')
   )
+  
+  # $('#score').html(score).css({backgroundColor: $('.point-legend tr.alert .label').css('backgroundColor')})
+  $('#score').html(score).attr('class',$('.point-legend tr.alert .label').attr('class'))
 )
 
 Response.action( ->
