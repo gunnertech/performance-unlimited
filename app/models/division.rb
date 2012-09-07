@@ -3,7 +3,7 @@ class Division < ActiveRecord::Base
   
   belongs_to :organization
 
-  has_many :assigned_divisions
+  has_many :assigned_divisions, dependent: :destroy
   has_many :managers, class_name: "User", through: :assigned_divisions
   has_many :groups, order: :position
   has_many :assigned_groups, through: :groups, order: :position
