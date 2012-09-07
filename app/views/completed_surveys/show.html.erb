@@ -1,24 +1,37 @@
 <%- model_class = CompletedSurvey -%>
 <div class="page-header clearfix">
-  <h1><%=t '.title', :default => model_class.model_name.human %></h1>
+  <h1><%= @completed_survey.to_s %> - <%= parent %> - <%= @completed_survey.date %> </h1>
 </div>
 
-<dl class="dl-horizontal">
-  <dt><strong><%= model_class.human_attribute_name(:date) %>:</strong></dt>
-  <dd><%= @completed_survey.date %></dd>
-  <dt><strong><%= model_class.human_attribute_name(:user_id) %>:</strong></dt>
-  <dd><%= @completed_survey.user_id %></dd>
-  <dt><strong><%= model_class.human_attribute_name(:survey_id) %>:</strong></dt>
-  <dd><%= @completed_survey.survey_id %></dd>
-</dl>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th><%=t 'question' %></th>
+      <th><%=t 'response' %></th>
+      <th><%=t '.actions', :default => t("helpers.actions") %></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @completed_survey.selected_responses.each do |selected_response| %>
+      <%= simple_form_for selected_response, {remote: true, :html => { :class => 'inline-submit form-horizontal' }} do |f| %>
+        <tr>
+          <td><%= selected_response.question %></td>
+          <td><%= f.association :response, collection: selected_response.question.responses, label: false, include_blank: false %></td>
+          <td>
+            <%= f.button :submit, :class => 'btn-primary', value: t('save') %>
+          </td>
+        </tr>
+      <% end %>
+    <% end %>
+  </tbody>
+</table>
+
 
 <div class="form-actions">
   <%= link_to t('.back', :default => t("helpers.links.back")),
-              completed_surveys_path, :class => 'btn'  %>
-  <%= link_to t('.edit', :default => t("helpers.links.edit")),
-              edit_completed_survey_path(@completed_survey), :class => 'btn' %>
+              parent, :class => 'btn'  %>
   <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
-              completed_survey_path(@completed_survey),
+              [parent,@completed_survey],
               :method => 'delete',
               :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')),
               :class => 'btn btn-danger' %>

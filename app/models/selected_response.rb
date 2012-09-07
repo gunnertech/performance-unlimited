@@ -14,6 +14,10 @@ class SelectedResponse < ActiveRecord::Base
     response.try(:points) || 0
   end
   
+  def to_s
+    response.to_s
+  end
+  
   def update_survey_score
     completed_survey.update_score
   end

@@ -1,6 +1,8 @@
 es:
+  save: Save
   scale: Scale
   tips_for_improvement: Tips for Improvement
+  
   current_members: Miembros Actuales
   admin: Administración
   submit_answers: Presentar Respuestas

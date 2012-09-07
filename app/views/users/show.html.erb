@@ -29,7 +29,7 @@
       <% @completed_surveys.each do |completed_survey| %>
         <tr>
           <td><%= completed_survey.date %></td>
-          <td><%= completed_survey %></td>
+          <td><%= can?(:manage, @user.organizations.first) ? link_to(completed_survey, [@user,completed_survey]) : completed_survey %></td>
           <td><%= completed_survey.score %></td>
         </tr>
       <% end %>
