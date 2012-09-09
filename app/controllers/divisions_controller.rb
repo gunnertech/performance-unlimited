@@ -9,6 +9,11 @@ class DivisionsController < InheritedResources::Base
     create!
   end
   
+  def leaderboard
+    authorize! :show, resource
+    leaderboard!
+  end
+  
   protected
 
   def get_layout
