@@ -1,1 +1,14 @@
-<%= render partial: "#{@division.nil? ? 'divisions' : @survey.nil? ? 'no_survey' : 'survey'}_index" %>
+<% if user_signed_in? %>
+  <%= render partial: "#{@division.nil? ? 'divisions' : @survey.nil? ? 'no_survey' : 'survey'}_index" %>
+<% else %>
+  <h2><%=t 'sign_in' %></h2>
+  <%= simple_form_for("user", :url => user_session_path, :html => { :class => 'form-horizontal' }) do |f| %>
+    <%= f.input :email %>
+    <%= f.input :password %>
+    <%= f.input :remember_me, as: :boolean %>
+    <div class="form-actions">
+      <%= f.button :submit, value: t('sign_in'), :class => 'btn btn-primary' %>
+      <%= link_to "Forgot your password?", new_password_path('user'), class: 'btn' %>
+    </div>
+  <% end %>
+<% end %>
