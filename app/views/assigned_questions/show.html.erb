@@ -18,7 +18,7 @@
         <td><span class="badge badge-inverse"><%= response.points %></span></td>
         <td>
           <%= link_to t('.edit', :default => t("helpers.links.edit")),
-                      [:edit,resource.question,response], :class => 'btn btn-mini' %>
+                      "#{url_for([:edit,resource.question,response])}&assigned_question_id=#{resource.id}&assigned_question_set_id=#{parent.id}", :class => 'btn btn-mini' %>
           <%= link_to t('remove'),
                       question_response_path(resource.question,response,assigned_question_id: resource.id, assigned_question_set_id: parent.id),
                       :method => :delete,
