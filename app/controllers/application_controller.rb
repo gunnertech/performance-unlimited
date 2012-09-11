@@ -5,7 +5,11 @@ class ApplicationController < ActionController::Base
   before_filter :set_locale
 
   def set_locale
-    I18n.locale = params[:locale] || current_user.try(:language) || I18n.default_locale
+    if devise_controller?
+      I18n.locale = current_user.try(:language) || I18n.default_locale
+    else
+      I18n.locale = params[:locale] || current_user.try(:language) || I18n.default_locale
+    end
   end
   
   def default_url_options(options={})
