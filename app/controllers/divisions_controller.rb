@@ -2,7 +2,7 @@ class DivisionsController < InheritedResources::Base
   belongs_to :organization, optional: true
   custom_actions resource: :leaderboard
   layout :get_layout
-  load_and_authorize_resource except: [:leaderboard]
+  skip_load_and_authorize_resource :leaderboard
   
   def create
     @division = Division.create(params[:division].merge(creator: current_user))
