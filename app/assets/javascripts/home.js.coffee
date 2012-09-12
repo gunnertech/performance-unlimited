@@ -36,7 +36,6 @@ $('.navigate.btn-primary').live('click', (event) ->
       "/divisions/#{$('#leaderboard').data('division_id')}/leaderboard",
     )
     .done((html,status,xhr) ->
-      console.log(html)
       $('#leaderboard .attach-point').html(html)
       $("#user-#{$('#leaderboard').data('user_id')}").addClass('alert')
     )
