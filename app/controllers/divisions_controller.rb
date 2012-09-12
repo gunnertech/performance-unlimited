@@ -10,7 +10,7 @@ class DivisionsController < InheritedResources::Base
   end
   
   def leaderboard
-    authorize! :show, resource
+    authorize! :read, resource
     leaderboard!
   end
   

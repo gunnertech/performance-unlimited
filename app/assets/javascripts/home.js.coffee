@@ -14,7 +14,6 @@ $('.user.navigate').live('click', (event) ->
 
 $('.navigate.btn-primary').live('click', (event) ->
   event.preventDefault()
-  console.log('you clicked me')
   response_string = ''
   $('.answer.active').each(->
     response_string = "#{response_string},#{$(this).data('question_id')}-#{$(this).data('response_id')}"
@@ -37,6 +36,7 @@ $('.navigate.btn-primary').live('click', (event) ->
       "/divisions/#{$('#leaderboard').data('division_id')}/leaderboard",
     )
     .done((html,status,xhr) ->
+      console.log(html)
       $('#leaderboard .attach-point').html(html)
       $("#user-#{$('#leaderboard').data('user_id')}").addClass('alert')
     )
