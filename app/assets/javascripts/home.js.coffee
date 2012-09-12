@@ -14,6 +14,7 @@ $('.user.navigate').live('click', (event) ->
 
 $('.navigate.btn-primary').live('click', (event) ->
   event.preventDefault()
+  console.log('you clicked me')
   response_string = ''
   $('.answer.active').each(->
     response_string = "#{response_string},#{$(this).data('question_id')}-#{$(this).data('response_id')}"
