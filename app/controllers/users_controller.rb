@@ -11,7 +11,7 @@ class UsersController < InheritedResources::Base
       end
       create!{ [parent.division, parent] }
     else
-      create!
+      raise "error -- no Group"
     end
   end
   
