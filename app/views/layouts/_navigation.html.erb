@@ -47,6 +47,16 @@
     </li>
     <% if user_signed_in? %>
       <% if signed_in? && Organization.with_role('admin', current_user).count > 0 %>
+        <li class="dropdown">
+          <a href="#"class="dropdown-toggle" data-toggle="dropdown"><%=t 'change_divisions' %><b class="caret"></b></a>
+          <ul class="dropdown-menu">
+            <% current_user.admined_divisions.each do |division| %>
+              <li class="<%= @division.try(:id) == division.id ? 'active' : '' %>">
+                <%= link_to division, root_url(division_id: division.id) %>
+              </li>
+            <% end %>
+          </ul>
+        </li>
         <li class="dropdown pull-right">
           <a href="#"class="dropdown-toggle" data-toggle="dropdown"><%=t 'admin' %><b class="caret"></b></a>
           <ul class="dropdown-menu">

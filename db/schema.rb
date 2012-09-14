@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120905154018) do
+ActiveRecord::Schema.define(:version => 20120914213755) do
 
   create_table "assigned_divisions", :force => true do |t|
     t.integer  "division_id"
@@ -318,6 +318,7 @@ ActiveRecord::Schema.define(:version => 20120905154018) do
     t.float    "average"
     t.boolean  "active",                 :default => true, :null => false
     t.string   "language"
+    t.integer  "division_id"
   end
 
   add_index "users", ["email"], :name => "index_users_on_email", :unique => true

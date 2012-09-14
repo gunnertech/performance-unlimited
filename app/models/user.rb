@@ -7,7 +7,7 @@ class User < ActiveRecord::Base
          :recoverable, :rememberable, :trackable, :validatable
 
   # Setup accessible (or protected) attributes for your model
-  attr_accessible :name, :email, :password, :password_confirmation, :remember_me, :first_name, :last_name, :score, :average, :active, :language
+  attr_accessible :name, :email, :password, :password_confirmation, :remember_me, :first_name, :last_name, :score, :average, :active, :language, :division_id
   
   before_validation :set_first_name_and_last_name
   
@@ -18,6 +18,8 @@ class User < ActiveRecord::Base
   has_many :organizations, through: :divisions
   has_many :completed_surveys
   has_many :recorded_metrics
+  
+  belongs_to :default_division, class_name: "Division", foreign_key: "division_id"
   
   default_scope order("users.last_name ASC")
   
@@ -33,6 +35,10 @@ class User < ActiveRecord::Base
     def active
       where{ active == true }
     end
+  end
+  
+  def admined_divisions
+    Organization.with_role('admin', self).map{ |organization| organization.divisions.all }.flatten
   end
   
   def time_zone
