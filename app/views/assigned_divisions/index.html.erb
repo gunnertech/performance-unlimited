@@ -16,6 +16,7 @@
     <% @assigned_divisions.each_with_index do |assigned_division,i| %>
       <div class="tab-pane <%= i == 0 ? 'active' : '' %>" id="<%= assigned_division.to_s.parameterize %>">
         <%= link_to t('leaderboards'), assigned_division.division, class: 'btn btn-large btn-info pull-right' %>
+        <%= link_to t('new_group'), [:new,assigned_division.division,:group], class: 'btn btn-large btn-info pull-right' if can?(:manage,assigned_division.division) %>
         <table class="table table-striped">
           <thead>
             <tr>
