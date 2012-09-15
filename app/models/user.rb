@@ -7,9 +7,13 @@ class User < ActiveRecord::Base
          :recoverable, :rememberable, :trackable, :validatable
 
   # Setup accessible (or protected) attributes for your model
-  attr_accessible :name, :email, :password, :password_confirmation, :remember_me, :first_name, :last_name, :score, :average, :active, :language, :division_id
+  attr_accessible :name, :email, :password, :password_confirmation, :remember_me, :first_name, :last_name, :score, :average, 
+                  :active, :language, :division_id, :assigned_roles
+  
+  attr_accessor :assigned_roles, :editor
   
   before_validation :set_first_name_and_last_name
+  after_save :assign_roles
   
   has_many :assigned_groups
   has_many :groups, through: :assigned_groups
@@ -61,6 +65,10 @@ class User < ActiveRecord::Base
     end
   end
   
+  def assigned_roles
+    @assigned_roles || self.roles.map{|role| role.name }
+  end
+  
   def assigned_group_for(groupd_id)
     assigned_groups.where{ group_id == my{groupd_id} }.first
   end
@@ -70,6 +78,32 @@ class User < ActiveRecord::Base
     average = completed_surveys.count > 0 ? score.to_f/completed_surveys.count.to_f : nil
     
     update_attributes(score: score, average: average)
+  end
+  
+  def assign_roles
+    if assigned_roles
+      self.roles = []
+      assigned_roles.each do |ar| 
+        if ar == 'admin'
+          Organization.with_role('admin', self.editor).each do |organization|
+            assign_role(ar,organization)
+          end
+        else
+          self.groups.each do |group|
+            assign_role(ar,group.division)
+          end
+        end
+      end 
+    end
+    true
+  end
+  
+  def assign_role(role, resource=nil)
+    if resource
+      self.add_role role.to_s, resource
+    else
+      self.add_role role.to_s
+    end
   end
   
 end

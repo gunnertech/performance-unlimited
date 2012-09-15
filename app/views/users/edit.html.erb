@@ -1,6 +1,9 @@
 <%- model_class = User -%>
 <div class="page-header clearfix">
-  <h1><%=t '.title', :default => t('helpers.titles.edit', :model => model_class.model_name.human,
-                                   :default => "Edit #{model_class.model_name.human}") %></h1>
+  <% if parent? %>
+    <h1><%=t '.title', :default => t('helpers.titles.edit', :model => model_class.model_name.human, :default => "Edit #{model_class.model_name.human}") %></h1>
+  <% else %>
+    <h1>Edit Admin</h1>
+  <% end %>
 </div>
 <%= render :partial => 'form' %>

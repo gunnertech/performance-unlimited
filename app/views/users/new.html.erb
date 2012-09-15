@@ -1,5 +1,9 @@
 <%- model_class = User -%>
 <div class="page-header clearfix">
-  <h1>Add User to <%= parent %></h1>
+  <% if parent? %>
+    <h1>Add User to <%= parent %></h1>
+  <% else %>
+    <h1>Create Admin User</h1>
+  <% end %>
 </div>
 <%= render :partial => 'form' %>

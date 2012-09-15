@@ -4,6 +4,10 @@
   <%= f.association :default_division, collection: (@user.divisions.all + @user.admined_divisions) unless @user.new_record? %>
   <%= f.input :active %>
   <%= f.input :language, collection: Locale.all.map{ |locale| [locale.name,locale.code] }, include_blank: false %>
+  
+  <%= f.input :assigned_roles, collection: ['admin','athlete'], input_html: {include_blank: true, multiple: true} %>
+  
+  
   <%= f.input :password %>
   <%= f.input :password_confirmation %>
   

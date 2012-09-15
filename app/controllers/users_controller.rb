@@ -3,20 +3,23 @@ class UsersController < InheritedResources::Base
   respond_to :csv, only: :show
   
   def create
+    @user = User.create(params[:user])
+    @user.editor = current_user
+    
     if parent?
-      @user = User.create(params[:user])
       if @user.valid?
         parent.users << @user
-        @user.add_role 'athlete', parent.division
+        #@user.add_role 'athlete', parent.division
       end
       create!{ [parent.division, parent] }
     else
-      raise "error -- no Group"
+      create!
     end
   end
   
   def update
     @user = User.find(params[:id])
+    @user.editor = current_user
     if params[:password].blank?
       @user.update_without_password(params[:user])
     else
