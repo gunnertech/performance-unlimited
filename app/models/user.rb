@@ -87,6 +87,9 @@ class User < ActiveRecord::Base
         if ar == 'admin'
           Organization.with_role('admin', self.editor).each do |organization|
             assign_role(ar,organization)
+            organization.surveys.each do |s|
+              assign_role(ar,s)
+            end
           end
         else
           self.groups.each do |group|
