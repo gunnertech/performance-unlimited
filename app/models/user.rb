@@ -8,9 +8,9 @@ class User < ActiveRecord::Base
 
   # Setup accessible (or protected) attributes for your model
   attr_accessible :name, :email, :password, :password_confirmation, :remember_me, :first_name, :last_name, :score, :average, 
-                  :active, :language, :division_id, :assigned_roles
+                  :active, :language, :division_id, :assigned_roles, :change_roles
   
-  attr_accessor :assigned_roles, :editor
+  attr_accessor :assigned_roles, :editor, :change_roles
   
   before_validation :set_first_name_and_last_name
   after_save :assign_roles
@@ -81,7 +81,7 @@ class User < ActiveRecord::Base
   end
   
   def assign_roles
-    if assigned_roles
+    if assigned_roles && change_roles
       self.roles = []
       assigned_roles.each do |ar| 
         if ar == 'admin'

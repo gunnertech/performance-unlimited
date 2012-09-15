@@ -6,6 +6,7 @@
   <%= f.input :language, collection: Locale.all.map{ |locale| [locale.name,locale.code] }, include_blank: false %>
   
   <%= f.input :assigned_roles, collection: ['admin','athlete'], input_html: {include_blank: true, multiple: true} %>
+  <%= f.input :change_roles, as: :hidden, input_html: {value: 1} %>
   
   
   <%= f.input :password %>
