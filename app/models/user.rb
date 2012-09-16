@@ -31,9 +31,9 @@ class User < ActiveRecord::Base
   class << self
     def leaderboard(start_date=nil,end_date=nil)
       if start_date && end_date
-        joins{ completed_surveys }.where{ completed_surveys.date >> (start_date..end_date) }.order{ completed_surveys.score.desc }
+        joins{ completed_surveys }.where{ completed_surveys.date >> (start_date..end_date) }.reorder{ completed_surveys.score.desc }
       else
-        joins{ completed_surveys }.order{ completed_surveys.score.desc }
+        joins{ completed_surveys }.reorder{ completed_surveys.score.desc }
       end
     end
     
