@@ -1,6 +1,6 @@
 class DivisionsController < InheritedResources::Base
   belongs_to :organization, optional: true
-  belongs_to :user, optional: true, collection_name: :admined_divisions
+  belongs_to :user, optional: true
   
   custom_actions resource: :leaderboard
   layout :get_layout

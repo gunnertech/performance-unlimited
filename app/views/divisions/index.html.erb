@@ -4,7 +4,7 @@
 
 <div class="tabbable">
   <ul class="nav nav-tabs">
-    <% @divisions.each_with_index do |division,i| %>
+    <% collection.each_with_index do |division,i| %>
       <li class="<%= i == 0 ? 'active' : '' %>">
         <a data-toggle="tab" href="#<%= division.to_s.parameterize %>"><%= division %></a>
       </li>
@@ -12,7 +12,7 @@
   </ul>
 
   <div class="tab-content">
-    <% @divisions.each_with_index do |division,i| %>
+    <% collection.order{ created_at }.each_with_index do |division,i| %>
       <div class="tab-pane <%= i == 0 ? 'active' : '' %>" id="<%= division.to_s.parameterize %>">
         <%= link_to t('leaderboards'), division, class: 'btn btn-large btn-info pull-right' %>
         <%= link_to t('new_group'), [:new,division,:group], class: 'btn btn-large btn-info pull-right' if can?(:manage,division) %>
@@ -45,5 +45,6 @@
   </div>
 </div>
 
-
-<%= link_to t('create_new_division'), new_division_path, :class => 'btn btn-primary' if can?(:manage, parent.organization) %>
+<% Organization.with_role('admin', current_user).each do |organization| %>
+  <%= link_to t('create_new_division'), new_division_path, :class => 'btn btn-primary' %>
+<% end %>
