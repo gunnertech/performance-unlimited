@@ -1,5 +1,7 @@
 class DivisionsController < InheritedResources::Base
   belongs_to :organization, optional: true
+  belongs_to :user, optional: true, collection_name: :admined_divisions
+  
   custom_actions resource: :leaderboard
   layout :get_layout
   skip_load_and_authorize_resource only: :leaderboard
@@ -10,6 +12,7 @@ class DivisionsController < InheritedResources::Base
     create!
   end
   
+  
   def leaderboard
     authorize! :read, resource
     leaderboard!
@@ -19,5 +22,14 @@ class DivisionsController < InheritedResources::Base
 
   def get_layout
     request.xhr? ? nil : 'application'
+  end
+  
+  def collection
+    if parent.is_a? User
+      @divisions ||= parent.admined_divisions
+    else
+      super
+    end
+    
   end
 end

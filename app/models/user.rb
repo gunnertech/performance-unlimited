@@ -18,6 +18,7 @@ class User < ActiveRecord::Base
   has_many :assigned_groups
   has_many :groups, through: :assigned_groups
   has_many :assigned_divisions
+  has_many :admined_divisions, through: :assigned_divisions, class_name: "Division"
   has_many :divisions, through: :groups
   has_many :organizations, through: :divisions
   has_many :completed_surveys

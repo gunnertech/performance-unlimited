@@ -1,38 +1,49 @@
-<%- model_class = Division -%>
 <div class="page-header clearfix">
-  <h1><%=t '.title', :default => model_class.model_name.human.pluralize %></h1>
+  <h1><%=t 'divisions' %></h1>
 </div>
-<table class="table table-striped">
-  <thead>
-    <tr>
-      <th><%= model_class.human_attribute_name(:id) %></th>
-      <th><%= model_class.human_attribute_name(:name) %></th>
-      <th><%= model_class.human_attribute_name(:organization_id) %></th>
-      <th><%= model_class.human_attribute_name(:created_at) %></th>
-      <th><%=t '.actions', :default => t("helpers.actions") %></th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @divisions.each do |division| %>
-      <tr>
-        <td><%= link_to division.id, division_path(division) %></td>
-        <td><%= division.name %></td>
-        <td><%= division.organization_id %></td>
-        <td><%=l division.created_at %></td>
-        <td>
-          <%= link_to t('.edit', :default => t("helpers.links.edit")),
-                      edit_division_path(division), :class => 'btn btn-mini' %>
-          <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
-                      division_path(division),
-                      :method => :delete,
-                      :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')),
-                      :class => 'btn btn-mini btn-danger' %>
-        </td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
 
-<%= link_to t('.new', :default => t("helpers.links.new")),
-            new_division_path,
-            :class => 'btn btn-primary' %>
+<div class="tabbable">
+  <ul class="nav nav-tabs">
+    <% @divisions.each_with_index do |division,i| %>
+      <li class="<%= i == 0 ? 'active' : '' %>">
+        <a data-toggle="tab" href="#<%= division.to_s.parameterize %>"><%= division %></a>
+      </li>
+    <% end %>
+  </ul>
+
+  <div class="tab-content">
+    <% @divisions.each_with_index do |division,i| %>
+      <div class="tab-pane <%= i == 0 ? 'active' : '' %>" id="<%= division.to_s.parameterize %>">
+        <%= link_to t('leaderboards'), division, class: 'btn btn-large btn-info pull-right' %>
+        <%= link_to t('new_group'), [:new,division,:group], class: 'btn btn-large btn-info pull-right' if can?(:manage,division) %>
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <% division.groups.each do |group| %>
+                <th><%= link_to group.name, [group.division, group] %></th>
+              <% end %>
+            </tr>
+          </thead>
+          <tbody>
+            <% division.grouped_users.each_with_index do |grouped_user_row,i| %>
+              <tr>
+                <% grouped_user_row.each do |grouped_user| %>
+                  <td>
+                    <% if grouped_user[i] %>
+                      <%= link_to grouped_user[i], grouped_user[i] %>
+                    <% else %>
+                      &nbsp;
+                    <% end %>
+                  </td>
+                <% end %>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+
+<%= link_to t('create_new_division'), new_division_path, :class => 'btn btn-primary' if can?(:manage, parent.organization) %>

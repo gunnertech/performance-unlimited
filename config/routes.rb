@@ -58,6 +58,7 @@ Recoverytracker::Application.routes.draw do
     resources :completed_surveys
     resources :assigned_groups
     resources :recorded_metrics
+    resources :divisions
   end
   
   scope "/admin" do

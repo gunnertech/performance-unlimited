@@ -65,8 +65,8 @@
                 <%= link_to organization, organization %>
               </li>
             <% end %>
-            <li class="<%= (controller_name == 'assigned_divisions' ? 'active' : '') %>">
-              <%= link_to t('divisions'), user_assigned_divisions_path(current_user) %>
+            <li class="<%= (controller_name == 'divisions' ? 'active' : '') %>">
+              <%= link_to t('divisions'), user_divisions_path(current_user) %>
             </li>
             <li class="<%= (controller_name == 'surveys' ? 'active' : '') %>">
               <%= link_to t('surveys'), surveys_path %>
