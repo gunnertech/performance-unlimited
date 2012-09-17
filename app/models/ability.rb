@@ -33,7 +33,7 @@ class Ability
     can :manage, Organization, :id => Organization.with_role('admin', user).map{ |organization| organization.id }
     
     can :create, CompletedSurvey do |completed_survey|
-      user.has_role? 'athlete', completed_survey.organization
+      completed_survey.new_record? || (user.has_role?('athlete', completed_survey.organization))
     end
     
     can :create, SelectedResponse do |selected_response|
