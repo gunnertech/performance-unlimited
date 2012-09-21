@@ -99,7 +99,7 @@
             </tr>
           </thead>
           <tbody>
-            <% @division.users.unscoped.active.leaderboard(@division.today,@division.today).each_with_index do |user,i| %>
+            <% @division.users.active.leaderboard(@division.today,@division.today).each_with_index do |user,i| %>
               <tr id="user-<%= user.id %>">
                 <td><%= i+1 %></td>
                 <td><%= user %></td>
