@@ -111,3 +111,13 @@ tbody {
 .page-header {
   padding-top: 18px;
 }
+
+@media (max-width: 480px) {
+  .table {
+    tr {
+      td {
+        font-size: 11px !important
+      }
+    }
+  }
+}
