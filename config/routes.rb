@@ -53,7 +53,7 @@ Recoverytracker::Application.routes.draw do
   resources :assigned_divisions #TODO: REMOVE
   resources :completed_surveys #TODO: REMOVE
   
-  resources :users, only: [:show] do
+  resources :users, only: [:show,:update,:create] do
     resources :assigned_divisions
     resources :completed_surveys
     resources :assigned_groups
