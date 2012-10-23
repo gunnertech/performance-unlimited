@@ -1,6 +1,6 @@
 <%= simple_form_for [parent,@response], :html => { :class => 'form-horizontal' } do |f| %>
 
-  <% resource.organization.locales.each do |l| %>
+  <% (resource.organization || parent.organization).locales.each do |l| %>
     <h4><%=t l.name %></h4>
     <%= f.globalize_fields_for l.code.to_sym do |g| %>
       <%= g.input :short_text %>

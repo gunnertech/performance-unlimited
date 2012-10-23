@@ -16,7 +16,10 @@ class Survey < ActiveRecord::Base
   has_many :completed_surveys
   has_many :divisions, through: :organization
   
-  attr_accessible :name, :active, :organization, :organization_id
+  attr_accessible :name, :active, :organization, :organization_id, :user_id
+  attr_accessor :user_id
+  
+  after_create :make_creatore_an_admin
   
   # default_scope where{ active == true }
   
@@ -26,6 +29,11 @@ class Survey < ActiveRecord::Base
   
   def time_zone
     divisions.first.time_zone || 'Eastern Time (US & Canada)'
+  end
+  
+  protected
+  def make_creatore_an_admin
+    User.find(user_id).add_role 'admin', self
   end
 end
 
