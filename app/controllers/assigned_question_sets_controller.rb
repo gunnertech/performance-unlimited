@@ -3,7 +3,7 @@ class AssignedQuestionSetsController < InheritedResources::Base
   
   def new
     @assigned_question_set = parent.assigned_question_sets.build
-    @assigned_question_set.question_set = QuestionSet.new
+    @assigned_question_set.question_set = QuestionSet.new(organization: parent.organization)
   end
   
   # def edit

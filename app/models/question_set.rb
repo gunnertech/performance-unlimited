@@ -9,7 +9,7 @@ class QuestionSet < ActiveRecord::Base
   has_many :assigned_questions, order: :position
   has_many :questions, through: :assigned_questions
   
-  attr_accessible :description, :name
+  attr_accessible :description, :name, :organization, :organization_id
   
   def max_responses
     questions.max_by {|question| question.responses.count }.responses.count

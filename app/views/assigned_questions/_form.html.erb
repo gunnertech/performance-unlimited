@@ -1,6 +1,7 @@
 <%= simple_form_for [parent,@assigned_question], :html => { :class => 'form-horizontal' } do |f| %>
+
   <%= f.simple_fields_for :question do |question_form| %>
-  
+    <%= question_form.input :organization_id, as: :hidden, input_html: {value: parent.organization.id} %>
     <% (resource.organization || parent.organization).locales.each do |l| %>
       <h4><%=t l.name %></h4>
       <%= question_form.globalize_fields_for l.code.to_sym do |g| %>
