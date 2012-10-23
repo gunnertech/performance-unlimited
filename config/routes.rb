@@ -4,6 +4,10 @@ Recoverytracker::Application.routes.draw do
 
   match '/auth/:provider/callback', to: 'organizations#add_authentication'
   
+  scope "/admin" do
+    resources :users
+  end
+  
   devise_for :users
   
   resources :authentications
@@ -59,10 +63,6 @@ Recoverytracker::Application.routes.draw do
     resources :assigned_groups
     resources :recorded_metrics
     resources :divisions
-  end
-  
-  scope "/admin" do
-    resources :users
   end
 
   
