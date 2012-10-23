@@ -1,4 +1,6 @@
 <%= simple_form_for @survey, :html => { :class => 'form-horizontal' } do |f| %>
+
+  <%= f.association :organization, collection: Organization.with_role('admin', current_user), include_blank: false %>
   
   <% (resource.organization || Organization.with_role('admin', current_user).first).locales.each do |l| %>
     <h4><%=t l.name %></h4>
