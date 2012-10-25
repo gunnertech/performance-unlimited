@@ -3,3 +3,8 @@ $('.back').live('click', (event) ->
   
   history.go(-1)
 )
+
+$('.btn-print').live('click', (event) ->
+  event.preventDefault()
+  window.print()
+)
