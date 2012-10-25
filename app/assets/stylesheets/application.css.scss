@@ -53,11 +53,23 @@ tbody {
   section {
     clear: both;
     display: none;
+    
+    @media print {
+      display: block;
+    }
     margin-bottom: 20px;
     &.start,
     &#divisions,
     &#current-roster {
       display: block;
+    }
+    
+    .navigate,
+    &#summary,
+    &#current-roster {
+      @media print {
+        display: none;
+      }
     }
   }
 
@@ -77,6 +89,11 @@ tbody {
       width: 70px;
       &.btn-small {
         width: 48px;
+      }
+      
+      @media print {
+        overflow: visible;
+        width: auto;
       }
     }
   }
@@ -119,5 +136,24 @@ tbody {
         font-size: 11px !important
       }
     }
+  }
+}
+
+.print-only {
+  display: none;
+}
+
+@media print {
+  footer,
+  nav {
+    display: none !important;
+  }
+  
+  span.print-only {
+    display: inline;
+  }
+  
+  #footnotes_debug {
+    display: none !important;
   }
 }
