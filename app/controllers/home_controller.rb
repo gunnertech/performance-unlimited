@@ -3,6 +3,14 @@ class HomeController < ApplicationController
   
   def index
     if signed_in?
+      if params[:survey_id]
+        @organization = Organization.with_role('admin', current_user).first
+        @survey = @organization.surveys.find(params[:survey_id])
+        @division = current_user.default_division
+        @groups = @division.groups
+        @grouped_users = @division.grouped_users
+      end
+      
       if params[:division_id] && @organization = Organization.with_role('admin', current_user).first
         @division = @organization.divisions.find(params[:division_id])
       elsif current_user.default_division
@@ -17,7 +25,7 @@ class HomeController < ApplicationController
         @organization = @division.try(:organization)
       end
       
-      if @division
+      if @division && @survey.nil?
         @groups = @division.groups
         @grouped_users = @division.grouped_users
         @survey = @division.surveys.where{ active == true }.first
