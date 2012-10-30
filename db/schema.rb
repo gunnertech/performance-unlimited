@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120914213755) do
+ActiveRecord::Schema.define(:version => 20121029185133) do
 
   create_table "assigned_divisions", :force => true do |t|
     t.integer  "division_id"
@@ -130,6 +130,16 @@ ActiveRecord::Schema.define(:version => 20120914213755) do
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
   end
+
+  create_table "mapped_domains", :force => true do |t|
+    t.string   "domain"
+    t.integer  "organization_id"
+    t.datetime "created_at",      :null => false
+    t.datetime "updated_at",      :null => false
+  end
+
+  add_index "mapped_domains", ["domain"], :name => "index_mapped_domains_on_domain"
+  add_index "mapped_domains", ["organization_id"], :name => "index_mapped_domains_on_organization_id"
 
   create_table "metric_types", :force => true do |t|
     t.string   "name"

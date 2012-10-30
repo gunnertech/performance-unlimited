@@ -11,6 +11,7 @@ class Organization < ActiveRecord::Base
   has_many :metrics
   has_many :assigned_locales
   has_many :locales, through: :assigned_locales
+  has_many :mapped_domains
   
   attr_accessible :name, :logo
   
