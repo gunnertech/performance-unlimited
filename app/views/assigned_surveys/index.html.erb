@@ -15,7 +15,7 @@
   <tbody>
     <% @assigned_surveys.each do |assigned_survey| %>
       <tr>
-        <td><%= link_to assigned_survey.id, assigned_survey_path(assigned_survey) %></td>
+        <td><%= link_to assigned_survey.id, resource_path %></td>
         <td><%= assigned_survey.survey_id %></td>
         <td><%= assigned_survey.division_id %></td>
         <td><%=l assigned_survey.created_at %></td>
