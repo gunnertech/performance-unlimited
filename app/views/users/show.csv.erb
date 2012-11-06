@@ -22,7 +22,7 @@ csv_output = csv_lib.generate(headers: true) do |csv|
         if selected_responses.empty?
           arr << 'NA'
         else
-          arr << selected_responses.first.response.to_s
+          arr << "#{selected_responses.first.response.points} #{completed_survey.survey_id} != #{last_survey.id}"
         end
       end
     end
