@@ -14,7 +14,7 @@ csv_output = csv_lib.generate(headers: true) do |csv|
     @dates.reverse.each do |date|
       completed_survey = @user.completed_surveys.find_by_date(date)
       #completed_survey = @user.completed_surveys.where{ (date == my{date}) & survey_id == my{last_survey.id}}.last
-      if completed_survey.nil? || completed_survey.survey_id != last_survey.id
+      if completed_survey.nil?# || completed_survey.survey_id != last_survey.id
         arr << 'NA'
       else
         selected_responses = completed_survey.selected_responses.joins{ response.question }.where{ response.question.short_text == my{question.short_text}}
@@ -22,7 +22,7 @@ csv_output = csv_lib.generate(headers: true) do |csv|
         if selected_responses.empty?
           arr << 'NA'
         else
-          arr << selected_responses.first.response.points
+          arr << selected_responses.first.response.to_s
         end
       end
     end
