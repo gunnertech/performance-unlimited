@@ -6,4 +6,8 @@ class AssignedSurvey < ActiveRecord::Base
   
   has_many :point_ranges
   attr_accessible :survey, :survey_id, :division, :division_id
+  
+  def to_s
+    survey.to_s
+  end
 end

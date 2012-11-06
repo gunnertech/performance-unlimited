@@ -65,7 +65,10 @@
   <div class="form-actions">
     <%= link_to t('create_new_group'),
                 new_division_group_path(@division), :class => 'btn btn-primary'  %>
-              
+    
+    <%= link_to t('surveys'),
+                [@division,:assigned_surveys], :class => 'btn'  %>
+                          
     <%= link_to t('.back', :default => t("helpers.links.back")),
                 divisions_path, :class => 'btn'  %>
     <%= link_to t('.edit', :default => t("helpers.links.edit")),

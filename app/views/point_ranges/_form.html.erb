@@ -1,11 +1,10 @@
-<%= simple_form_for @point_range, :html => { :class => 'form-horizontal' } do |f| %>
-  <%= f.input :assigned_survey_id %>
+<%= simple_form_for [parent, @point_range], :html => { :class => 'form-horizontal' } do |f| %>
   <%= f.input :low %>
   <%= f.input :high %>
   <%= f.input :description %>
   <div class="form-actions">
     <%= f.button :submit, :class => 'btn-primary' %>
     <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
-                point_ranges_path, :class => 'btn' %>
+                [parent.division,parent], :class => 'btn' %>
   </div>
 <% end %>

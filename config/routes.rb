@@ -26,8 +26,6 @@ Recoverytracker::Application.routes.draw do
 
   resources :question_sets
 
-  resources :point_ranges
-
   resources :surveys do
     resources :completed_surveys
     resources :assigned_question_sets
@@ -40,6 +38,9 @@ Recoverytracker::Application.routes.draw do
   end
   
   resources :groups #TODO: REMOVE
+  resources :assigned_surveys, only: [] do
+    resources :point_ranges
+  end
   
   resources :divisions do
     member do

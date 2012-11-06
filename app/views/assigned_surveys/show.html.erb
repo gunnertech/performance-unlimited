@@ -1,22 +1,49 @@
 <%- model_class = AssignedSurvey -%>
 <div class="page-header clearfix">
-  <h1><%=t '.title', :default => model_class.model_name.human %></h1>
+  <h1><%= resource %></h1>
 </div>
 
-<dl class="dl-horizontal">
-  <dt><strong><%= model_class.human_attribute_name(:survey_id) %>:</strong></dt>
-  <dd><%= @assigned_survey.survey_id %></dd>
-  <dt><strong><%= model_class.human_attribute_name(:division_id) %>:</strong></dt>
-  <dd><%= @assigned_survey.division_id %></dd>
-</dl>
+
+<h3><%=t 'point_ranges' %></h3>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th><%= 'low' %></th>
+      <th><%= 'high' %></th>
+      <th><%= 'description' %></th>
+      <th><%=t '.actions', :default => t("helpers.actions") %></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @assigned_survey.point_ranges.each do |point_range| %>
+      <tr>
+        <td><%= point_range.low %></td>
+        <td><%= point_range.high %></td>
+        <td><%= point_range.description %></td>
+        <td>
+          <%= link_to t('.edit', :default => t("helpers.links.edit")),
+                      [:edit,@assigned_survey,point_range], :class => 'btn btn-mini' %>
+          <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
+                      [@assigned_survey,point_range],
+                      :method => :delete,
+                      :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')),
+                      :class => 'btn btn-mini btn-danger' %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
 
 <div class="form-actions">
+  <%= link_to t('add_point_rage'),
+              [:new, @assigned_survey, :point_range], :class => 'btn-primary btn' %>
+              
   <%= link_to t('.back', :default => t("helpers.links.back")),
-              assigned_surveys_path, :class => 'btn'  %>
+              parent_path, :class => 'btn'  %>
   <%= link_to t('.edit', :default => t("helpers.links.edit")),
-              edit_assigned_survey_path(@assigned_survey), :class => 'btn' %>
+              edit_resource_path, :class => 'btn' %>
   <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
-              assigned_survey_path(@assigned_survey),
+              resource_path,
               :method => 'delete',
               :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')),
               :class => 'btn btn-danger' %>
