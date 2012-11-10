@@ -83,7 +83,8 @@ $('.home.index .table .btn').live('click', (event) ->
   
   $('.point-legend tr').each( -> 
     [low, high] = $(this).data('range').split('-')
-    if score <= parseInt(high) && score >= parseInt(low)
+    test_score = if score < 0 then 0 else score
+    if test_score <= parseInt(high) && score >= parseInt(low)
       $(this).addClass('alert')
     else
       $(this).removeClass('alert')
