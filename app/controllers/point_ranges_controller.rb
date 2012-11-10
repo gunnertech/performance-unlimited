@@ -2,10 +2,10 @@ class PointRangesController < InheritedResources::Base
   belongs_to :assigned_survey
   
   def create
-    create!{ parent_url }
+    create!{ division_assigned_survey_url(parent.division,parent) }
   end
   
   def update
-    update!{ parent_url }
+    update!{ division_assigned_survey_url(parent.division,parent) }
   end
 end

@@ -8,18 +8,18 @@
 <table class="table table-striped">
   <thead>
     <tr>
+      <th><%= 'name' %></th>
       <th><%= 'low' %></th>
       <th><%= 'high' %></th>
-      <th><%= 'description' %></th>
       <th><%=t '.actions', :default => t("helpers.actions") %></th>
     </tr>
   </thead>
   <tbody>
     <% @assigned_survey.point_ranges.each do |point_range| %>
       <tr>
+        <td><%= point_range.name %></td>
         <td><%= point_range.low %></td>
         <td><%= point_range.high %></td>
-        <td><%= point_range.description %></td>
         <td>
           <%= link_to t('.edit', :default => t("helpers.links.edit")),
                       [:edit,@assigned_survey,point_range], :class => 'btn btn-mini' %>
