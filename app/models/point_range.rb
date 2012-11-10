@@ -3,5 +3,5 @@ class PointRange < ActiveRecord::Base
   has_one :survey, through: :assigned_survey
   has_one :organization, through: :assigned_survey
   
-  attr_accessible :description, :high, :low
+  attr_accessible :description, :high, :low, :name
 end
