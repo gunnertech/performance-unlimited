@@ -76,7 +76,7 @@
       <h3><%=t 'scale' %></h3>
       <table class="table table-bordered point-legend">
         <% @survey.point_ranges.each_with_index do |point_range,i| %>
-          <tr data-range="<%= point_range.low %>-<%= point_range.high || 1000 %>">
+          <tr data-range="<%= point_range.low %>^<%= point_range.high || 1000 %>">
             <td><%= point_range_to_html(@survey,point_range,i) %></td>
             <td><%= point_range.name %></td>
           </tr>
