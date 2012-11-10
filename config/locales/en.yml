@@ -2,6 +2,8 @@
 # See https://github.com/svenfuchs/rails-i18n/tree/master/rails%2Flocale for starting points.
 
 en:
+  surveys_assigned_to: "Surveys Assigned to %{to}"
+  
   sign_in: Sign In
   save: Save
   scale: Scale

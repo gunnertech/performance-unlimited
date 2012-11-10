@@ -15,7 +15,8 @@
     <% collection.order{ created_at }.each_with_index do |division,i| %>
       <div class="tab-pane <%= i == 0 ? 'active' : '' %>" id="<%= division.to_s.parameterize %>">
         <%= link_to t('leaderboards'), division, class: 'btn btn-large btn-info pull-right' %>
-        <%= link_to t('new_group'), [:new,division,:group], class: 'btn btn-large btn-info pull-right' if can?(:manage,division) %>
+        <%= link_to t('add_group'), [:new,division,:group], class: 'btn btn-large btn-info pull-right' if can?(:manage,division) %>
+        <%= link_to t('surveys'), [division,:assigned_surveys], class: 'btn btn-large btn-info pull-right' if can?(:manage,division) %>
         <table class="table table-striped">
           <thead>
             <tr>
