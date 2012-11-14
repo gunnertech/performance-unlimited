@@ -15,12 +15,12 @@ csv_output = csv_lib.generate(headers: true) do |csv|
       completed_survey = @user.completed_surveys.find_by_date(date)
       #completed_survey = @user.completed_surveys.where{ (date == my{date}) & survey_id == my{last_survey.id}}.last
       if completed_survey.nil? || completed_survey.survey_id != last_survey.survey_id
-        arr << 'NA (old survey)'
+        arr << 'NA'
       else
         selected_responses = completed_survey.selected_responses.joins{ response.question }.where{ response.question.id == my{question.id}}
         
         if selected_responses.empty?
-          arr << "#{question.id}"
+          arr << "NA"
         else
           arr << selected_responses.first.response.points
         end
