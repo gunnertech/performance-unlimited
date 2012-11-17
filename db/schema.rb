@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121029185133) do
+ActiveRecord::Schema.define(:version => 20121117004331) do
 
   create_table "assigned_divisions", :force => true do |t|
     t.integer  "division_id"
@@ -219,9 +219,10 @@ ActiveRecord::Schema.define(:version => 20121029185133) do
   create_table "questions", :force => true do |t|
     t.string   "short_text"
     t.text     "long_text"
-    t.datetime "created_at",      :null => false
-    t.datetime "updated_at",      :null => false
+    t.datetime "created_at",         :null => false
+    t.datetime "updated_at",         :null => false
     t.integer  "organization_id"
+    t.boolean  "measures_dimension"
   end
 
   add_index "questions", ["organization_id"], :name => "index_questions_on_organization_id"

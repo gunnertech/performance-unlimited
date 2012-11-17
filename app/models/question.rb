@@ -9,7 +9,7 @@ class Question < ActiveRecord::Base
   has_many :question_sets, through: :assigned_questions
   has_many :responses, order: :position
   
-  attr_accessible :long_text, :short_text, :organization, :organization_id
+  attr_accessible :long_text, :short_text, :organization, :organization_id, :measures_dimension
   
   after_save :set_organization
   

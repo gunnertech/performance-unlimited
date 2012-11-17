@@ -2,6 +2,7 @@
 
   <%= f.simple_fields_for :question do |question_form| %>
     <%= question_form.input :organization_id, as: :hidden, input_html: {value: parent.organization.id} %>
+    <%= question_form.input :measures_dimension %>
     <% (resource.organization || parent.organization).locales.each do |l| %>
       <h4><%=t l.name %></h4>
       <%= question_form.globalize_fields_for l.code.to_sym do |g| %>
