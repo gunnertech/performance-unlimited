@@ -1,5 +1,4 @@
 <% if user_signed_in? %>
-  <%= "#{@division.nil? ? 'divisions' : @survey.nil? ? 'no_survey' : 'survey'}_index" %>
   <%= render partial: "#{@division.nil? ? 'divisions' : @survey.nil? ? 'no_survey' : 'survey'}_index" %>
 <% else %>
   <h2><%=t 'sign_in' %></h2>
