@@ -3,7 +3,8 @@ class UsersController < InheritedResources::Base
   respond_to :csv, only: :show
   
   def create
-    @user = User.create(params[:user])
+    @user = User.find_or_create_by_email(params[:user])
+    # @user = User.create(params[:user])
     @user.editor = current_user
     
     if parent?
