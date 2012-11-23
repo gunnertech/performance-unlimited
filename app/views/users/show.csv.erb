@@ -22,7 +22,7 @@ csv_output = csv_lib.generate(headers: true) do |csv|
         if selected_responses.empty?
           arr << "NA"
         else
-          arr << selected_responses.first.response.question.measures_dimension? ? selected_responses.first.response.to_s : selected_responses.first.response.points
+          arr << (selected_responses.first.response.question.measures_dimension? ? selected_responses.first.response.to_s : selected_responses.first.response.points)
         end
       end
     end
