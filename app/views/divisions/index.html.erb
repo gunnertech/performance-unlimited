@@ -4,10 +4,12 @@
 
 <div class="tabbable">
   <ul class="nav nav-tabs">
-    <% collection.each_with_index do |division,i| %>
-      <li class="<%= i == 0 ? 'active' : '' %>">
-        <a data-toggle="tab" href="#<%= division.to_s.parameterize %>"><%= division %></a>
-      </li>
+    <% if parent? and parent.is_a? User %>
+      <% parent.divisions_with_admin_access.each_with_index do |division,i| %>
+        <li class="<%= i == 0 ? 'active' : '' %>">
+          <a data-toggle="tab" href="#<%= division.to_s.parameterize %>"><%= division %></a>
+        </li>
+      <% end %>
     <% end %>
   </ul>
 

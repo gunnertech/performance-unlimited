@@ -26,7 +26,7 @@ class DivisionsController < InheritedResources::Base
   
   def collection
     if parent.is_a? User
-      @divisions ||= parent.divisions_with_admin_access
+      @divisions ||= parent.admined_divisions
     else
       super
     end
