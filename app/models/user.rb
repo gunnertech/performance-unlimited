@@ -42,9 +42,9 @@ class User < ActiveRecord::Base
     end
   end
   
-  # def admined_divisions
-  #   Organization.with_role('admin', self).map{ |organization| organization.divisions.all }.flatten
-  # end
+  def divisions_with_admin_access
+    Organization.with_role('admin', self).map{ |organization| organization.divisions.all }.flatten
+  end
   
   def time_zone
     divisions.first.try(:time_zone) || 'Eastern Time (US & Canada)'
