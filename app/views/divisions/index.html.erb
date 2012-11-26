@@ -2,51 +2,51 @@
   <h1><%=t 'divisions' %></h1>
 </div>
 
-<div class="tabbable">
-  <ul class="nav nav-tabs">
-    <% if parent? and parent.is_a? User %>
+<% if parent? and parent.is_a? User %>
+  <div class="tabbable">
+    <ul class="nav nav-tabs">
       <% parent.divisions_with_admin_access.each_with_index do |division,i| %>
         <li class="<%= i == 0 ? 'active' : '' %>">
           <a data-toggle="tab" href="#<%= division.to_s.parameterize %>"><%= division %></a>
         </li>
       <% end %>
-    <% end %>
-  </ul>
+    </ul>
 
-  <div class="tab-content">
-    <% collection.order{ created_at }.each_with_index do |division,i| %>
-      <div class="tab-pane <%= i == 0 ? 'active' : '' %>" id="<%= division.to_s.parameterize %>">
-        <%= link_to t('leaderboards'), division, class: 'btn btn-large btn-info pull-right' %>
-        <%= link_to t('add_group'), [:new,division,:group], class: 'btn btn-large btn-info pull-right' if can?(:manage,division) %>
-        <%= link_to t('surveys'), [division,:assigned_surveys], class: 'btn btn-large btn-info pull-right' if can?(:manage,division) %>
-        <table class="table table-striped">
-          <thead>
-            <tr>
-              <% division.groups.each do |group| %>
-                <th><%= link_to group.name, [group.division, group] %></th>
-              <% end %>
-            </tr>
-          </thead>
-          <tbody>
-            <% division.grouped_users.each_with_index do |grouped_user_row,i| %>
+    <div class="tab-content">
+      <% parent.divisions_with_admin_access.each_with_index do |division,i| %>
+        <div class="tab-pane <%= i == 0 ? 'active' : '' %>" id="<%= division.to_s.parameterize %>">
+          <%= link_to t('leaderboards'), division, class: 'btn btn-large btn-info pull-right' %>
+          <%= link_to t('add_group'), [:new,division,:group], class: 'btn btn-large btn-info pull-right' if can?(:manage,division) %>
+          <%= link_to t('surveys'), [division,:assigned_surveys], class: 'btn btn-large btn-info pull-right' if can?(:manage,division) %>
+          <table class="table table-striped">
+            <thead>
               <tr>
-                <% grouped_user_row.each do |grouped_user| %>
-                  <td>
-                    <% if grouped_user[i] %>
-                      <%= link_to grouped_user[i], grouped_user[i] %>
-                    <% else %>
-                      &nbsp;
-                    <% end %>
-                  </td>
+                <% division.groups.each do |group| %>
+                  <th><%= link_to group.name, [group.division, group] %></th>
                 <% end %>
               </tr>
-            <% end %>
-          </tbody>
-        </table>
-      </div>
-    <% end %>
+            </thead>
+            <tbody>
+              <% division.grouped_users.each_with_index do |grouped_user_row,i| %>
+                <tr>
+                  <% grouped_user_row.each do |grouped_user| %>
+                    <td>
+                      <% if grouped_user[i] %>
+                        <%= link_to grouped_user[i], grouped_user[i] %>
+                      <% else %>
+                        &nbsp;
+                      <% end %>
+                    </td>
+                  <% end %>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      <% end %>
+    </div>
   </div>
-</div>
+<% end %>
 
 <% Organization.with_role('admin', current_user).each do |organization| %>
   <%= link_to t('create_new_division'), new_division_path, :class => 'btn btn-primary' %>
