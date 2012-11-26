@@ -4,11 +4,11 @@ class UsersController < InheritedResources::Base
   
   def create
     @user = User.find_by_email(params[:user][:email])
-    if @user
-      @user = @user.update_attributes(params[:user])
-      @user.editor = current_user
+    if @user and parent?
       
-      update!
+      parent.users << @user if !parent.users.include?(@user)
+      
+      redirect_to [parent.division, parent]
     else
       @user = User.create(params[:user])
       @user.editor = current_user
