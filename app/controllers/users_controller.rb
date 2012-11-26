@@ -3,18 +3,25 @@ class UsersController < InheritedResources::Base
   respond_to :csv, only: :show
   
   def create
-    @user = User.find_or_create_by_email(params[:user])
-    # @user = User.create(params[:user])
-    @user.editor = current_user
-    
-    if parent?
-      if @user.valid?
-        parent.users << @user
-        #@user.add_role 'athlete', parent.division
-      end
-      create!{ [parent.division, parent] }
+    @user = User.find_by_email(params[:user][:email])
+    if @user
+      @user = @user.update_attributes(params[:user])
+      @user.editor = current_user
+      
+      update!
     else
-      create!
+      @user = User.create(params[:user])
+      @user.editor = current_user
+      
+      if parent?
+        if @user.valid?
+          parent.users << @user
+          #@user.add_role 'athlete', parent.division
+        end
+        create!{ [parent.division, parent] }
+      else
+        create!
+      end
     end
   end
   
