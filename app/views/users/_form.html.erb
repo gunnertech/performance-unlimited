@@ -1,7 +1,7 @@
 <%= simple_form_for (parent? ? [parent,@user] : @user), :html => { :class => 'form-horizontal' } do |f| %>
   <%= f.input :name %>
   <%= f.input :email %>
-  <%= f.association :default_division, collection: (@user.divisions.all + @user.admined_divisions) unless @user.new_record? %>
+  <%#= f.association :default_division, collection: (@user.divisions.all + @user.admined_divisions) unless @user.new_record? %>
   <%= f.input :active %>
   <%= f.input :language, collection: Locale.all.map{ |locale| [locale.name,locale.code] }, include_blank: false %>
   
