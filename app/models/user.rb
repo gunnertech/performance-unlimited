@@ -1,4 +1,5 @@
 class User < ActiveRecord::Base
+  self.per_page = 50
   rolify
   # Include default devise modules. Others available are:
   # :token_authenticatable, :confirmable,
@@ -8,7 +9,7 @@ class User < ActiveRecord::Base
 
   # Setup accessible (or protected) attributes for your model
   attr_accessible :name, :email, :password, :password_confirmation, :remember_me, :first_name, :last_name, :score, :average, 
-                  :active, :language, :division_id, :assigned_roles, :change_roles
+                  :active, :language, :division_id, :assigned_roles, :change_roles, :group_ids
   
   attr_accessor :assigned_roles, :editor, :change_roles
   
@@ -26,7 +27,7 @@ class User < ActiveRecord::Base
   
   belongs_to :default_division, class_name: "Division", foreign_key: "division_id"
   
-  default_scope order("users.last_name ASC")
+  default_scope order{ last_name.asc }
   
   class << self
     def leaderboard(start_date=nil,end_date=nil)

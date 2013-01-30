@@ -1,7 +1,18 @@
+<%= content_for(:breadcrumb) do %>
+  <div class="span6">
+    <ul class="breadcrumb">
+      <li class="active"><%= t('surveys') %></li>
+    </ul>
+  </div>  
+  
+  <div class="span6 btn-group">
+    <%= link_to t('new_survey'), new_survey_path, :class => 'btn btn-large btn-primary' %>
+  </div>
+<% end %>
+
+
 <%- model_class = Survey -%>
-<div class="page-header clearfix">
-  <h1><%=t '.title', :default => model_class.model_name.human.pluralize %></h1>
-</div>
+
 <table class="table table-striped">
   <thead>
     <tr>
@@ -29,7 +40,3 @@
     <% end %>
   </tbody>
 </table>
-
-<%= link_to t('.new', :default => t("helpers.links.new")),
-            new_survey_path,
-            :class => 'btn btn-primary' %>

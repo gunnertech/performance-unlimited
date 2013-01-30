@@ -4,19 +4,23 @@ class Ability
   def initialize(user)
     user ||= User.new # guest user (not logged in)
     
-    can :manage, :all if user.has_role? 'admin'
+    if user.has_role? 'admin'
+      can :manage, :all
+    end
     
-    can :manage, AssignedDivision, :id => AssignedDivision.with_role('admin', user).map{ |assigned_division| assigned_division.id }
     
-    [Metric, AssignedDivision, AssignedGroup, AssignedQuestion, AssignedQuestionSet, AssignedSurvey, CompletedSurvey, Division, Group, PointRange, Question, QuestionSet, Response, SelectedResponse, Survey].each do |clazz|
+    
+    can :manage, AssignedDivision, :id => AssignedDivision.with_role('admin', user).pluck('assigned_divisions.id')
+    can :manage, AssignedDivision, :id => Organization.with_role('admin', user).joins{ divisions.assigned_divisions }.pluck('assigned_divisions.id')
+    can :manage, Division, :id => Organization.with_role('admin', user).joins{ divisions }.pluck('divisions.id')
+    
+    [Metric, AssignedGroup, AssignedQuestion, AssignedQuestionSet, AssignedSurvey, CompletedSurvey, Group, PointRange, Question, QuestionSet, Response, SelectedResponse, Survey].each do |clazz|
       can :manage, clazz do |resource|
         user.has_role? 'admin', resource.organization
       end
     end
     
-    can :manage, User do |u|
-      !user.new_record? && (u.new_record? ||  u.organizations.any? { |organization| user.has_role? 'admin', organization })
-    end
+    can :manage, User, :id => Organization.with_role('admin', user).pluck('organizations.id')
     
     can :manage, RecordedMetric do |rm|
       !user.new_record? && (rm.new_record? ||  rm.user.organizations.any? { |organization| user.has_role? 'admin', organization })

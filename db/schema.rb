@@ -244,9 +244,9 @@ ActiveRecord::Schema.define(:version => 20121117004331) do
     t.string   "locale"
     t.string   "short_text"
     t.text     "long_text"
+    t.text     "suggestion"
     t.datetime "created_at",  :null => false
     t.datetime "updated_at",  :null => false
-    t.text     "suggestion"
   end
 
   add_index "response_translations", ["locale"], :name => "index_response_translations_on_locale"
@@ -328,7 +328,7 @@ ActiveRecord::Schema.define(:version => 20121117004331) do
     t.integer  "score"
     t.float    "average"
     t.boolean  "active",                 :default => true, :null => false
-    t.string   "language"
+    t.string   "language",               :default => "en", :null => false
     t.integer  "division_id"
   end
 

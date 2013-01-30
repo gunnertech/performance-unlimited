@@ -15,6 +15,10 @@ class Group < ActiveRecord::Base
     name
   end
   
+  def full_name
+    "#{division.to_s}: #{name}"
+  end
+  
   def as_json(options = {})
     super options.merge(include: {users:{}})
   end

@@ -12,13 +12,13 @@
   <ul class="nav">
     <% if user_signed_in? %>
       <li class="dropdown">
-        <a href="#"class="dropdown-toggle" data-toggle="dropdown"><%=t 'signed_in_as' %>: <%= current_user.name %><b class="caret"></b></a>
+        <a href="#"class="dropdown-toggle" data-toggle="dropdown"><%= current_user.name %><b class="caret"></b></a>
         <ul class="dropdown-menu">
           <li>
             <%= link_to t('history'), current_user %>
           </li>
           <li>
-            <%= link_to t('edit_account'), edit_user_registration_path %>
+            <%= link_to t('settings'), edit_user_registration_path %>
           </li>
           <li>
             <%= link_to t('log_out'), destroy_user_session_path, :method=>'delete' %>        
@@ -29,6 +29,60 @@
     <% else %>
       <li>
         <%= link_to t('log_in'), new_user_session_path %>  
+      </li>
+    <% end %>
+    
+    <% if can? :read, User %>
+      <li class="dropdown">
+        <a href="#"class="dropdown-toggle" data-toggle="dropdown"><%=t 'users' %><b class="caret"></b></a>
+        <ul class="dropdown-menu">
+          <li class="<%= (controller_name == 'users' && controller.action_name == 'index' ? 'active' : '') %>">
+            <%= link_to t('list'), users_path %>
+          </li>
+          <% if can? :create, User %>
+            <li class="<%= (controller_name == 'users'  && controller.action_name == 'new' ? 'active' : '') %>">
+              <%= link_to t('new'), new_user_path %>
+            </li>
+          <% end %>
+        </ul>
+      </li>
+    <% end %>
+    
+    <% if can? :read, Division %>
+      <li class="dropdown">
+        <a href="#"class="dropdown-toggle" data-toggle="dropdown"><%=t 'divisions' %><b class="caret"></b></a>
+        <ul class="dropdown-menu">
+          <li class="<%= (controller_name == 'divisions' && controller.action_name == 'index' ? 'active' : '') %>">
+            <%= link_to t('list'), user_divisions_path(current_user) %>
+          </li>
+          <% if can? :create, Division %>
+            <li class="<%= (controller_name == 'users'  && controller.action_name == 'new' ? 'active' : '') %>">
+              <%= link_to t('new'), new_division_path %>
+            </li>
+          <% end %>
+        </ul>
+      </li>
+    <% end %>
+    
+    <% if can? :read, Survey %>
+      <li class="dropdown">
+        <a href="#"class="dropdown-toggle" data-toggle="dropdown"><%=t 'surveys' %><b class="caret"></b></a>
+        <ul class="dropdown-menu">
+          <li class="<%= (controller_name == 'surveys' && controller.action_name == 'index' ? 'active' : '') %>">
+            <%= link_to t('list'), surveys_path %>
+          </li>
+          <% if can? :create, Survey %>
+            <li class="<%= (controller_name == 'surveys'  && controller.action_name == 'new' ? 'active' : '') %>">
+              <%= link_to t('new'), new_survey_path %>
+            </li>
+          <% end %>
+        </ul>
+      </li>
+    <% end %>
+    
+    <% if !signed_in? %>
+      <li>
+        <%= link_to 'Sign up', new_user_registration_path %>
       </li>
     <% end %>
     <li class="dropdown">
@@ -45,42 +99,5 @@
         <% end %>
       </ul>
     </li>
-    <% if user_signed_in? %>
-      <% if signed_in? && Organization.with_role('admin', current_user).count > 0 %>
-        <li class="dropdown">
-          <a href="#"class="dropdown-toggle" data-toggle="dropdown"><%=t 'change_divisions' %><b class="caret"></b></a>
-          <ul class="dropdown-menu">
-            <% current_user.admined_divisions.each do |division| %>
-              <li class="<%= @division.try(:id) == division.id ? 'active' : '' %>">
-                <%= link_to division, root_url(division_id: division.id) %>
-              </li>
-            <% end %>
-          </ul>
-        </li>
-        <li class="dropdown pull-right">
-          <a href="#"class="dropdown-toggle" data-toggle="dropdown"><%=t 'admin' %><b class="caret"></b></a>
-          <ul class="dropdown-menu">
-            <% Organization.with_role('admin', current_user).each do |organization| %>
-              <li>
-                <%= link_to organization, organization %>
-              </li>
-            <% end %>
-            <li class="<%= (controller_name == 'divisions' ? 'active' : '') %>">
-              <%= link_to t('divisions'), user_divisions_path(current_user) %>
-            </li>
-            <li class="<%= (controller_name == 'surveys' ? 'active' : '') %>">
-              <%= link_to t('surveys'), surveys_path %>
-            </li>
-            <li class="<%= (controller_name == 'users' ? 'active' : '') %>">
-              <%= link_to t('users'), users_path %>
-            </li>
-          </ul>
-        </li>
-      <% end %>
-    <% else %>
-      <li>
-        <%= link_to 'Sign up', new_user_registration_path %>
-      </li>
-    <% end %>
   </ul>
 </div>

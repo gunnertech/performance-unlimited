@@ -2,7 +2,7 @@ require 'rbconfig'
 HOST_OS = RbConfig::CONFIG['host_os']
 source 'https://rubygems.org'
 
-gem 'rails', '3.2.6'
+gem "rails", "~> 3.2.11"
 gem "thin"
 gem "squeel"
 gem 'jquery-rails'
@@ -48,17 +48,29 @@ group :test, :development do
 end
 
 group :development do
+  gem 'rails3-generators'
+  gem 'thor'
+  gem 'log4r'
+  gem 'sevenwire-rest-client'
+  gem 'giraffesoft-trample'
+  gem 'pry-rails'
+  gem 'bullet'
   gem "rails-footnotes", ">= 3.7"
-  gem "guard", ">= 0.6.2"
+  gem 'guard'
   gem 'rb-fsevent'
-  gem 'growl'
-  gem "guard-bundler", ">= 0.1.3"
-  gem "guard-rails", ">= 0.0.3"
-  gem "guard-livereload", ">= 0.3.0"
-  gem "guard-rspec", ">= 0.4.3"
-  gem "heroku", "> 1.15.1" 
-  gem "heroku-rails"
+  gem 'guard-bundler'
+  gem 'guard-rails-assets', '>= 0.0.7'
+  gem 'guard-rspec'
+  gem "rack-livereload"
+  gem "guard-livereload"
+  gem "nifty-generators"
+  gem "quiet_assets", ">= 1.0.1"
+  gem "better_errors", ">= 0.3.2"
+  gem "binding_of_caller"
+  gem "foreman"
 end
+
+
 
 group :test do
   gem "email_spec"

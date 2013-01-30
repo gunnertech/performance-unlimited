@@ -1,6 +1,22 @@
-<%= simple_form_for @division, :html => { :class => 'form-horizontal' } do |f| %>
+<%= content_for(:breadcrumb) do %>
+  <div class="span6">
+    <ul class="breadcrumb">
+      <% if !resource.new_record? %>
+        <li><%= link_to resource.organization, [resource.organization] %><span class="divider">/</span></li>
+      <% end %>
+      <li class="active"><%= resource.new_record? ? t("new_division") : t("edit_divison") %></li>
+    </ul>
+  </div>  
+<% end %>
+
+
+<%= simple_form_for resource, :html => { :class => 'form-horizontal' } do |f| %>
   <%= f.input :name %>
-  <%#= f.association :organization, collection: Organization.with_role('admin', current_user), prompt: "Choose an Organization" %>
+  <% if Organization.with_role('admin', current_user).count > 1 %>
+    <%= f.association :organization, collection: Organization.with_role('admin', current_user), prompt: "Choose an Organization" %>
+  <% else %>
+    <%= f.input :organization_id, as: :hidden, input_html: {value: Organization.with_role('admin', current_user).first.id } %>
+  <% end %>
   <%= f.input :time_zone, priority: /US/ %>
   
   <div class="form-actions">

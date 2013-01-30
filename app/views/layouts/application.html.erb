@@ -118,6 +118,13 @@
       <div class="container-fluid">
         <div class="content">
           <%= render 'layouts/messages' %>
+          
+          <% if content_for?(:breadcrumb) %>
+            <div id="breadcrumbs" class="row-fluid">
+              <%= content_for(:breadcrumb) %>
+            </div>
+          <% end %>
+          
           <%= yield %>
         </div>
         <footer>

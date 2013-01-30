@@ -1,6 +1,6 @@
 class CreateResponseTranslations < ActiveRecord::Migration
   def up
-    Response.create_translation_table!({short_text: :string, long_text: :text}, migrate_data: true)
+    Response.create_translation_table!({short_text: :string, long_text: :text, suggestion: :text}, migrate_data: true)
   end
   
   def down

@@ -1,6 +1,15 @@
-<div class="page-header clearfix">
-  <h1><%=t 'divisions' %></h1>
-</div>
+<%= content_for(:breadcrumb) do %>
+  <div class="span6">
+    <ul class="breadcrumb">
+      <li><%= link_to Organization.with_role('admin', current_user).first, [Organization.with_role('admin', current_user).first] %><span class="divider">/</span></li>
+      <li class="active"><%= t('divisions') %></li>
+    </ul>
+  </div>  
+  
+  <div class="span6 btn-group">
+    <%= link_to t('create_new_division'), new_division_path, :class => 'btn btn-primary btn-large' %>
+  </div>
+<% end %>
 
 <% if parent? and parent.is_a? User %>
   <div class="tabbable">
@@ -46,8 +55,4 @@
       <% end %>
     </div>
   </div>
-<% end %>
-
-<% Organization.with_role('admin', current_user).each do |organization| %>
-  <%= link_to t('create_new_division'), new_division_path, :class => 'btn btn-primary' %>
 <% end %>

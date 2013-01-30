@@ -1,6 +1,6 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery
-  load_and_authorize_resource :unless => :devise_controller?
+  load_and_authorize_resource :unless => :devise_controller?, except: :index
   
   before_filter :set_locale
 

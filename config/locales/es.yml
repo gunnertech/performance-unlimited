@@ -1,11 +1,12 @@
 es:
-  choose_division: "Elegir División"
+  list: "List"
+  settings: "Settings"
   
+  choose_division: "Elegir División"
   sign_in: Registrarse
   save: Salvar
   scale: Nivel
   tips_for_improvement: Consejos para el Mejoramiento
-  
   current_members: Miembros Actuales
   admin: Administración
   submit_answers: Presentar Respuestas

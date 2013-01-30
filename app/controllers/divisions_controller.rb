@@ -25,11 +25,8 @@ class DivisionsController < InheritedResources::Base
   end
   
   def collection
-    if parent.is_a? User
-      @divisions ||= parent.admined_divisions
-    else
-      super
-    end
+    return @divisions if @divisions
+    @divisions = end_of_association_chain.accessible_by(current_ability)
     
   end
 end

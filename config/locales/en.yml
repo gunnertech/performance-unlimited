@@ -2,13 +2,15 @@
 # See https://github.com/svenfuchs/rails-i18n/tree/master/rails%2Flocale for starting points.
 
 en:
+  list: "List"
+  settings: "Settings"
+  
   surveys_assigned_to: "Surveys Assigned to %{to}"
   choose_division: Choose Division
   sign_in: Sign In
   save: Save
   scale: Scale
   tips_for_improvement: Tips for Improvement
-  
   submit_answers: Submit Answers
   surveys: Surveys
   divisions: Divisions

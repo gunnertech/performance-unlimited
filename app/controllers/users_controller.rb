@@ -2,6 +2,12 @@ class UsersController < InheritedResources::Base
   belongs_to :group, optional: true
   respond_to :csv, only: :show
   
+  def new
+    @user = parent? ? parent.users.build : User.new
+    @user.group_ids = [parent.id] if parent?
+    new!
+  end
+  
   def create
     @user = User.find_by_email(params[:user][:email])
     if @user and parent?
@@ -54,5 +60,12 @@ class UsersController < InheritedResources::Base
         response.headers['Content-Disposition'] = "attachment; filename=\"#{title}\""
       }
     end
+  end
+  
+  protected
+  
+  def collection
+    return @users if @users
+    @users = end_of_association_chain.accessible_by(current_ability).paginate(:page => params[:page])
   end
 end
