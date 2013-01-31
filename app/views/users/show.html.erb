@@ -1,19 +1,25 @@
 <%- model_class = User -%>
-<div class="page-header clearfix clearfix row-fluid">
-  <h1 class="span8">
-    <%= @user %> 
-    <% if can?(:manage, @user.organizations.first) %>
-      <small>(<%= @user.groups.map{|group| link_to(group,[group.division,group])}.join(',').html_safe %>)</small>
-    <% end %>
-  </h1>
-  <%= link_to t('download'), user_path(@user,format:'csv'), class: 'btn btn-primary btn-large span2' %>
-  <% if can?(:update, @user.organizations.first)
- %>
-    <%= link_to t('.edit', :default => t("helpers.links.edit")), edit_user_path(@user), :class => 'btn btn-large span2' %>
-  <% else %>
-    <%= link_to t('leaderboards'), @user.divisions.first, class: 'btn btn-large span2' %>
-  <% end %>
-</div>
+
+<%= content_for(:breadcrumb) do %>
+  <div class="span6">
+    <ul class="breadcrumb">
+      <li><%= link_to t('home'), root_path %><span class="divider">/</span></li>
+      <li><%= link_to resource.organization, [resource.organization] %><span class="divider">/</span></li>
+      <li><%= link_to t('divisions'), [current_user, :divisions] %><span class="divider">/</span></li>
+      <li class="active"><%= resource %></li>
+    </ul>
+  </div>  
+  
+  <div class="span6 btn-group">
+    <%= link_to t('download'), user_path(@user,format:'csv'), class: 'btn btn-primary btn-large' %>
+     <% if can?(:update, @user) %>
+       <%= link_to t('.edit', :default => t("helpers.links.edit")), edit_user_path(@user), :class => 'btn btn-large' %>
+     <% end %>
+     <% if can?(:create, RecordedMetric) %>
+        <%= link_to t('record_metric'), new_user_recorded_metric_path(resource), :class => 'btn btn-info btn-large' %>
+     <% end %>
+  </div>
+<% end %>
 
 <section>
   <h2><%=t 'completed_surveys' %></h2>
@@ -90,10 +96,22 @@
       <% end %>
     </tbody>
   </table>
-  
-  <% if can?(:manage, @user.organizations.first) %>
-    <div class="form-actions">
-      <%= link_to t('record_metric'), new_user_recorded_metric_path(resource), :class => 'btn btn-info' %>
-    </div>
-  <% end %>
+</section>
+
+<section>
+  <h3><%= t('groups') %></h3>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th><%=t 'name' %></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @user.groups.each do |group| %>
+        <tr>
+          <td><%= link_to group.full_name, [group.division, group] %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
 </section>

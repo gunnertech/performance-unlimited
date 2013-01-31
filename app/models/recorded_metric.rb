@@ -1,6 +1,7 @@
 class RecordedMetric < ActiveRecord::Base
   belongs_to :user
   belongs_to :metric
+  has_many :organizations, through: :user
   
   attr_accessible :recorded_on, :value, :user, :user_id, :metric, :metric_id
   

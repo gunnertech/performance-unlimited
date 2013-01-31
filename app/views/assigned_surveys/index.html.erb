@@ -1,32 +1,50 @@
 <%- model_class = AssignedSurvey -%>
-<div class="page-header clearfix">
-  <h1><%=t 'surveys_assigned_to', to: parent.to_s %></h1>
-</div>
+
+<%= content_for(:breadcrumb) do %>
+  <div class="span6">
+    <ul class="breadcrumb">
+      <li><%= link_to t('home'), root_path %><span class="divider">/</span></li>
+      <li><%= link_to parent, parent %><span class="divider">/</span></li>
+      <li class="active"><%= t('assigned_surveys') %></li>
+    </ul>
+  </div>  
+  
+  <div class="span6 btn-group">
+    <%= link_to t('assign_new_survey'), [:new,parent,:assigned_survey], :class => 'btn btn-primary' if can?(:create, AssignedSurvey) %>
+  </div>
+<% end %>
+
+
+
 <table class="table table-striped">
-  <thead>
-    <tr>
-      <th></th>
-      <th><%=t '.actions', :default => t("helpers.actions") %></th>
-    </tr>
-  </thead>
   <tbody>
     <% @assigned_surveys.each do |assigned_survey| %>
       <tr>
         <td><%= link_to assigned_survey, [parent,assigned_survey] %></td>
         <td>
-          <%= link_to t('.edit', :default => t("helpers.links.edit")),
-                      [:edit,parent,assigned_survey], :class => 'btn btn-mini' %>
-          <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
-                      [parent,assigned_survey],
-                      :method => :delete,
-                      :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')),
-                      :class => 'btn btn-mini btn-danger' %>
+          <div class="btn-group">
+            <a class="btn btn-inverse btn-mini dropdown-toggle" data-toggle="dropdown" href="#">
+              <%= t('actions') %>
+              <span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu">
+              <% if can?(:udpate, assigned_survey) %>
+                <li><%= link_to t('.edit', :default => t("helpers.links.edit")),
+                          [:edit,parent,assigned_survey] %></li>
+              <% end %>
+              <% if can?(:destroy, assigned_survey) %>
+                <li><%= link_to t('.destroy', :default => t("helpers.links.destroy")),
+                          [parent,assigned_survey],
+                          :method => :delete,
+                          :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) %></li>
+              <% end %>
+            </ul>
+          </div>
+          
+          
         </td>
       </tr>
     <% end %>
   </tbody>
 </table>
 
-<%= link_to t('.new', :default => t("helpers.links.new")),
-            [:new,parent,:assigned_survey],
-            :class => 'btn btn-primary' %>

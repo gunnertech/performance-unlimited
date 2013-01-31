@@ -1,6 +1,7 @@
 <%= content_for(:breadcrumb) do %>
   <div class="span6">
     <ul class="breadcrumb">
+      <li><%= link_to t('home'), root_path %><span class="divider">/</span></li>
       <% if parent? %>
         <li><%= link_to parent.division.organization, [parent.division.organization] %><span class="divider">/</span></li>
         <li><%= link_to t('divisions'), [current_user, :divisions] %><span class="divider">/</span></li>
@@ -24,7 +25,7 @@
   
   <%= f.input :assigned_roles, collection: ['admin','athlete'], input_html: {include_blank: true, multiple: true} %>
   <%= f.input :change_roles, as: :hidden, input_html: {value: 1} %>
-  <%= f.association :groups, as: :check_boxes, label_method: :full_name %>
+  <%= f.association :groups, as: :check_boxes, label_method: :full_name, collection: Group.accessible_by(current_ability) %>
   
   
   <%= f.input :password %>

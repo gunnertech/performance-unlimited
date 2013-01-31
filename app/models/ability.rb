@@ -6,41 +6,42 @@ class Ability
     
     if user.has_role? 'admin'
       can :manage, :all
-    elsif !user.new_record?
-      can :manage, AssignedDivision, :id => AssignedDivision.with_role('admin', user).pluck('assigned_divisions.id')
-      can :manage, AssignedDivision, :id => Organization.with_role('admin', user).joins{ divisions.assigned_divisions }.pluck('assigned_divisions.id')
-      can :manage, Division, :id => Organization.with_role('admin', user).joins{ divisions }.pluck('divisions.id')
-
-      [Metric, AssignedGroup, AssignedQuestion, AssignedQuestionSet, AssignedSurvey, CompletedSurvey, Group, PointRange, Question, QuestionSet, Response, SelectedResponse, Survey].each do |clazz|
-        can :manage, clazz do |resource|
-          user.has_role? 'admin', resource.organization
-        end
-      end
-
-      can :manage, User, :id => Organization.with_role('admin', user).pluck('organizations.id')
-
-      can :manage, RecordedMetric do |rm|
-        !user.new_record? && (rm.new_record? ||  rm.user.organizations.any? { |organization| user.has_role? 'admin', organization })
-      end
-
-      can :manage, Authentication do |authentication|
-        if authentication.authenticationable.isa?(Organization)
-          user.has_role? 'admin', authentication.authenticationable
-        else
-          user.has_role? 'admin', authentication.authenticationable.organization
-        end
-      end
-
-      can :manage, Organization, :id => Organization.with_role('admin', user).map{ |organization| organization.id }
-
-      can :create, CompletedSurvey do |completed_survey|
-        completed_survey.new_record? || (user.has_role?('athlete', completed_survey.organization))
-      end
-
-      can :create, SelectedResponse do |selected_response|
-        user.has_role? 'athlete', selected_response.organization
-      end
-      can :read, :all
-    end    
+    elsif user.is_an_admin?
+      can :manage, AssignedDivision,      :id => AssignedDivision.with_role('admin', user).pluck('assigned_divisions.id')
+      can :manage, AssignedDivision,      :id => Organization.with_role('admin', user).joins{ divisions.assigned_divisions }.pluck('assigned_divisions.id')
+      can :create, AssignedDivision
+      can :manage, Division,              :id => Organization.with_role('admin', user).joins{ divisions }.pluck('divisions.id')
+      can :create, Division
+      can :manage, CompletedSurvey,       :id => Organization.with_role('admin', user).joins{ completed_surveys }.pluck('completed_surveys.id')
+      can :create, CompletedSurvey
+      can :manage, User,                  :id => Organization.with_role('admin', user).joins{ users }.pluck('users.id')
+      can :manage, User,                  :id => user.id
+      can :create, User
+      can :manage, RecordedMetric,        :id => Organization.with_role('admin', user).joins{ recorded_metrics }.pluck('recorded_metrics.id')
+      can :create, RecordedMetric
+      can :manage, Organization,          :id => Organization.with_role('admin', user).pluck('organizations.id')
+      can :manage, Survey,                :id => Organization.with_role('admin', user).joins{ surveys }.pluck('surveys.id')
+      can :create, Survey
+      can :manage, AssignedSurvey,        :id => Organization.with_role('admin', user).joins{ assigned_surveys }.pluck('assigned_surveys.id')
+      can :create, AssignedSurvey
+      can :manage, AssignedQuestionSet,   :id => Organization.with_role('admin', user).joins{ assigned_question_sets }.pluck('assigned_question_sets.id')
+      can :create, AssignedQuestionSet
+      can :manage, AssignedQuestionSet,   :id => Organization.with_role('admin', user).joins{ assigned_question_sets }.pluck('assigned_question_sets.id')
+      can :create, AssignedQuestion
+      can :manage, AssignedQuestion,      :id => Organization.with_role('admin', user).joins{ assigned_question_sets.assigned_questions }.pluck('assigned_questions.id')
+      can :create, Response
+      can :manage, Response,              :id => Organization.with_role('admin', user).joins{ responses }.pluck('responses.id')
+      can :create, Group
+      can :manage, Group,                 :id => Organization.with_role('admin', user).joins{ groups }.pluck('groups.id')
+      can :create, Authentication
+      can :manage, Authentication,        :id => Organization.with_role('admin', user).joins{ authentications }.pluck('authentications.id')
+      can :create, PointRange
+      can :manage, PointRange,            :id => Organization.with_role('admin', user).joins{ point_ranges }.pluck('point_ranges.id')
+    elsif user.is_a_participant?
+      can :read, Division, :id => Division.with_role('athlete', user).pluck('divisions.id')
+      can :read, Organization, :id => Division.with_role('athlete', user).joins{ organization }.pluck('organizations.id')
+      can :read, User, :id => user.id
+      can :create, CompletedSurvey
+    end
   end
 end

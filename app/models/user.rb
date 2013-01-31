@@ -82,6 +82,14 @@ class User < ActiveRecord::Base
     update_attributes(score: score, average: average)
   end
   
+  def is_a_participant?
+    roles.where{ name == 'athlete' }.count > 0
+  end
+  
+  def is_an_admin?
+    roles.where{ name == 'admin' }.count > 0
+  end
+  
   def assign_roles
     if assigned_roles && change_roles
       self.roles = []

@@ -4,6 +4,10 @@ class Organization < ActiveRecord::Base
   
   has_many :divisions
   has_many :surveys
+  has_many :assigned_surveys, through: :surveys
+  has_many :point_ranges, through: :assigned_surveys
+  has_many :completed_surveys, through: :surveys
+  has_many :assigned_question_sets, through: :surveys
   has_many :question_sets
   has_many :questions
   has_many :authentications, as: :authenticationable
@@ -12,6 +16,10 @@ class Organization < ActiveRecord::Base
   has_many :assigned_locales
   has_many :locales, through: :assigned_locales
   has_many :mapped_domains
+  has_many :recorded_metrics, through: :users
+  has_many :groups, through: :divisions
+  
+  has_many :responses, through: :questions
   
   attr_accessible :name, :logo
   

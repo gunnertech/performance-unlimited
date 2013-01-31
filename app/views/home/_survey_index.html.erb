@@ -1,9 +1,17 @@
-<% if current_user.has_role? 'admin', @survey %>
+<%= content_for(:breadcrumb) do %>
+  <div class="span6">
+    <ul class="breadcrumb">
+      <li class="active"><%= t('home') %></li>
+    </ul>
+  </div>  
+  
+  <div class="span6 btn-group">
+    <%= link_to t('leaderboards'), @division, class: 'btn btn-large' %>
+  </div>
+<% end %>
+
+<% if can? :update, @survey %>
   <section id="current-roster">
-    <h1>
-      <%=t 'current_members' %>
-      <%= link_to t('leaderboards'), @division, class: 'btn btn-large pull-right' %>
-    </h1>
     <table class="table table-striped">
       <thead>
         <tr>
@@ -32,7 +40,7 @@
 <% end %> 
 
 <% @survey.assigned_question_sets.each_with_index do |assigned_question_set,i| %>
-  <section class="clearfix question-set <%= i==0 && current_user.has_role?('athlete', @division) ? 'start' : '' %>" id="<%= assigned_question_set.name.parameterize %>">
+  <section class="clearfix question-set <%= i==0 && (can?(:read, @division) && cannot?(:update, @division)) ? 'start' : '' %>" id="<%= assigned_question_set.name.parameterize %>">
     <h1><%= assigned_question_set %></h1>
     <table class="table">
       <tbody>

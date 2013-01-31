@@ -1,3 +1,19 @@
+<%= content_for(:breadcrumb) do %>
+  <div class="span7">
+    <ul class="breadcrumb">
+      <li><%= link_to t('home'), root_path %><span class="divider">/</span></li>
+      <li><%= link_to parent.organization, [parent.organization] %><span class="divider">/</span></li>
+      <li><%= link_to t('surveys'), [:surveys] %><span class="divider">/</span></li>
+      <li><%= link_to @assigned_question_set.survey, [@assigned_question_set.survey] %><span class="divider">/</span></li>
+      <li><%= link_to @assigned_question_set, [@assigned_question_set.survey,@assigned_question_set] %><span class="divider">/</span></li>
+      <li><%= link_to @assigned_question, [@assigned_question_set,@assigned_question] %><span class="divider">/</span></li>
+      <li class="active"><%= resource.new_record? ? t('new_response') : t('edit_response') %></li>
+    </ul>
+  </div>
+<% end %>
+
+
+
 <%= simple_form_for [parent,@response], :html => { :class => 'form-horizontal' } do |f| %>
 
   <% (resource.organization || parent.organization).locales.each do |l| %>

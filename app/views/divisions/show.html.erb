@@ -3,6 +3,7 @@
 <%= content_for(:breadcrumb) do %>
   <div class="span6">
     <ul class="breadcrumb">
+      <li><%= link_to t('home'), root_path %><span class="divider">/</span></li>
       <li><%= link_to resource.organization, [resource.organization] %><span class="divider">/</span></li>
       <li><%= link_to t('divisions'), [current_user, :divisions] %><span class="divider">/</span></li>
       <li class="active"><%= resource %></li>
@@ -10,21 +11,13 @@
   </div>  
   
   <div class="span6 btn-group">
-    <%= link_to t('history'), current_user, class: 'btn btn-large' %>
-    <%= link_to t('surveys'),
-                [@division,:assigned_surveys], :class => 'btn btn-large'  %>
-    <%= link_to t('.edit', :default => t("helpers.links.edit")),
-                edit_division_path(@division), :class => 'btn btn-large' %>
-    <%= link_to t('create_new_group'),
-                new_division_group_path(@division), :class => 'btn btn-primary btn-large'  %>
-
-
-
+    <%= link_to t('.edit', :default => t("helpers.links.edit")), edit_division_path(@division), :class => 'btn btn-large' if can? :update, @division %>
+    <%= link_to t('create_new_group'), new_division_group_path(@division), :class => 'btn btn-primary btn-large'  if can? :create, Group %>
     <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
                 division_path(@division),
                 :method => 'delete',
                 :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')),
-                :class => 'btn btn-danger btn-large' %>
+                :class => 'btn btn-danger btn-large' if can? :destroy, @division %>
   </div>
 <% end %>
 

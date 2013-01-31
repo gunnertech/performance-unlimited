@@ -3,6 +3,12 @@ class ApplicationController < ActionController::Base
   load_and_authorize_resource :unless => :devise_controller?, except: :index
   
   before_filter :set_locale
+  
+  protected
+  
+  def authorize_parent
+    authorize! :read, (parent) if parent?
+  end
 
   def set_locale
     if devise_controller?
@@ -17,6 +23,11 @@ class ApplicationController < ActionController::Base
   end
   
   rescue_from CanCan::AccessDenied do |exception|
-    redirect_to root_path, :alert => exception.message
+    if signed_in?
+      redirect_to root_url, :alert => exception.message
+    else
+      redirect_to new_user_session_url, :alert => exception.message
+    end
+    
   end
 end

@@ -5,6 +5,8 @@ class AssignedQuestionSet < ActiveRecord::Base
   has_one :organization, through: :question_set
   
   has_many :questions, through: :question_set
+  has_many :assigned_questions, through: :question_set
+  
   
   acts_as_list scope: :survey
   
