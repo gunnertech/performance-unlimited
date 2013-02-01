@@ -10,12 +10,13 @@ class CompletedSurvey < ActiveRecord::Base
   
   has_many :selected_responses
   has_many :questions, through: :survey
+  has_many :responses, through: :selected_responses
   
   validates_uniqueness_of :date, scope: :user_id
   
   attr_accessible :date, :user, :user_id, :score
   
-  default_scope order('date DESC')
+  default_scope order{ date.desc }
   
   def as_json(options = {})
     super options.merge(methods: [:score])
@@ -26,7 +27,7 @@ class CompletedSurvey < ActiveRecord::Base
   end
   
   def update_score
-    update_attributes(score: selected_responses.map(&:score).inject(:+))
+    update_attributes(score: responses.sum('responses.points'))
   end
   
   def update_user_score
