@@ -6,7 +6,9 @@ class CompletedSurvey < ActiveRecord::Base
   
   has_one :organization, through: :survey
   
+  after_create :send_alerts
   after_save :update_user_score
+  
   
   has_many :selected_responses
   has_many :questions, through: :survey
@@ -32,5 +34,9 @@ class CompletedSurvey < ActiveRecord::Base
   
   def update_user_score
     user.update_score
+  end
+  
+  def send_alerts
+    AlertMailer.notification_email(self).deliver if selected_responses.joins{ response }.where{ response.suggestion != nil }.count
   end
 end

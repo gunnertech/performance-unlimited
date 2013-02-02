@@ -1,0 +1,5 @@
+<%= @completed_survey.user.to_s %> <%= @completed_survey.to_s %> Notifications<br /><br />
+
+<% @completed_survey.selected_responses.joins{ response }.where{ response.suggestion != nil }.each do |response| %>
+  <%= response.question %>: <%= response %><br />
+<% end %>

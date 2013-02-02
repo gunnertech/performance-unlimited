@@ -44,7 +44,8 @@ class User < ActiveRecord::Base
   end
   
   def divisions_with_admin_access
-    Organization.with_role('admin', self).map{ |organization| organization.divisions.all }.flatten
+    ids = Organization.with_role('admin', user).pluck('organizations.id')
+    Division.joins{ organization }.where{ organization.id >> my{ids} }
   end
   
   def time_zone
@@ -76,8 +77,8 @@ class User < ActiveRecord::Base
   end
   
   def update_score
-    score = completed_surveys.map(&:score).inject(:+) rescue 0
-    average = completed_surveys.count > 0 ? score.to_f/completed_surveys.count.to_f : nil
+    score = completed_surveys.sum('completed_surveys.score')
+    average = completed_surveys.group{ id }.select{ avg(score) }.first.try(:avg).try(:to_f)
     
     update_attributes(score: score, average: average)
   end
