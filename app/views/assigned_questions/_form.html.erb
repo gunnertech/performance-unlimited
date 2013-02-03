@@ -12,7 +12,7 @@
     <% end %>
   <% end %>
 
-  <%= f.input :position, input_html: { value: (resource.position || (parent.assigned_questions.last ? (parent.assigned_questions.last.position || 0) + 1 : 1)) }, hint: t('position_hint') %>
+  <%#= f.input :position, input_html: { value: (resource.position || (parent.assigned_questions.last ? (parent.assigned_questions.last.position || 0) + 1 : 1)) }, hint: t('position_hint') %>
   <div class="form-actions">
     <%= f.button :submit, :class => 'btn-primary', value: t('add_question') %>
     <%= link_to t('.cancel', :default => t("helpers.links.cancel")),

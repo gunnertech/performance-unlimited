@@ -31,9 +31,9 @@
       <th></th>
     </tr>
   </thead>
-  <tbody>
+  <tbody class="sortable">
     <% @survey.assigned_question_sets.each do |assigned_question_set| %>
-      <tr>
+      <tr data-object-id="<%= assigned_question_set.id %>" data-object-type="<%= assigned_question_set.class.name.underscore.downcase %>" data-object-url="<%= url_for [resource,assigned_question_set] %>">
         <td><%= link_to assigned_question_set, [@survey,assigned_question_set] %></td>
         <td>
           <div class="btn-group">

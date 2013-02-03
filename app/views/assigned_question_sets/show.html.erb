@@ -34,9 +34,9 @@
       <th><%=t '.actions', :default => t("helpers.actions") %></th>
     </tr>
   </thead>
-  <tbody>
+  <tbody class="sortable">
     <% @assigned_question_set.question_set.assigned_questions.each do |assigned_question| %>
-      <tr>
+      <tr data-object-id="<%= assigned_question.id %>" data-object-type="<%= assigned_question.class.name.underscore.downcase %>" data-object-url="<%= url_for [resource,assigned_question] %>">
         <td><%= link_to assigned_question, [resource,assigned_question] %></td>
         <td>
           <div class="btn-group">

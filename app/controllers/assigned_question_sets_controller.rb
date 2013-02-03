@@ -4,6 +4,8 @@ class AssignedQuestionSetsController < InheritedResources::Base
   load_resource :survey
   load_and_authorize_resource :assigned_question_set, through: :survey, except: [:index]
   
+  respond_to :json, only: [:update]
+  
   def new
     @assigned_question_set = parent.assigned_question_sets.build
     @assigned_question_set.question_set = QuestionSet.new(organization: parent.organization)

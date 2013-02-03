@@ -5,6 +5,8 @@ class ResponsesController < InheritedResources::Base
   load_resource :question
   load_and_authorize_resource :response, through: :question, except: [:index]
   
+  respond_to :json, only: [:update]
+  
   def create
     if @assigned_question_set && @assigned_question
       create!{ [@assigned_question_set, @assigned_question] }

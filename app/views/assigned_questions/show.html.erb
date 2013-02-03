@@ -34,9 +34,9 @@
       <th></th>
     </tr>
   </thead>
-  <tbody>
+  <tbody class="sortable">
     <% @assigned_question.question.responses.each do |response| %>
-      <tr>
+      <tr data-object-id="<%= response.id %>" data-object-type="<%= response.class.name.underscore.downcase %>" data-object-url="<%= url_for [resource.question,response] %>">
         <td><%= raw(response.to_s) %></td>
         <td><span class="badge badge-inverse"><%= response.points %></span></td>
         <td>

@@ -25,7 +25,7 @@
     
   <% end %>
   
-  <%= f.input :position, input_html: { value: (@assigned_question_set.position || (parent.assigned_question_sets.last ? (parent.assigned_question_sets.last.position || 0) + 1 : 1)) }, hint: t('position_hint') %>
+  <%#= f.input :position, input_html: { value: (@assigned_question_set.position || (parent.assigned_question_sets.last ? (parent.assigned_question_sets.last.position || 0) + 1 : 1)) }, hint: t('position_hint') %>
   
   <div class="form-actions">
     <%= f.button :submit, :class => 'btn-primary' %>
