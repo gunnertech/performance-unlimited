@@ -37,6 +37,6 @@ class CompletedSurvey < ActiveRecord::Base
   end
   
   def send_alerts
-    AlertMailer.notification_email(self).deliver if selected_responses.joins{ response }.where{ response.suggestion != nil }.count
+    AlertMailer.notification_email(self).deliver if selected_responses.joins{ response }.where{ response.suggestion != nil && response.alert == true }.count
   end
 end

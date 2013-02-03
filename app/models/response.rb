@@ -5,7 +5,7 @@ class Response < ActiveRecord::Base
   
   belongs_to :question
   has_one :organization, through: :question
-  attr_accessible :long_text, :points, :short_text, :position, :suggestion
+  attr_accessible :long_text, :points, :short_text, :position, :suggestion, :alert
   
   before_save :set_points_to_zero, if: proc { |response| response.question.measures_dimension? }
   

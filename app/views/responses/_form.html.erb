@@ -26,6 +26,7 @@
   <% end %>
 
   <%= f.input :points %>
+  <%= f.input :alert %>
   <%= f.input :position, input_html: { value: (resource.position || (parent.responses.last ? (parent.responses.last.position || 0) + 1 : 1)) }, hint: t('position_hint') %>
   
   <% if params[:assigned_question_id] %>
