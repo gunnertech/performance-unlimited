@@ -44,7 +44,7 @@ class User < ActiveRecord::Base
   end
   
   def divisions_with_admin_access
-    ids = Organization.with_role('admin', user).pluck('organizations.id')
+    ids = Organization.with_role('admin', self).pluck('organizations.id')
     Division.joins{ organization }.where{ organization.id >> my{ids} }
   end
   
