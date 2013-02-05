@@ -12,7 +12,7 @@ class HomeController < ApplicationController
         @grouped_users = @division.grouped_users
       elsif params[:division_id]
         @division = @organization.divisions.find(params[:division_id])
-      elsif false && current_user.default_division
+      elsif current_user.default_division
         @division = current_user.default_division
         @organization = @division.organization
       elsif current_user.has_role?('admin', @organization)
