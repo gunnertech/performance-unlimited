@@ -2,7 +2,9 @@
   <div class="span6">
     <ul class="breadcrumb">
       <li><%= link_to t('home'), root_path %><span class="divider">/</span></li>
-      <li><%= link_to Organization.with_role('admin', current_user).first, [Organization.with_role('admin', current_user).first] %><span class="divider">/</span></li>
+			<% if Organization.with_role('admin', current_user).first %>
+	      <li><%= link_to Organization.with_role('admin', current_user).first, [Organization.with_role('admin', current_user).first] %><span class="divider">/</span></li>
+			<% end %>
       <li class="active"><%= t('divisions') %></li>
     </ul>
   </div>  

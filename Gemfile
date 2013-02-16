@@ -1,6 +1,4 @@
-require 'rbconfig'
-HOST_OS = RbConfig::CONFIG['host_os']
-source 'https://rubygems.org'
+source 'http://rubygems.org'
 
 gem "rails", "~> 3.2.11"
 gem "thin"
@@ -21,7 +19,7 @@ gem "has_scope"
 gem 'acts_as_list'
 gem "paperclip", "~> 3.0"
 gem "aws-sdk"
-gem "twitter"
+# gem "twitter"
 gem "geokit", :require => "geokit" 
 gem "geokit-rails3"
 gem 'omniauth-twitter'
@@ -51,8 +49,6 @@ group :development do
   gem 'rails3-generators'
   gem 'thor'
   gem 'log4r'
-  gem 'sevenwire-rest-client'
-  gem 'giraffesoft-trample'
   gem 'pry-rails'
   gem 'bullet'
   gem "rails-footnotes", ">= 3.7"

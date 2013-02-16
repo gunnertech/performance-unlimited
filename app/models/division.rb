@@ -5,7 +5,7 @@ class Division < ActiveRecord::Base
 
   has_many :assigned_divisions, dependent: :destroy
   has_many :managers, class_name: "User", through: :assigned_divisions
-  has_many :groups, order: :position
+  has_many :groups, order: :position, dependent: :destroy
   has_many :assigned_groups, through: :groups, order: :position
   has_many :users, through: :groups
   
