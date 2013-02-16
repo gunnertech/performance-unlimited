@@ -19,7 +19,7 @@ gem "has_scope"
 gem 'acts_as_list'
 gem "paperclip", "~> 3.0"
 gem "aws-sdk"
-# gem "twitter"
+gem "twitter"
 gem "geokit", :require => "geokit" 
 gem "geokit-rails3"
 gem 'omniauth-twitter'

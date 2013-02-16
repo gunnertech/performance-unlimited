@@ -295,6 +295,7 @@ GEM
     simple_form (2.0.2)
       actionpack (~> 3.0)
       activemodel (~> 3.0)
+    simple_oauth (0.2.0)
     slop (3.4.3)
     sprockets (2.2.2)
       hike (~> 1.2)
@@ -317,6 +318,10 @@ GEM
     treetop (1.4.12)
       polyglot
       polyglot (>= 0.3.1)
+    twitter (4.5.0)
+      faraday (~> 0.8, < 0.10)
+      multi_json (~> 1.0)
+      simple_oauth (~> 0.2)
     twitter-bootstrap-rails (2.1.1)
       actionpack (>= 3.1)
       less-rails (~> 2.2.2)
@@ -391,6 +396,7 @@ DEPENDENCIES
   squeel
   thin
   thor
+  twitter
   twitter-bootstrap-rails (>= 2.0.3)
   uglifier (>= 1.0.3)
   will_paginate (>= 3.0.3)
