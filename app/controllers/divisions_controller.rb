@@ -24,9 +24,9 @@ class DivisionsController < InheritedResources::Base
     request.xhr? ? nil : 'application'
   end
   
-  def collection
-    return @divisions if @divisions
-    @divisions = end_of_association_chain.accessible_by(current_ability)
-    
-  end
+  # def collection
+  #   return @divisions if @divisions
+  #   @divisions = end_of_association_chain.accessible_by(current_ability)
+  #   
+  # end
 end
