@@ -29,6 +29,7 @@ gem 'google_drive'
 gem 'rails_autolink', :require => 'rails_autolink'
 gem 'globalize3'
 gem 'batch_translations'
+gem 'paper_trail', '~> 2'
 
 group :assets do
   gem 'sass-rails',   '~> 3.2.3'

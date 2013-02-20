@@ -53,7 +53,7 @@
         <a href="#"class="dropdown-toggle" data-toggle="dropdown"><%=t 'divisions' %><b class="caret"></b></a>
         <ul class="dropdown-menu">
           <li class="<%= (controller_name == 'divisions' && controller.action_name == 'index' ? 'active' : '') %>">
-            <%= link_to t('list'), user_divisions_path(current_user) %>
+            <%= link_to t('list'), divisions_path %>
           </li>
           <% if can? :create, Division %>
             <li class="<%= (controller_name == 'users'  && controller.action_name == 'new' ? 'active' : '') %>">

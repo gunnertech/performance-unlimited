@@ -1,4 +1,5 @@
 class Division < ActiveRecord::Base
+  has_paper_trail
   resourcify
   
   belongs_to :organization

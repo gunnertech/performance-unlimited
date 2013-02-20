@@ -1,6 +1,6 @@
 class DivisionsController < InheritedResources::Base
   belongs_to :organization, optional: true
-  belongs_to :user, optional: true
+  # belongs_to :user, optional: true
   
   custom_actions resource: :leaderboard
   layout :get_layout
@@ -24,9 +24,9 @@ class DivisionsController < InheritedResources::Base
     request.xhr? ? nil : 'application'
   end
   
-  # def collection
-  #   return @divisions if @divisions
-  #   @divisions = end_of_association_chain.accessible_by(current_ability)
-  #   
-  # end
+  def collection
+    return @divisions if @divisions
+    @divisions = end_of_association_chain.accessible_by(current_ability)
+    
+  end
 end
