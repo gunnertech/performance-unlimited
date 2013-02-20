@@ -244,9 +244,9 @@ ActiveRecord::Schema.define(:version => 20130203002656) do
     t.string   "locale"
     t.string   "short_text"
     t.text     "long_text"
+    t.text     "suggestion"
     t.datetime "created_at",  :null => false
     t.datetime "updated_at",  :null => false
-    t.text     "suggestion"
   end
 
   add_index "response_translations", ["locale"], :name => "index_response_translations_on_locale"
