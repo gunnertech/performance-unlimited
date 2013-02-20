@@ -16,7 +16,7 @@
 
  <div class="tabbable">
    <ul class="nav nav-tabs">
-     <% parent.divisions_with_admin_access.each_with_index do |division,i| %>
+     <% collection.each_with_index do |division,i| %>
        <li class="<%= i == 0 ? 'active' : '' %>">
          <a data-toggle="tab" href="#<%= division.to_s.parameterize %>"><%= division %></a>
        </li>
@@ -24,7 +24,7 @@
    </ul>
 
    <div class="tab-content">
-     <% parent.divisions_with_admin_access.each_with_index do |division,i| %>
+     <% collection.each_with_index do |division,i| %>
        <div class="tab-pane <%= i == 0 ? 'active' : '' %>" id="<%= division.to_s.parameterize %>">
          <%= link_to t('delete'), division, class: 'btn btn-large btn-danger pull-right', method: "delete", confirm: "Are you sure you want to delete this group?" if can?(:destroy,division) %>
          <%= link_to t('leaderboards'), division, class: 'btn btn-large btn-info pull-right' %>
