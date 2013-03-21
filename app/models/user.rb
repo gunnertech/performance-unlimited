@@ -77,10 +77,10 @@ class User < ActiveRecord::Base
   end
   
   def update_score
-    score = completed_surveys.sum('completed_surveys.score')
-    average = completed_surveys.group{ id }.select{ avg(score) }.first.try(:avg).try(:to_f)
-    
-    update_attributes(score: score, average: average)
+    self.score = completed_surveys.sum('completed_surveys.score')
+    self.average = completed_surveys.reorder{ user_id }.group{ user_id }.select{ avg(score).as(the_avg) }.first.try(:the_avg).try(:to_f)
+    self.save!
+    #update_attributes(score: score, average: average)
   end
   
   def is_a_participant?

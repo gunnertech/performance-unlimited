@@ -9,6 +9,7 @@ class Ability
     elsif user.is_an_admin?
       can :manage, AssignedDivision,      :id => AssignedDivision.with_role('admin', user).pluck('assigned_divisions.id')
       can :manage, AssignedDivision,      :id => Organization.with_role('admin', user).joins{ divisions.assigned_divisions }.pluck('assigned_divisions.id')
+      can :manage, PointRange,            :id => Organization.with_role('admin', user).joins{ point_ranges }.pluck('point_ranges.id')
       can :create, AssignedDivision
       can :manage, Division,              :id => Organization.with_role('admin', user).joins{ divisions }.pluck('divisions.id')
       can :create, Division

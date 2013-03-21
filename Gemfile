@@ -1,7 +1,7 @@
 source 'http://rubygems.org'
 
 gem "rails", "~> 3.2.11"
-gem "thin"
+gem "unicorn"
 gem "squeel"
 gem 'jquery-rails'
 gem "devise", ">= 2.1.2"
