@@ -9,7 +9,6 @@ gem "devise_invitable", ">= 1.0.2"
 gem "cancan", ">= 1.6.8"
 gem "rolify", ">= 3.1.0"
 gem "sendgrid"
-gem "will_paginate", ">= 3.0.3"
 gem "inherited_resources"
 gem "simple_form"
 gem 'bootstrap-will_paginate'

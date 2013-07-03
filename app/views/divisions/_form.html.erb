@@ -14,7 +14,9 @@
 
 <%= simple_form_for resource, :html => { :class => 'form-horizontal' } do |f| %>
   <%= f.input :name %>
-  <% if Organization.with_role('admin', current_user).count > 1 %>
+  <% if current_user.has_role?('admin') %>
+    <%= f.association :organization %>
+  <% elsif Organization.with_role('admin', current_user).count > 1 %>
     <%= f.association :organization, collection: Organization.with_role('admin', current_user), prompt: "Choose an Organization" %>
   <% else %>
     <%= f.input :organization_id, as: :hidden, input_html: {value: Organization.with_role('admin', current_user).first.id } %>
