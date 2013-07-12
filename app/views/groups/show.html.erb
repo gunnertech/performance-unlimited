@@ -11,7 +11,7 @@
   </div>  
   
   <div class="span6 btn-group">
-    <%= link_to t('download_last_30_days'), division_group_path(parent,@group,format:'csv'), class: 'btn btn-primary btn-large' %>
+    <%= link_to t('download_data'), division_group_path(parent,@group,format:'csv'), class: 'btn btn-primary btn-large modal-trigger', 'data-modal' => 'download-modal' %>
     <%= link_to t('add_member'),new_group_user_path(@group), :class => 'btn btn-primary btn-large' if can? :update, @group  %>
     
     <%= link_to t('.edit', :default => t("helpers.links.edit")),
@@ -81,3 +81,30 @@
     <div class="group-graph" data-division_id="<%= @group.division.id %>" data-group_id="<%= @group.id %>" data-day_range="30"></div>
   </div>
 </section>
+
+<div id="download-modal" class="modal hide fade">
+  <form action="<%= division_group_path(parent,@group,format:'csv') %>" method="get" class="horizontal">
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+      <h3>Choose Time Frame</h3>
+    </div>
+    <div class="modal-body">
+      <div class="control-group">
+        <label class="control-label" for="start_date">Start Date</label>
+        <div class="controls">
+          <input type="text" class="datepicker" id="start_date" name="start_date" value="<%=l 30.days.ago.to_date, format: :picker %>">
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="end_date">End Date</label>
+        <div class="controls">
+          <input type="text" class="datepicker" id="end_date" name="end_date" value="<%=l Date.today, format: :picker %>">
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <a href="#" class="btn close-it">Close</a>
+      <button type="submit" class="btn btn-primary">Download Data</button>
+    </div>
+  </form>
+</div>

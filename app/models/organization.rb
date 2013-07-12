@@ -103,7 +103,7 @@ class Organization < ActiveRecord::Base
         oauth_token: authentication.token,
         oauth_token_secret: authentication.secret
       )
-      @client.user(screen_name).profile_image_url
+      @client.user(screen_name).profile_image_url rescue ""
     end
   end
   

@@ -64,3 +64,6 @@ en:
       time_only: '%l %p'
       long: '%B %d, %Y %l %p'
       input: '%m/%d/%Y %I:%M %p'
+  date:
+    formats:
+      picker: "%m/%d/%Y"

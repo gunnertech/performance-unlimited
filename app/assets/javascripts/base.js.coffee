@@ -11,6 +11,18 @@ $('.btn-print').live('click', (event) ->
 
 $(->
   
+  $(".datepicker").datepicker()
+  
+  $(".modal-trigger").on('click', (event) ->
+    event.preventDefault()
+    $modal = $("##{$(this).data('modal')}").modal('show')
+    $modal.find('.close-it').on('click', (event) ->
+      event.preventDefault()
+      
+      $modal.modal('hide')
+    )
+  )
+  
   $(".sortable" ).sortable(axis: "y", 
     helper: (e, ui) ->
       ui.children().each( ->
