@@ -177,7 +177,7 @@ end
 User.all.each{|user| user.update_attributes(language: 'en') if user.language.blank? }
 
 mapped_production_domain = MappedDomain.find_or_create_by_domain(DEFAULT_DOMAIN)
-mapped_staging_domain = MappedDomain.find_or_create_by_domain("recoverytracker-staging.herokuapp.com")
+mapped_staging_domain = MappedDomain.find_or_create_by_domain("performance-unlimited-staging.herokuapp.com")
 mapped_development_domain = MappedDomain.find_or_create_by_domain("localhost")
 
 [mapped_production_domain, mapped_staging_domain, mapped_development_domain].each do |mapped_domain|

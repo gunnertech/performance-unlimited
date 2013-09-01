@@ -1,7 +1,7 @@
 PAPERCLIP_STORAGE_OPTIONS = { }
 OAUTH_SITE_URL = 'http://localhost:3010'
 
-Recoverytracker::Application.configure do
+PerformanceUnlimited::Application.configure do
   # Settings specified here will take precedence over those in config/application.rb
 
   # In the development environment your application's code is reloaded on

@@ -1,4 +1,4 @@
-Recoverytracker::Application.routes.draw do
+PerformanceUnlimited::Application.routes.draw do
 
   resources :metric_types
 

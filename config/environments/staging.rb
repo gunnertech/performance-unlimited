@@ -2,9 +2,9 @@ PAPERCLIP_STORAGE_OPTIONS = { storage: 's3',
                              s3_credentials: "#{Rails.root}/config/s3.yml",
                              path: "/:style/:id/:filename"}
 
-OAUTH_SITE_URL = 'recoverytracker-staging.herokuapp.com'
+OAUTH_SITE_URL = 'performance-unlimited-staging.herokuapp.com'
 
-Recoverytracker::Application.configure do
+PerformanceUnlimited::Application.configure do
   # Settings specified here will take precedence over those in config/application.rb
 
   # Code is not reloaded between requests

@@ -4,8 +4,8 @@ apps:
   #   production: awesomeapp
   # would create the RACK_ENV=production
   # and deploy to http://awesomeapp.heroku.com
-  production: recoverytracker
-  staging: recoverytracker-staging
+  production: performance-unlimited
+  staging: performance-unlimited-staging
   # legacy: awesomeapp-legacy
 
 stacks:

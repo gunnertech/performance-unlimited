@@ -1,18 +1,18 @@
-Recovery Tracker
+Performance Unlimited
 ========================
 
-rm -rf ~/workspace/ruby/rails/recoverytracker
+rm -rf ~/workspace/ruby/rails/performance-unlimited
 cd ~/workspace/ruby/rails
 rvm use 1.9.3
-rvm gemset create recoverytracker
-rvm use 1.9.3@recoverytracker
+rvm gemset create performance-unlimited
+rvm use 1.9.3@performance-unlimited
 gem install rails --no-ri --no-rdoc
 gem install rails_apps_composer --no-ri --no-rdoc
-rails_apps_composer new recoverytracker -r home_page devise add_user rspec action_mailer html5 cleanup extras git seed_database capybara guard inherited_resources simple_form
+rails_apps_composer new performance-unlimited -r home_page devise add_user rspec action_mailer html5 cleanup extras git seed_database capybara guard inherited_resources simple_form
 
-echo 'rvm use 1.9.3@recoverytracker' >> recoverytracker/.rvmrc
+echo 'rvm use 1.9.3@performance-unlimited' >> performance-unlimited/.rvmrc
 
-cd recoverytracker
+cd performance-unlimited
 
 mate Gemfile
 # ADD GEMS (HEROKU, ETC)
@@ -43,17 +43,17 @@ rails g heroku:config
 #   @heroku = Heroku::Auth.client
 # end
 
-git remote add origin https://github.com/gunnertech/recoverytracker.git
-git remote set-url origin git@github.com:gunnertech/recoverytracker.git
+git remote add origin https://github.com/gunnertech/performance-unlimited.git
+git remote set-url origin git@github.com:gunnertech/performance-unlimited.git
 git add .
 git commit -am "first commit"
 git push -u origin master
 
 bundle exec rake all heroku:setup
 bundle exec rake all heroku:deploy
-heroku run rake db:migrate --app recoverytracker-staging
-heroku run rake db:seed --app recoverytracker-staging
-heroku run rake db:migrate --app recoverytracker
+heroku run rake db:migrate --app performance-unlimited-staging
+heroku run rake db:seed --app performance-unlimited-staging
+heroku run rake db:migrate --app performance-unlimited
 
 
 

@@ -1,7 +1,7 @@
 development:
   access_key_id: AKIAJLZSJ7DLDBAIC3QA
   secret_access_key: "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'"
-  bucket: com.gunnertech.recoverytracker.development
+  bucket: com.gunnertech.performance-unlimited.development
 test:
   access_key_id: AKIAJLZSJ7DLDBAIC3QA
   secret_access_key: "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'"
@@ -9,8 +9,8 @@ test:
 production:
   access_key_id: AKIAJLZSJ7DLDBAIC3QA
   secret_access_key: "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"
-  bucket: com.gunnertech.recoverytracker.development.production
+  bucket: com.gunnertech.performance-unlimited.development.production
 staging:
   access_key_id: AKIAJLZSJ7DLDBAIC3QA 
   secret_access_key: "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"
-  bucket: com.gunnertech.recoverytracker.staging
+  bucket: com.gunnertech.performance-unlimited.staging

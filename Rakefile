@@ -4,4 +4,4 @@
 
 require File.expand_path('../config/application', __FILE__)
 
-Recoverytracker::Application.load_tasks
+PerformanceUnlimited::Application.load_tasks
