@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130220231232) do
+ActiveRecord::Schema.define(:version => 20130901220741) do
 
   create_table "assigned_divisions", :force => true do |t|
     t.integer  "division_id"
@@ -154,6 +154,7 @@ ActiveRecord::Schema.define(:version => 20130220231232) do
     t.integer  "decimal_places"
     t.datetime "created_at",      :null => false
     t.datetime "updated_at",      :null => false
+    t.string   "note"
   end
 
   add_index "metrics", ["metric_type_id"], :name => "index_metrics_on_metric_type_id"

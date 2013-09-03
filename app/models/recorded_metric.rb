@@ -6,6 +6,9 @@ class RecordedMetric < ActiveRecord::Base
   attr_accessible :recorded_on, :value, :user, :user_id, :metric, :metric_id
   
   validates_uniqueness_of :recorded_on, scope: [:user_id,:metric_id]
+  validates :value, presence: true
+  validates :metric_id, presence: true
+  validates :recorded_on, presence: true
   
   class << self
     def current_for(metric_id)

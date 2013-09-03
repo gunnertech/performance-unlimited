@@ -11,7 +11,7 @@
   <div class="span6 btn-group">
     <%= link_to t('.edit', :default => t("helpers.links.edit")),
                 edit_organization_path(@organization), :class => 'btn btn-large' if can?(:update, resource) %>
-    <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
+    <%= link_to t('delete'),
                 organization_path(@organization),
                 :method => 'delete',
                 :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')),
@@ -20,76 +20,264 @@
 <% end %>
 
 <% if can?(:update, resource) %>
+  <div class="accordion" id="accordion">
+    <div class="accordion-group">
+      <div class="accordion-heading">
+        <h4 class="accordion-title">
+          <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
+            <%=t 'divisions' %>
+          </a>
+        </h4>
+      </div>
+      <div id="collapseOne" class="accordion-collapse collapse in">
+        <div class="accordion-body">
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th><%= model_class.human_attribute_name(:name) %></th>
+                <th><%=t '.actions', :default => t("helpers.actions") %></th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @organization.divisions.each do |division| %>
+                <tr>
+                  <td><%= link_to division, [resource,division] %></td>
+                  <td>
+                    <%= link_to t('.edit', :default => t("helpers.links.edit")),
+                                edit_organization_division_path(@organization,division), :class => 'btn btn-mini' %>
+                    <%= link_to t('add_group'),
+                                new_division_group_path(division), :class => 'btn btn-mini' %>
+                    <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
+                                organization_division_path(@organization,division),
+                                :method => :delete,
+                                :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')),
+                                :class => 'btn btn-mini btn-danger' %>
+                  </td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+    
+          <div class="form-actions">
+            <%= link_to t('add_division'), new_organization_division_path(resource), :class => 'btn btn-info' %>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="accordion-group">
+      <div class="accordion-heading">
+        <h4 class="accordion-title">
+          <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseGroups">
+            <%=t 'groups' %>
+          </a>
+        </h4>
+      </div>
+      <div id="collapseGroups" class="accordion-collapse collapse">
+        <div class="accordion-body">
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th><%= model_class.human_attribute_name(:name) %></th>
+                <th><%=t '.actions', :default => t("helpers.actions") %></th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @organization.groups.each do |group| %>
+                <tr>
+                  <td><%= link_to group, [group.division,group] %></td>
+                  <td>
+                    <%= link_to t('.edit', :default => t("helpers.links.edit")),
+                                edit_division_group_path(group.division,group), :class => 'btn btn-mini' %>
+                    <%= link_to t('add_user'),
+                                new_group_user_path(group), :class => 'btn btn-mini' %>
+                    <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
+                                division_group_path(group.division,group),
+                                :method => :delete,
+                                :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')),
+                                :class => 'btn btn-mini btn-danger' %>
+                  </td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    
+    
+    <div class="accordion-group">
+      <div class="accordion-heading">
+        <h4 class="accordion-title">
+          <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseUsers">
+            <%=t 'athletes' %>
+          </a>
+        </h4>
+      </div>
+      <div id="collapseUsers" class="accordion-collapse collapse">
+        <div class="accordion-body">
+          
+          <div class="btn-group pull-right">
+            <a class="btn btn-primary" href="#">Upload</a>
+            <a class="btn btn-primary global-submit" href="#">Submit</a>
+          </div>
+          <div class="pull-right">
+            <label style="display:inline;">Date Recorded:</label>
+            <input type="text" class="base-date datepicker input-small" value="<%= Date.today.strftime('%m/%d/%Y') %>" />
+          </div>
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th><%= model_class.human_attribute_name(:name) %></th>
+                <% resource.metrics.each do |metric| %>
+                  <th><%= metric %></th>
+                <% end %>
+                <!-- <th><%=t '.actions', :default => t("helpers.actions") %></th> -->
+              </tr>
+            </thead>
+            <tbody>
+              <% @organization.users.each do |user| %>
+                <tr>
+                  <td><%= link_to user, user %></td>
+                  <% resource.metrics.each do |metric| %>
+                    <td class="metric">
+                      <%= simple_form_for [user,RecordedMetric.new], :html => { :class => 'form-inline' } do |f| %>
+                        <%= f.input :metric_id, as: :hidden, input_html: {value: metric.id} %>
+                        <%= f.input :value, label: false, input_html: {class: "input-mini"} %>
+                        <%= f.input :recorded_on, as: :hidden, input_html: {value: Date.today.strftime('%m/%d/%Y'), class: 'datepicker'} %>
+                      <% end %>
+                      
+                    </td>
+                  <% end %>
+                  <!-- <td>
+                                      <%= link_to t('.edit', :default => t("helpers.links.edit")),
+                                                  [:edit, user], :class => 'btn btn-mini' %>
+                                      <%= link_to t('record_metric'),
+                                                  new_user_recorded_metric_path(user), :class => 'btn btn-mini' %>
+                                      <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
+                                                  user,
+                                                  :method => :delete,
+                                                  :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')),
+                                                  :class => 'btn btn-mini btn-danger' %>
+                                    </td> -->
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+          <div class="btn-group pull-right">
+            <a class="btn btn-primary global-submit" href="#">Submit</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+  
+    <div class="accordion-group">
+      <div class="accordion-heading">
+        <h4 class="accordion-title">
+          <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">
+            <%=t 'metrics' %>
+          </a>
+        </h4>
+      </div>
+    
+      <div id="collapseTwo" class="accordion-collapse collapse">
+        <div class="accordion-body">
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th><%= model_class.human_attribute_name(:name) %></th>
+                <th><%= model_class.human_attribute_name(:metric_type_id) %></th>
+                <th><%= model_class.human_attribute_name(:decimal_places) %></th>
+                <th><%=t '.actions', :default => t("helpers.actions") %></th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @organization.metrics.each do |metric| %>
+                <tr>
+                  <td><%= link_to metric, organization_metric_path(@organization,metric) %></td>
+                  <td><%= metric.metric_type %></td>
+                  <td><%= metric.decimal_places %></td>
+                  <td>
+                    <%= link_to t('.edit', :default => t("helpers.links.edit")),
+                                edit_organization_metric_path(@organization,metric), :class => 'btn btn-mini' %>
+                    <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
+                                organization_metric_path(@organization,metric),
+                                :method => :delete,
+                                :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')),
+                                :class => 'btn btn-mini btn-danger' %>
+                  </td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
 
-  <h3><%=t 'metrics' %></h3>
+          <div class="form-actions">
+            <%= link_to t('add_metric'), new_organization_metric_path(resource), :class => 'btn btn-info' %>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+    <div class="accordion-group">
+      <div class="accordion-heading">
+        <h4 class="accordion-title">
+          <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseThree">
+            <%=t 'twitter_accounts' %>
+          </a>
+        </h4>
+      </div>
+    
+      <div id="collapseThree" class="accordion-collapse collapse">
+        <div class="accordion-body">
+          <table class="table">
+            <tbody>
+              <% @organization.twitter_accounts.each do |account| %>
+                <tr>
+                  <td><a href="http://twitter.com/<%= account.nickname %>"><img src="<%= @organization.twitter_profile_image_src(account.nickname) %>" /></a></td>
+                  <td>@<a href="http://twitter.com/<%= account.nickname %>"><%= account.nickname %></a></td>
+                  <td><%= @organization.twitter_description(account.nickname) %></td>
+                  <td><%= link_to t('delete'), authentication_path(account), method: 'delete', confirm: t("helpers.links.confirm", default: 'Are you sure?'), class: 'btn btn-danger' %></td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
 
-  <table class="table table-striped">
-    <thead>
-      <tr>
-        <th><%= model_class.human_attribute_name(:name) %></th>
-        <th><%= model_class.human_attribute_name(:metric_type_id) %></th>
-        <th><%= model_class.human_attribute_name(:decimal_places) %></th>
-        <th><%=t '.actions', :default => t("helpers.actions") %></th>
-      </tr>
-    </thead>
-    <tbody>
-      <% @organization.metrics.each do |metric| %>
-        <tr>
-          <td><%= link_to metric, organization_metric_path(@organization,metric) %></td>
-          <td><%= metric.metric_type %></td>
-          <td><%= metric.decimal_places %></td>
-          <td>
-            <%= link_to t('.edit', :default => t("helpers.links.edit")),
-                        edit_organization_metric_path(@organization,metric), :class => 'btn btn-mini' %>
-            <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
-                        organization_metric_path(@organization,metric),
-                        :method => :delete,
-                        :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')),
-                        :class => 'btn btn-mini btn-danger' %>
-          </td>
-        </tr>
-      <% end %>
-    </tbody>
-  </table>
+          <div class="form-actions">
+            <a class="btn btn-info" href="/auth/twitter?force_login=true&amp;organization_id=<%= @organization.to_param %>"><%= t('add_twitter_account') %></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+    <div class="accordion-group">
+      <div class="accordion-heading">
+        <h4 class="accordion-title">
+          <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseFour">
+            <%=t 'google_accounts' %>
+          </a>
+        </h4>
+      </div>
+    
+      <div id="collapseFour" class="accordion-collapse collapse">
+        <div class="accordion-body">
+          <table class="table">
+            <tbody>
+              <% @organization.google_accounts.each do |account| %>
+                <tr>
+                  <td><%= account.nickname %></td>
+                  <td><%= link_to t('delete'), authentication_path(account), method: 'delete', confirm: t("helpers.links.confirm", default: 'Are you sure?'), class: 'btn btn-danger' %></td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
 
-  <div class="form-actions">
-    <%= link_to t('add_metric'), new_organization_metric_path(resource), :class => 'btn btn-info' %>
+          <div class="form-actions">
+            <a class="btn btn-info" href="/auth/google_oauth2?force_login=true&amp;organization_id=<%= @organization.to_param %>"><%= t('add_google_account') %></a>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
-
-
-  <h3><%=t 'twitter_accounts' %></h3>
-
-  <table class="table">
-    <tbody>
-      <% @organization.twitter_accounts.each do |account| %>
-        <tr>
-          <td><a href="http://twitter.com/<%= account.nickname %>"><img src="<%= @organization.twitter_profile_image_src(account.nickname) %>" /></a></td>
-          <td>@<a href="http://twitter.com/<%= account.nickname %>"><%= account.nickname %></a></td>
-          <td><%= @organization.twitter_description(account.nickname) %></td>
-          <td><%= link_to t('delete'), authentication_path(account), method: 'delete', confirm: t("helpers.links.confirm", default: 'Are you sure?'), class: 'btn btn-danger' %></td>
-        </tr>
-      <% end %>
-    </tbody>
-  </table>
-
-  <div class="form-actions">
-    <a class="btn btn-info" href="/auth/twitter?force_login=true&amp;organization_id=<%= @organization.to_param %>"><%= t('add_twitter_account') %></a>
-  </div>
-
-  <h3><%=t 'google_accounts' %></h3>
-
-  <table class="table">
-    <tbody>
-      <% @organization.google_accounts.each do |account| %>
-        <tr>
-          <td><%= account.nickname %></td>
-          <td><%= link_to t('delete'), authentication_path(account), method: 'delete', confirm: t("helpers.links.confirm", default: 'Are you sure?'), class: 'btn btn-danger' %></td>
-        </tr>
-      <% end %>
-    </tbody>
-  </table>
-
-  <div class="form-actions">
-    <a class="btn btn-info" href="/auth/google_oauth2?force_login=true&amp;organization_id=<%= @organization.to_param %>"><%= t('add_google_account') %></a>
   </div>
 <% end %>

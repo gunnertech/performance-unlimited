@@ -16,6 +16,8 @@ class User < ActiveRecord::Base
   before_validation :set_first_name_and_last_name
   after_save :assign_roles
   
+  after_create :add_admin_role, if: Proc.new{ |user| User.count <= 1 }
+  
   has_many :assigned_groups
   has_many :groups, through: :assigned_groups
   has_many :assigned_divisions
@@ -56,8 +58,16 @@ class User < ActiveRecord::Base
     Organization.with_role('admin', self).first || organizations.first
   end
   
+  def admined_organizations
+    if has_role?('admin')
+      Organization.all
+    else
+      Organization.with_role('admin', self)
+    end
+  end
+  
   def to_s
-    name
+    name || email
   end
   
   def set_first_name_and_last_name
@@ -118,6 +128,10 @@ class User < ActiveRecord::Base
     else
       self.add_role role.to_s
     end
+  end
+  
+  def add_admin_role
+    self.add_role('admin')
   end
   
 end

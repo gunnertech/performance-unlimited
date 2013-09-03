@@ -12,7 +12,7 @@
   <ul class="nav">
     <% if user_signed_in? %>
       <li class="dropdown">
-        <a href="#"class="dropdown-toggle" data-toggle="dropdown"><%= current_user.name %><b class="caret"></b></a>
+        <a href="#"class="dropdown-toggle" data-toggle="dropdown"><%= current_user %><b class="caret"></b></a>
         <ul class="dropdown-menu">
           <li>
             <%= link_to t('history'), current_user %>
@@ -26,6 +26,19 @@
           
         </ul>
       <li class="divider-vertical"></li>
+      
+      <% if can?(:create, Organization) && current_user.admined_organizations.count > 0 %>
+        <li class="dropdown">
+          <a href="#"class="dropdown-toggle" data-toggle="dropdown"><%=t 'organizations' %><b class="caret"></b></a>
+          <ul class="dropdown-menu">
+            <% current_user.admined_organizations.each do |organization| %>
+              <li>
+                <%= link_to organization, organization %>
+              </li>
+            <% end %>
+          </ul>
+        </li>
+      <% end %>
     <% else %>
       <li>
         <%= link_to t('log_in'), new_user_session_path %>  

@@ -11,6 +11,35 @@ $('.btn-print').live('click', (event) ->
 
 $(->
   
+  $('.global-submit').click( (event) ->
+    event.preventDefault()
+    $(".metric").each((i,item) ->
+      if $(item).find('#recorded_metric_value').val()
+        console.log( $(item).find('#recorded_metric_value').parents('form').serialize() )
+        console.log( $(item).find('#recorded_metric_value').parents('form').attr('action') )
+        
+        $.post(
+          $(item).find('#recorded_metric_value').parents('form').attr('action'),
+          $(item).find('#recorded_metric_value').parents('form').serialize(),
+          null,
+          'json'
+        )
+        .done(-> 
+          $(item).find("input[type='text']").attr('disabled','disabled')
+          $(item).find(".control-group").addClass('success')
+        )
+        .fail(-> 
+          $(item).find("input[type='text']").attr('disabled','disabled')
+          $(item).find(".control-group").addClass('error')
+        )
+        .always(-> console.log("always"))
+    )
+  )
+  
+  $('.base-date').on('change', ->
+    $('.hidden.datepicker').val($(this).val())
+  )
+  
   $(".datepicker").datepicker()
   
   $(".modal-trigger").on('click', (event) ->

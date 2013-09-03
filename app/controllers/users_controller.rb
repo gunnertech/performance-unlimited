@@ -1,5 +1,7 @@
 class UsersController < InheritedResources::Base
   belongs_to :group, optional: true
+  belongs_to :organization, optional: true
+  belongs_to :division, optional: true
   respond_to :csv, only: :show
   
   def new
@@ -20,10 +22,10 @@ class UsersController < InheritedResources::Base
       @user.editor = current_user
       
       if parent?
-        if @user.valid?
-          parent.users << @user
-          #@user.add_role 'athlete', parent.division
-        end
+        # if @user.valid?
+        #   parent.users << @user
+        #   #@user.add_role 'athlete', parent.division
+        # end
         create!{ [parent.division, parent] }
       else
         create!

@@ -1,1 +1,1 @@
-DEFAULT_DOMAIN = 'piratestrong.com'
+DEFAULT_DOMAIN = 'performance-unlimited.herokuapp.com'

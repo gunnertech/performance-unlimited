@@ -4,6 +4,8 @@ class RecordedMetricsController < InheritedResources::Base
   load_resource :user
   load_and_authorize_resource :recorded_metric, through: :user, except: [:index]
   
+  respond_to :json
+  
   
   before_filter :authorize_parent
   
