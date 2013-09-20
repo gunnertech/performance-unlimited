@@ -37,6 +37,14 @@ class OrganizationsController < InheritedResources::Base
         user = resource.users.where{ (first_name == my{row['First Name']}) & (last_name == my{row['Last Name']}) }.first
       end
       
+      if row['Groups'].present?
+        pieces = row['Groups'].split(":")
+        division = resource.divisions.find_or_create_by_name(pieces.first)
+        group = division.groups.find_or_create_by_name(pieces.last)
+        
+        user.groups << group unless user.groups.include?(group)
+      end
+      
       if user.nil?
         group = Group.find(params[:group_id])
         user = User.new(first_name: row['First Name'], last_name: row['Last Name'])

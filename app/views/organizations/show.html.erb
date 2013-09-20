@@ -51,11 +51,12 @@
             <table class="table table-striped">
               <thead>
                 <tr>
-                  <th>Athlete ID</th>
-                  <th><%= model_class.human_attribute_name(:last_name) %></th>
-                  <th><%= model_class.human_attribute_name(:first_name) %></th>
+                  <th nowrap>Athlete ID</th>
+                  <th nowrap><%= model_class.human_attribute_name(:last_name) %></th>
+                  <th nowrap><%= model_class.human_attribute_name(:first_name) %></th>
+                  <th nowrap>Groups</th>
                   <% resource.metrics.each do |metric| %>
-                    <th><%= link_to metric, [:edit,resource,metric] %></th>
+                    <th nowrap><%= link_to metric, [:edit,resource,metric] %></th>
                   <% end %>
                   <!-- <th><%=t '.actions', :default => t("helpers.actions") %></th> -->
                 </tr>
@@ -66,6 +67,7 @@
                     <td><%= link_to user.id, user %></td>
                     <td><%= link_to user.first_name, user %></td>
                     <td><%= link_to user.last_name, user %></td>
+                    <td><%= user.assigned_groups.map{|ag| "#{ag.division}:#{ag.group}"}.join(", ") %></td>
                     <% resource.metrics.each do |metric| %>
                       <% recorded_metric = metric.recorded_metrics.where{ (recorded_on == my{params[:record_date].to_date}) & (user_id == my{user.id}) }.first %>
                       <td class="metric">
@@ -327,18 +329,19 @@
         </div>
       </div>
     </div>
-    <div class="alert alert-block alert-error">
+    <div class="alert alert-block alert-error" style="overflow:scroll;">
       <h4>Heads Up!</h4>
       <p>Your spreadsheet must be formatted properly or you will cause a bunch of problems!</p>
       <p>Your spreadsheet should match the following format and column order. Do not upload your file if it doesn't match this format!</p>
       <table class="table table-striped table-condensed">
         <tbody>
           <tr>
-            <td>Athlete ID</td>
-            <td>Last Name</td>
-            <td>First Name</td>
+            <td nowrap>Athlete ID</td>
+            <td nowrap>Last Name</td>
+            <td nowrap>First Name</td>
+            <td nowrap>Groups</td>
             <% resource.metrics.each do |metric| %>
-              <td><%= metric %></td>
+              <td nowrap><%= metric %></td>
             <% end %>
           </tr>
         </tbody>
