@@ -313,13 +313,13 @@
           <input type="text" class="datepicker" id="recorded_date" name="recorded_date" value="<%=l params[:record_date], format: :picker %>">
         </div>
       </div>
-      <div class="control-group">
-        <label class="control-label" for="end_date">Group</label>
-        <div class="controls">
-          <%= select_tag :group_id, options_from_collection_for_select(resource.groups, :id, :full_name) %>
-          <span class="help-block">Any athlete that is in the spreadsheet that is not already in the system, will be assigned to this group.</span>
-        </div>
-      </div>
+      <!-- <div class="control-group">
+              <label class="control-label" for="end_date">Group</label>
+              <div class="controls">
+                <%= select_tag :group_id, options_from_collection_for_select(resource.groups, :id, :full_name) %>
+                <span class="help-block">Any athlete that is in the spreadsheet that is not already in the system, will be assigned to this group.</span>
+              </div>
+            </div> -->
       
       <div class="control-group">
         <label class="control-label" for="end_date">File</label>

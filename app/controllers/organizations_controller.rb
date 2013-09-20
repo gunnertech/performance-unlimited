@@ -31,34 +31,39 @@ class OrganizationsController < InheritedResources::Base
     (rows||[]).each_with_index do |row, i|
       next if row['First Name'].blank?
       user = nil
-      group = nil
+      groups = []
       
       if row['Groups'].present?
-        pieces = row['Groups'].split(":")
-        division = resource.divisions.find_or_create_by_name(pieces.first)
-        group = division.groups.find_or_create_by_name(pieces.last)
+        (row['Groups'].split(",")||[]).each do |piece|
+          pieces = piece.split(":")
+          division = resource.divisions.find_or_create_by_name(pieces.first)
+          group = division.groups.find_or_create_by_name(pieces.last)
+          groups.push(group)
+        end
+        
       end
       
       if row['Athlete ID'].present?
         user = User.find_by_id(row['Athlete ID'])
       else
-        user = (group||resource).users.where{ (first_name == my{row['First Name']}) & (last_name == my{row['Last Name']}) }.first
+        user = resource.users.where{ (first_name == my{row['First Name']}) & (last_name == my{row['Last Name']}) }.first
       end
       
       if user.nil?
-        group ||= Group.find(params[:group_id]) if params[:group_id].present?
         user = User.new(first_name: row['First Name'], last_name: row['Last Name'])
         user.save!
       end
       
-      if group.nil?
+      if groups.empty?
         division ||= resource.divisions.find_or_create_by_name('Primary')
         group = division.groups.create(name: "Primary")
+        groups.push(group)
       end
       
-      user.add_role('athlete', group) unless user.has_role?('athlete',group)
-      user.groups << group unless user.groups.include?(group)
-      
+      groups.each do |group|
+        user.add_role('athlete', group) unless user.has_role?('athlete',group)
+        user.groups << group unless user.groups.include?(group)
+      end
       
       
       rows.headers.each_with_index do |header,i|
