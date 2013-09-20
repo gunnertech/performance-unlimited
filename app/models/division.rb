@@ -54,6 +54,8 @@ class Division < ActiveRecord::Base
   end
   
   def set_organization
-    self.update_attributes(organization: Organization.with_role('admin', creator).first)
+    if organization.nil? && creator.present? && Organization.with_role('admin', creator).first.present?
+      self.update_attributes(organization: Organization.with_role('admin', creator).first)
+    end
   end
 end
