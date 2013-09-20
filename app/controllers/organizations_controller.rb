@@ -31,27 +31,30 @@ class OrganizationsController < InheritedResources::Base
     (rows||[]).each_with_index do |row, i|
       next if row['First Name'].blank?
       user = nil
-      if row['Athlete ID'].present?
-        user = User.find_by_id(row['Athlete ID'])
-      else
-        user = resource.users.where{ (first_name == my{row['First Name']}) & (last_name == my{row['Last Name']}) }.first
-      end
+      group = nil
       
       if row['Groups'].present?
         pieces = row['Groups'].split(":")
         division = resource.divisions.find_or_create_by_name(pieces.first)
         group = division.groups.find_or_create_by_name(pieces.last)
-        
-        user.groups << group unless user.groups.include?(group)
+      end
+      
+      if row['Athlete ID'].present?
+        user = User.find_by_id(row['Athlete ID'])
+      else
+        user = (group||resource).users.where{ (first_name == my{row['First Name']}) & (last_name == my{row['Last Name']}) }.first
       end
       
       if user.nil?
-        group = Group.find(params[:group_id])
+        group ||= Group.find(params[:group_id]) if params[:group_id].present?
         user = User.new(first_name: row['First Name'], last_name: row['Last Name'])
         user.save!
-        user.add_role('athlete', group)
-        group.users << user
       end
+      
+      user.add_role('athlete', group)
+      user.groups << group unless user.groups.include?(group)
+      
+      
       
       rows.headers.each_with_index do |header,i|
         if i > 2
