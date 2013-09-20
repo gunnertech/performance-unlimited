@@ -3,11 +3,7 @@
   <span class="icon-bar"></span>
   <span class="icon-bar"></span>
 </a>
-<% unless icon_image_tag %>
-  <%= link_to "Performance Unlimited", root_path, :class => 'brand' %>
-<% else %>
-  <%= link_to "#{icon_image_tag} Performance Unlimited".html_safe, root_path, :class => 'brand' %>
-<% end %>
+<%= link_to "Performance Unlimited", root_path, :class => 'brand' %>
 <div class="nav-collapse">
   <ul class="nav">
     <% if user_signed_in? %>
@@ -31,10 +27,20 @@
         <li class="dropdown">
           <a href="#"class="dropdown-toggle" data-toggle="dropdown"><%=t 'organizations' %><b class="caret"></b></a>
           <ul class="dropdown-menu">
-            <% current_user.admined_organizations.each do |organization| %>
+            <% current_user.admined_organizations.each_with_index do |organization,i| %>
+              <% if i != 0 %>
+                <li class="divider"></li>
+              <% end %>
               <li>
-                <%= link_to organization, organization %>
+                <%= organization %>
               </li>
+              <li>
+                <%= link_to 'Admin', organization %>
+              </li>
+              <li>
+                <%= link_to 'Dashboard', [:dashboard, organization] %>
+              </li>
+              
             <% end %>
           </ul>
         </li>

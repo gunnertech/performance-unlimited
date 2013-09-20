@@ -24,12 +24,94 @@
     <div class="accordion-group">
       <div class="accordion-heading">
         <h4 class="accordion-title">
+          <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseUsers">
+            <%=t 'athletes' %>
+          </a>
+        </h4>
+      </div>
+      <div id="collapseUsers" class="accordion-collapse collapse in">
+        <div class="accordion-body">
+          <div class="form-actions">
+            <div class="btn-group pull-right">
+              <a class="btn btn-primary global-submit" href="#">Submit</a>
+              <a class="btn btn-primary" href="#upload-modal" data-toggle="modal">Upload</a>
+            </div>
+          
+            <div class="pull-right">
+              <form class="form-inline" action="" method="get">
+                <div class="input-append">
+                  <!-- <label style="display:inline;">Date Recorded:</label> -->
+                  <input type="text" name="record_date" class="base-date datepicker input-small" value="<%= params[:record_date].strftime('%m/%d/%Y') %>" />
+                  <input type="submit" class="btn btn-primary" value="Change Date" />
+                </div>
+              </form>
+            </div>
+          </div>
+          <div class="scroll-pane">
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>Athlete ID</th>
+                  <th><%= model_class.human_attribute_name(:last_name) %></th>
+                  <th><%= model_class.human_attribute_name(:first_name) %></th>
+                  <% resource.metrics.each do |metric| %>
+                    <th><%= link_to metric, [:edit,resource,metric] %></th>
+                  <% end %>
+                  <!-- <th><%=t '.actions', :default => t("helpers.actions") %></th> -->
+                </tr>
+              </thead>
+              <tbody>
+                <% @organization.users.each do |user| %>
+                  <tr>
+                    <td><%= link_to user.id, user %></td>
+                    <td><%= link_to user.first_name, user %></td>
+                    <td><%= link_to user.last_name, user %></td>
+                    <% resource.metrics.each do |metric| %>
+                      <% recorded_metric = metric.recorded_metrics.where{ (recorded_on == my{params[:record_date].to_date}) & (user_id == my{user.id}) }.first %>
+                      <td class="metric">
+                        <%= simple_form_for [user,(recorded_metric||RecordedMetric.new)], :html => { :class => 'form-inline' } do |f| %>
+                          <%= f.input :metric_id, as: :hidden, input_html: {value: metric.id} %>
+                          <% if metric.metric_type.name == 'Text' %>
+                            <%= f.input :value, label: false %>
+                          <% else %>
+                            <%= f.input :value, label: false, input_html: {type: :number, step: ".01", class: "input-mini"} %>
+                          <% end %>
+                          <%= f.input :recorded_on, as: :hidden, input_html: {value: params[:record_date].strftime('%m/%d/%Y'), class: 'datepicker'} %>
+                        <% end %>
+                      </td>
+                    <% end %>
+                    <!-- <td>
+                                        <%= link_to t('.edit', :default => t("helpers.links.edit")),
+                                                    [:edit, user], :class => 'btn btn-mini' %>
+                                        <%= link_to t('record_metric'),
+                                                    new_user_recorded_metric_path(user), :class => 'btn btn-mini' %>
+                                        <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
+                                                    user,
+                                                    :method => :delete,
+                                                    :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')),
+                                                    :class => 'btn btn-mini btn-danger' %>
+                                      </td> -->
+                  </tr>
+                <% end %>
+              </tbody>
+            </table>
+          </div>
+          <div class="form-actions">
+            <a class="btn btn-primary global-submit" href="#">Submit</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="accordion-group">
+      <div class="accordion-heading">
+        <h4 class="accordion-title">
           <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
             <%=t 'divisions' %>
           </a>
         </h4>
       </div>
-      <div id="collapseOne" class="accordion-collapse collapse in">
+      <div id="collapseOne" class="accordion-collapse collapse">
         <div class="accordion-body">
           <table class="table table-striped">
             <thead>
@@ -85,7 +167,7 @@
             <tbody>
               <% @organization.groups.each do |group| %>
                 <tr>
-                  <td><%= link_to group, [group.division,group] %></td>
+                  <td><%= link_to "#{group} (#{group.division})", [group.division,group] %></td>
                   <td>
                     <%= link_to t('.edit', :default => t("helpers.links.edit")),
                                 edit_division_group_path(group.division,group), :class => 'btn btn-mini' %>
@@ -101,72 +183,6 @@
               <% end %>
             </tbody>
           </table>
-        </div>
-      </div>
-    </div>
-    
-    
-    <div class="accordion-group">
-      <div class="accordion-heading">
-        <h4 class="accordion-title">
-          <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseUsers">
-            <%=t 'athletes' %>
-          </a>
-        </h4>
-      </div>
-      <div id="collapseUsers" class="accordion-collapse collapse">
-        <div class="accordion-body">
-          
-          <div class="btn-group pull-right">
-            <a class="btn btn-primary" href="#">Upload</a>
-            <a class="btn btn-primary global-submit" href="#">Submit</a>
-          </div>
-          <div class="pull-right">
-            <label style="display:inline;">Date Recorded:</label>
-            <input type="text" class="base-date datepicker input-small" value="<%= Date.today.strftime('%m/%d/%Y') %>" />
-          </div>
-          <table class="table table-striped">
-            <thead>
-              <tr>
-                <th><%= model_class.human_attribute_name(:name) %></th>
-                <% resource.metrics.each do |metric| %>
-                  <th><%= metric %></th>
-                <% end %>
-                <!-- <th><%=t '.actions', :default => t("helpers.actions") %></th> -->
-              </tr>
-            </thead>
-            <tbody>
-              <% @organization.users.each do |user| %>
-                <tr>
-                  <td><%= link_to user, user %></td>
-                  <% resource.metrics.each do |metric| %>
-                    <td class="metric">
-                      <%= simple_form_for [user,RecordedMetric.new], :html => { :class => 'form-inline' } do |f| %>
-                        <%= f.input :metric_id, as: :hidden, input_html: {value: metric.id} %>
-                        <%= f.input :value, label: false, input_html: {class: "input-mini"} %>
-                        <%= f.input :recorded_on, as: :hidden, input_html: {value: Date.today.strftime('%m/%d/%Y'), class: 'datepicker'} %>
-                      <% end %>
-                      
-                    </td>
-                  <% end %>
-                  <!-- <td>
-                                      <%= link_to t('.edit', :default => t("helpers.links.edit")),
-                                                  [:edit, user], :class => 'btn btn-mini' %>
-                                      <%= link_to t('record_metric'),
-                                                  new_user_recorded_metric_path(user), :class => 'btn btn-mini' %>
-                                      <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
-                                                  user,
-                                                  :method => :delete,
-                                                  :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')),
-                                                  :class => 'btn btn-mini btn-danger' %>
-                                    </td> -->
-                </tr>
-              <% end %>
-            </tbody>
-          </table>
-          <div class="btn-group pull-right">
-            <a class="btn btn-primary global-submit" href="#">Submit</a>
-          </div>
         </div>
       </div>
     </div>
@@ -281,3 +297,57 @@
   </div>
   </div>
 <% end %>
+
+<div id="upload-modal" class="modal hide fade">
+  <%= form_tag(upload_performance_data_organization_path(resource), method: :put, multipart: true, class: 'horizontal') do %>
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+      <h3>Upload Performance Data</h3>
+    </div>
+    <div class="modal-body">
+      <div class="control-group">
+        <label class="control-label" for="recorded_date">Date Recorded</label>
+        <div class="controls">
+          <input type="text" class="datepicker" id="recorded_date" name="recorded_date" value="<%=l params[:record_date], format: :picker %>">
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="end_date">Group</label>
+        <div class="controls">
+          <%= select_tag :group_id, options_from_collection_for_select(resource.groups, :id, :full_name) %>
+          <span class="help-block">Any athlete that is in the spreadsheet that is not already in the system, will be assigned to this group.</span>
+        </div>
+      </div>
+      
+      <div class="control-group">
+        <label class="control-label" for="end_date">File</label>
+        <div class="controls">
+          <%= file_field_tag 'file', accept: 'text/csv' %>
+          <span class="help-block">File must be in 'CSV' format</span>
+        </div>
+      </div>
+    </div>
+    <div class="alert alert-block alert-error">
+      <h4>Heads Up!</h4>
+      <p>Your spreadsheet must be formatted properly or you will cause a bunch of problems!</p>
+      <p>Your spreadsheet should match the following format and column order. Do not upload your file if it doesn't match this format!</p>
+      <table class="table table-striped table-condensed">
+        <tbody>
+          <tr>
+            <td>Athlete ID</td>
+            <td>Last Name</td>
+            <td>First Name</td>
+            <% resource.metrics.each do |metric| %>
+              <td><%= metric %></td>
+            <% end %>
+          </tr>
+        </tbody>
+      </table>
+      <%= link_to "Download Template", download_performance_template_organization_path(resource,'csv'), class: 'btn btn-danger' %>
+    </div>
+
+    <div class="modal-footer">
+      <button type="submit" class="btn btn-primary">Upload Data</button>
+    </div>
+  <% end %>
+</div>

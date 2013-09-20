@@ -6,6 +6,8 @@ class RecordedMetricsController < InheritedResources::Base
   
   respond_to :json
   
+  prepend_before_filter :fix_recorded_on_parameter
+  
   
   before_filter :authorize_parent
   
@@ -15,5 +17,13 @@ class RecordedMetricsController < InheritedResources::Base
   
   def update
     update! { parent }
+  end
+  
+  protected
+  
+  def fix_recorded_on_parameter
+    if params[:recorded_metric].present? && params[:recorded_metric][:recorded_on].present? && params[:recorded_metric][:recorded_on].match(/\//)
+      params[:recorded_metric][:recorded_on] = DateTime.strptime(params[:recorded_metric][:recorded_on],'%m/%d/%Y')
+    end
   end
 end

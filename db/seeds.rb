@@ -7,7 +7,7 @@ Organization.first.assigned_locales.create(locale: english) if Organization.firs
 Organization.first.assigned_locales.create(locale: spanish) if Organization.first.locales.where{ code == 'es' }.count == 0
 
 
-['Text', 'Number', 'Decimal', 'Percentage'].each do |metric_type|
+['Text', 'Number', 'Percentage'].each do |metric_type|
   MetricType.find_or_create_by_name(metric_type)
 end
 

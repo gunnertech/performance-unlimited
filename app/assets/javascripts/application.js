@@ -16,4 +16,5 @@
 //= require flot/jquery.flot
 //= require twitter/bootstrap
 //= require jquery-ui
+//= require_tree ./jqplot
 //= require_tree .

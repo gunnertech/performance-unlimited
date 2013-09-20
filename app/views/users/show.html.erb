@@ -4,7 +4,9 @@
   <div class="span6">
     <ul class="breadcrumb">
       <li><%= link_to t('home'), root_path %><span class="divider">/</span></li>
-      <li><%= link_to resource.organization, [resource.organization] %><span class="divider">/</span></li>
+      <% if resource.organization %>
+        <li><%= link_to resource.organization, [resource.organization] %><span class="divider">/</span></li>
+      <% end %>
       <li><%= link_to t('divisions'), [current_user, :divisions] %><span class="divider">/</span></li>
       <li class="active"><%= resource %></li>
     </ul>

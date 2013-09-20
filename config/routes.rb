@@ -51,6 +51,11 @@ PerformanceUnlimited::Application.routes.draw do
   end
 
   resources :organizations do
+    member do
+      get 'dashboard'
+      put 'upload_performance_data'
+      get 'download_performance_template'
+    end
     resources :metrics
     resources :divisions
   end

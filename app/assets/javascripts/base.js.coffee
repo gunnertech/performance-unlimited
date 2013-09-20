@@ -11,6 +11,18 @@ $('.btn-print').live('click', (event) ->
 
 $(->
   
+  $('#metric_metric_type_id').change( -> 
+    if $(this).find('option:selected').text() == 'Text'
+      $('#metric_decimal_places').parents('.control-group').hide()
+    else
+      $('#metric_decimal_places').parents('.control-group').show()
+  )
+  
+  if $(this).find('option:selected').text() == 'Text'
+    $('#metric_decimal_places').parents('.control-group').hide()
+  else
+    $('#metric_decimal_places').parents('.control-group').show()
+  
   $('.global-submit').click( (event) ->
     event.preventDefault()
     $(".metric").each((i,item) ->

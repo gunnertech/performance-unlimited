@@ -93,12 +93,12 @@ form {
 
 .navbar-inner {
   .brand {
-    padding-bottom: 0 !important;
-    padding-top: 0 !important;
-    line-height: 38px !important;
-    img {
-      height: 38px;
-    }
+//    padding-bottom: 0 !important;
+//    padding-top: 0 !important;
+//    line-height: 38px !important;
+//    img {
+//      height: 38px;
+//    }
 //    @include background-size(contain);
 //    
 //    background: image-url('logos/pittsburgh-pirates.png') no-repeat 0 0 scroll transparent;
@@ -118,6 +118,10 @@ form {
 
 .page-header {
   padding-top: 18px;
+}
+
+.graph {
+  margin-bottom: 30px;
 }
 
 @media (max-width: 480px) {

@@ -5,7 +5,7 @@ class User < ActiveRecord::Base
   # :token_authenticatable, :confirmable,
   # :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :trackable, :validatable
+         :recoverable, :rememberable, :trackable#, :validatable
 
   # Setup accessible (or protected) attributes for your model
   attr_accessible :name, :email, :password, :password_confirmation, :remember_me, :first_name, :last_name, :score, :average, 
@@ -15,6 +15,7 @@ class User < ActiveRecord::Base
   
   before_validation :set_first_name_and_last_name
   after_save :assign_roles
+  before_save :set_name
   
   after_create :add_admin_role, if: Proc.new{ |user| User.count <= 1 }
   
@@ -68,6 +69,10 @@ class User < ActiveRecord::Base
   
   def to_s
     name || email
+  end
+  
+  def set_name
+    self.name ||= "#{self.first_name} #{self.last_name}"
   end
   
   def set_first_name_and_last_name

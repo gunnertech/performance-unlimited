@@ -1,0 +1,10 @@
+<%- 
+require 'csv'
+csv_lib = RUBY_VERSION =~ /^1.8/ ? FasterCSV : CSV
+ 
+csv_output = csv_lib.generate(headers: true) do |csv|
+  csv << ["Athlete ID", "Last Name", "First Name", resource.metrics.map(&:to_s) ].flatten
+  resource.users.each do |user|
+    csv << [user.id, user.last_name, user.first_name].flatten
+  end
+end -%><%= csv_output.html_safe %>
