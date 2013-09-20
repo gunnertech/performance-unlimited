@@ -62,7 +62,7 @@
                 </tr>
               </thead>
               <tbody>
-                <% @organization.users.each do |user| %>
+                <% @organization.users.uniq.each do |user| %>
                   <tr>
                     <td><%= link_to user.id, user %></td>
                     <td><%= link_to user.first_name, user %></td>
