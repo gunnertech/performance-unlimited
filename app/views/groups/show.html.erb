@@ -11,16 +11,17 @@
   </div>  
   
   <div class="span6 btn-group">
-    <%= link_to t('download_data'), division_group_path(parent,@group,format:'csv'), class: 'btn btn-primary btn-large modal-trigger', 'data-modal' => 'download-modal' %>
-    <%= link_to t('add_member'),new_group_user_path(@group), :class => 'btn btn-primary btn-large' if can? :update, @group  %>
+    <%= link_to t('metrics'), [:dashboard,@group], class: 'btn btn-primary' %>
+    <%= link_to t('download_data'), division_group_path(parent,@group,format:'csv'), class: 'btn btn-primary  modal-trigger', 'data-modal' => 'download-modal' %>
+    <%= link_to t('add_member'),new_group_user_path(@group), :class => 'btn btn-primary ' if can? :update, @group  %>
     
     <%= link_to t('.edit', :default => t("helpers.links.edit")),
-                [:edit,parent,@group], :class => 'btn btn-large' if can? :update, @group %>
+                [:edit,parent,@group], :class => 'btn ' if can? :update, @group %>
     <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
                 group_path(@group),
                 :method => 'delete',
                 :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')),
-                :class => 'btn btn-danger btn-large' if can? :destroy, @group %>
+                :class => 'btn btn-danger ' if can? :destroy, @group %>
   </div>
 <% end %>
 

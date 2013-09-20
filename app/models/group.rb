@@ -4,6 +4,9 @@ class Group < ActiveRecord::Base
   has_many :assigned_groups, order: :position
   has_many :users, through: :assigned_groups
   
+  has_many :metrics, through: :organization
+  # has_many :recorded_metrics, through: :metrics
+  
   attr_accessible :name, :global_position, :position
   attr_accessor :global_position
   
@@ -13,6 +16,10 @@ class Group < ActiveRecord::Base
   
   def to_s
     name
+  end
+  
+  def recorded_metrics
+    organization.recorded_metrics.joins{ user }.where{ user.id >> my{ users.pluck('users.id') }}
   end
   
   def full_name

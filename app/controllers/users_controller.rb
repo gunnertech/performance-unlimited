@@ -4,6 +4,14 @@ class UsersController < InheritedResources::Base
   belongs_to :division, optional: true
   respond_to :csv, only: :show
   
+  custom_actions resource: [:dashboard]
+  skip_load_and_authorize_resource only: [:dashboard]
+  
+  def dashboard
+    authorize! :create, RecordedMetric
+    dashboard!
+  end
+  
   def new
     @user = parent? ? parent.users.build : User.new
     @user.group_ids = [parent.id] if parent?

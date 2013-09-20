@@ -10,7 +10,7 @@
   </div>  
   
   <div class="span6 btn-group">
-    <%= link_to t('create_new_division'), new_division_path, :class => 'btn btn-primary btn-large' %>
+    <%= link_to t('create_new_division'), new_division_path, :class => 'btn btn-primary ' %>
   </div>
 <% end %>
 
@@ -26,11 +26,14 @@
    <div class="tab-content">
      <% collection.each_with_index do |division,i| %>
        <div class="tab-pane <%= i == 0 ? 'active' : '' %>" id="<%= division.to_s.parameterize %>">
-         <%= link_to t('delete'), division, class: 'btn btn-large btn-danger pull-right', method: "delete", confirm: "Are you sure you want to delete this group?" if can?(:destroy,division) %>
-         <%= link_to t('leaderboards'), division, class: 'btn btn-large btn-info pull-right' %>
-         <%= link_to t('add_group'), [:new,division,:group], class: 'btn btn-large btn-info pull-right' if can?(:manage,division) %>
-         <%= link_to t('surveys'), [division,:assigned_surveys], class: 'btn btn-large btn-info pull-right' if can?(:manage,division) %>
-         <%= link_to t('take_survey'), root_path(division_id: division.id), class: 'btn btn-large btn-info pull-right' if can?(:manage,division) %>
+         <%= link_to t('delete'), division, class: 'btn  btn-danger pull-right', method: "delete", confirm: "Are you sure you want to delete this group?" if can?(:destroy,division) %>
+         <div class="btn-group pull-right">
+           <%= link_to t('leaderboards'), division, class: 'btn  btn-info' %>
+           <%= link_to t('add_group'), [:new,division,:group], class: 'btn  btn-info' if can?(:manage,division) %>
+           <%= link_to t('surveys'), [division,:assigned_surveys], class: 'btn  btn-info' if can?(:manage,division) %>
+           <%= link_to t('take_survey'), root_path(division_id: division.id), class: 'btn  btn-info' if can?(:manage,division) %>
+           <%= link_to t('metrics'), [:dashboard,division], class: 'btn  btn-info' if can?(:manage,division) %>
+        </div>
          <table class="table table-striped">
            <thead>
              <tr>

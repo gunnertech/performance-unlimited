@@ -2,6 +2,14 @@ class GroupsController < InheritedResources::Base
   belongs_to :division, optional: true
   respond_to :json
   
+  custom_actions resource: [:dashboard]
+  skip_load_and_authorize_resource only: [:dashboard]
+  
+  def dashboard
+    authorize! :create, RecordedMetric
+    dashboard!
+  end
+  
   def show
     show! do |success|
       success.html

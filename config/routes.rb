@@ -5,7 +5,11 @@ PerformanceUnlimited::Application.routes.draw do
   match '/auth/:provider/callback', to: 'organizations#add_authentication'
   
   scope "/admin" do
-    resources :users
+    resources :users do
+      member do
+        get 'dashboard'
+      end
+    end
   end
   
   devise_for :users
@@ -37,7 +41,11 @@ PerformanceUnlimited::Application.routes.draw do
     resources :users
   end
   
-  resources :groups #TODO: REMOVE
+  resources :groups do
+    member do
+      get 'dashboard'
+    end
+  end
   resources :assigned_surveys, only: [] do
     resources :point_ranges
   end
@@ -45,6 +53,7 @@ PerformanceUnlimited::Application.routes.draw do
   resources :divisions do
     member do
       get 'leaderboard'
+      get 'dashboard'
     end
     resources :groups
     resources :assigned_surveys

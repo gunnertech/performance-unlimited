@@ -12,11 +12,17 @@ class Division < ActiveRecord::Base
   
   has_many :assigned_surveys, dependent: :destroy
   has_many :surveys, through: :assigned_surveys
+  has_many :metrics, through: :organization
+  # has_many :recorded_metrics, through: :metrics
   
   attr_accessible :name, :organization, :organization_id, :time_zone, :creator
   attr_accessor :creator
   
   after_create :set_organization
+  
+  def recorded_metrics
+    organization.recorded_metrics.joins{ user }.where{ user.id >> my{ users.pluck('users.id') }}
+  end
   
   def to_s
     name
