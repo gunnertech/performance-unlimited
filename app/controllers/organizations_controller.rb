@@ -51,7 +51,12 @@ class OrganizationsController < InheritedResources::Base
         user.save!
       end
       
-      user.add_role('athlete', group)
+      if group.nil?
+        division ||= resource.divisions.find_or_create_by_name('Primary')
+        group = division.groups.create(name: "Primary")
+      end
+      
+      user.add_role('athlete', group) unless user.has_role?('athlete',group)
       user.groups << group unless user.groups.include?(group)
       
       
