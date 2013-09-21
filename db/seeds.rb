@@ -20,3 +20,5 @@ mapped_development_domain = MappedDomain.find_or_create_by_domain("localhost")
 [mapped_production_domain, mapped_staging_domain, mapped_development_domain].each do |mapped_domain|
   Organization.first.mapped_domains << mapped_domain unless Organization.first.mapped_domains.include? mapped_domain
 end
+
+# User.where{ id << [1,14] }.destroy_all; AssignedGroup.destroy_all; Group.destroy_all; Division.all.map(&:delete); AssignedDivision.destroy_all; RecordedMetric.destroy_all; Metric.destroy_all

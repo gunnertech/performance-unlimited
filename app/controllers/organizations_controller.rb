@@ -21,6 +21,10 @@ class OrganizationsController < InheritedResources::Base
   def upload_performance_data
     require 'csv'
     authorize! :create, RecordedMetric
+    if params[:file].content_type.to_s != 'text/csv'
+      flash[:error] = "You can only upload csv files. To save an excel file as csv, just choose 'Save As...' and then pick 'CSV'"
+      redirect_to resource and return false
+    end
     file_contents = File.read(params[:file].tempfile, mode:'r:ISO-8859-1')
     rows = CSV.parse(file_contents, :headers => true)
     rows.headers.each_with_index do |header,i|
