@@ -21,7 +21,88 @@ class Organization < ActiveRecord::Base
   
   has_many :responses, through: :questions
   
-  attr_accessible :name, :logo
+  attr_accessible :name, :logo, :file, :file_contents
+  attr_accessor :file, :recorded_date
+  
+  before_save :start_upload, if: Proc.new{|resource| resource.file_contents.present? }
+  
+  def start_upload
+    do_upload(recorded_date)
+  end
+  
+  def do_upload(recorded_date)
+    require 'csv'
+    rows = CSV.parse(file_contents, :headers => true)
+    rows.headers.each_with_index do |header,i|
+      if i > 2 && self.metrics.where{ lower(name) == my{header.downcase} }.first.nil?
+        self.metrics.create(name: header, metric_type: MetricType.find_or_create_by_name('Number'))
+      end
+    end
+    (rows||[]).each_with_index do |row, i|
+      next if row['First Name'].blank?
+      user = nil
+      groups = []
+      
+      if row['Groups'].present?
+        (row['Groups'].split(",")||[]).each do |piece|
+          pieces = piece.split(":")
+          division = self.divisions.find_or_create_by_name(pieces.first)
+          group = division.groups.find_or_create_by_name(pieces.last)
+          groups.push(group)
+        end
+        
+      end
+      
+      if row['Athlete ID'].present?
+        user = User.find_by_id(row['Athlete ID'])
+      else
+        user = self.users.where{ (first_name == my{row['First Name']}) & (last_name == my{row['Last Name']}) }.first
+      end
+      
+      if user.nil?
+        user = User.new(first_name: row['First Name'], last_name: row['Last Name'])
+        user.save!
+      end
+      
+      if groups.empty?
+        division ||= self.divisions.find_or_create_by_name('Primary')
+        group = division.groups.create(name: "Primary")
+        groups.push(group)
+      end
+      
+      groups.each do |group|
+        user.add_role('athlete', group) unless user.has_role?('athlete',group)
+        user.groups << group unless user.groups.include?(group)
+      end
+      
+      
+      rows.headers.each_with_index do |header,i|
+        if i > 2
+          if row[header].present?
+            metric = self.metrics.where{ lower(name) == my{header.downcase} }.first
+            begin
+              if row[header].match(/%/)
+                row[header] = (row[header].gsub(/%/,"").to_f / 100)
+                m = self.metrics.where{ lower(name) == my{header.downcase} }.first
+                m.metric_type_id = MetricType.find_or_create_by_name('Percentage').id
+                m.save!
+              elsif row[header].match(/[a-z]/i)
+                m = self.metrics.where{ lower(name) == my{header.downcase} }.first
+                m.metric_type_id = MetricType.find_or_create_by_name('Text').id
+                m.save!
+              end
+              metric.recorded_metrics.create!(value: row[header], recorded_on: recorded_date, user: user)
+            rescue
+              #raise metric.to_s
+            end
+          end
+        end
+      end
+    end
+    self.file_contents = nil
+    self.save!
+  end
+  handle_asynchronously :do_upload
   
   def connected_to_twitter?
     twitter_accounts.count > 0

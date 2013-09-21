@@ -62,11 +62,11 @@
                 </tr>
               </thead>
               <tbody>
-                <% @organization.users.uniq.each do |user| %>
+                <% @organization.users.order{ last_name.asc }.uniq.each do |user| %>
                   <tr>
                     <td><%= link_to user.id, user %></td>
-                    <td><%= link_to user.first_name, user %></td>
                     <td><%= link_to user.last_name, user %></td>
+                    <td><%= link_to user.first_name, user %></td>
                     <td><%= user.assigned_groups.map{|ag| "#{ag.division}:#{ag.group}"}.join(", ") %></td>
                     <% resource.metrics.each do |metric| %>
                       <% recorded_metric = metric.recorded_metrics.where{ (recorded_on == my{params[:record_date].to_date}) & (user_id == my{user.id}) }.first %>
