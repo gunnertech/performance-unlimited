@@ -1,6 +1,7 @@
 class OrganizationsController < InheritedResources::Base
   before_filter :create_session_variable, only: :show
   before_filter :set_record_date, only: [:show, :upload_performance_data]
+  before_filter :set_users, only: [:show]
   
   custom_actions resource: [:upload_performance_data,:download_performance_template,:dashboard]
   skip_load_and_authorize_resource only: [:upload_performance_data, :index,:dashboard]
@@ -70,18 +71,31 @@ class OrganizationsController < InheritedResources::Base
   
   def set_record_date
     
-    if params[:recorded_date].present?
+    if params[:recorded_date].present? && params[:recorded_date].to_s.match(/\//)
       params[:recorded_date] = DateTime.strptime(params[:recorded_date],'%m/%d/%Y')
     else
       params[:recorded_date] ||= Date.today
+      if params[:recorded_date].is_a?(String)
+        params[:recorded_date] = Date.parse(params[:recorded_date])
+      end
     end
     
     
-    if params[:record_date].present?
+    if params[:record_date].present? && params[:record_date].to_s.match(/\//)
       params[:record_date] = DateTime.strptime(params[:record_date],'%m/%d/%Y')
     else
       params[:record_date] ||= Date.today
+      if params[:record_date].is_a?(String)
+        params[:record_date] = Date.parse(params[:record_date])
+      end
     end
+    
+    
+  end
+  
+  def set_users
+    params[:letter] ||= 'a'
+    @users = User.where{ (id >> my{resource.users.pluck('users.id')}) & (last_name =~ my{"#{params[:letter]}%"}) }.order{ [last_name.asc, first_name.asc] }
   end
   
 end

@@ -32,6 +32,7 @@
       <div id="collapseUsers" class="accordion-collapse collapse in">
         <div class="accordion-body">
           <div class="form-actions">
+            
             <div class="btn-group pull-right">
               <a class="btn btn-primary global-submit" href="#">Submit</a>
               <a class="btn btn-primary" href="#upload-modal" data-toggle="modal">Upload</a>
@@ -62,7 +63,7 @@
                 </tr>
               </thead>
               <tbody>
-                <% @organization.users.order{ last_name.asc }.uniq.each do |user| %>
+                <% @users.each do |user| %>
                   <tr>
                     <td><%= link_to user.id, user %></td>
                     <td><%= link_to user.last_name, user %></td>
@@ -97,6 +98,13 @@
                 <% end %>
               </tbody>
             </table>
+          </div>
+          <div class="pagination" style="margin-left: 20px;">
+            <ul>
+              <% %w(a b c d e f g h i j k l m n o p q r s t u v w x y z).each do |letter| %>
+                <li class="<%= (params[:letter].to_s == letter ? 'active' : '') %>"><%= link_to letter.upcase, params.merge(letter: letter) %></li>
+              <% end %>
+            </ul>
           </div>
           <div class="form-actions">
             <a class="btn btn-primary global-submit" href="#">Submit</a>
