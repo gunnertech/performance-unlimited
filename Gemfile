@@ -52,7 +52,7 @@ group :development do
   gem 'rails3-generators'
   gem 'thor'
   gem 'log4r'
-  gem 'pry-rails'
+  # gem 'pry-rails'
   gem 'bullet'
   gem "rails-footnotes", ">= 3.7"
   gem 'guard'
