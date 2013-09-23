@@ -11,7 +11,7 @@
  *= require_self
  *= require bootstrap_and_overrides
  *= require jqplot/jquery.jqplot.min
-
+ *= require_tree .
 */
 
 @import "base";

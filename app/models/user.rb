@@ -47,6 +47,10 @@ class User < ActiveRecord::Base
     end
   end
   
+  def reverse_name
+    "#{last_name}, #{first_name}"
+  end
+  
   def divisions_with_admin_access
     ids = Organization.with_role('admin', self).pluck('organizations.id')
     Division.joins{ organization }.where{ organization.id >> my{ids} }

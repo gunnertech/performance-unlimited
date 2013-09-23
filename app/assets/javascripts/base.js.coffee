@@ -1,3 +1,10 @@
+clone = (obj) ->
+  return obj  if obj is null or typeof (obj) isnt "object"
+  temp = new obj.constructor()
+  for key of obj
+    temp[key] = clone(obj[key])
+  temp
+
 $('.back').live('click', (event) ->
   event.preventDefault()
   
@@ -10,6 +17,64 @@ $('.btn-print').live('click', (event) ->
 )
 
 $(->
+  
+  $(".add").click( (event) ->
+    event.preventDefault()
+    $('#available option:selected').remove().prependTo($('#taken'))
+  )
+  
+  $(".remove").click( (event) ->
+    event.preventDefault()
+    $('#taken option:selected').remove().prependTo($('#available'))
+  )
+  
+  $(".graph-btn").click( (event) ->
+    event.preventDefault()
+    $('#taken option').each( ->
+      _user_data = []
+      $.ajax("/users/#{$(this).attr('value')}/recorded_metrics",
+        dataType: 'json'
+      ).done( (data) -> 
+        user_id = if data.length then data[0].user.id else null
+        name = if data.length then data[0].user.name else null
+        window['dynamically_added'] = window['dynamically_added'] || {}
+        
+        return if window['dynamically_added'][user_id]
+        window['dynamically_added'][user_id] = {}
+        
+        grouped_arr = _.groupBy(data, (item, key) -> 
+          return item.metric.name
+        )
+        
+        _.each(grouped_arr, (data,key,obj) ->
+          grouped_arr[key] = _.map(data, (item, key) -> 
+            return [item.recorded_on, item.numerical_value]
+          )
+        )
+        
+        _.each(grouped_arr, (data,key,obj) ->
+          graph = window.graphs["_#{key.toLowerCase().replace(/\W/,"_")}"]
+          if graph
+            dk = "_#{key.toLowerCase().replace(/\W/,"_")}"
+            window["#{dk}_data"].push(data)
+            window["#{dk}_labels"].push({
+              label: name
+            })
+            window['dynamically_added'][user_id] = {
+              label: {
+                label: name
+              }
+              data: data
+              index: window["#{dk}_data"].length - 1
+            }
+            graph.replot(
+              data: window["#{dk}_data"]
+              series: window["#{dk}_labels"]
+            )
+        )
+      )
+    )
+  )
   
   $('#metric_metric_type_id').change( -> 
     if $(this).find('option:selected').text() == 'Text'
@@ -27,8 +92,6 @@ $(->
     event.preventDefault()
     $(".metric").each((i,item) ->
       if $(item).find('#recorded_metric_value').val()
-        console.log( $(item).find('#recorded_metric_value').parents('form').serialize() )
-        console.log( $(item).find('#recorded_metric_value').parents('form').attr('action') )
         
         $.post(
           $(item).find('#recorded_metric_value').parents('form').attr('action'),

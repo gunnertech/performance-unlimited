@@ -222,6 +222,9 @@ GEM
     polyglot (0.3.3)
     quiet_assets (1.0.2)
       railties (>= 3.1, < 5.0)
+    rabl-rails (0.3.3)
+      activesupport (~> 3.0)
+      railties (~> 3.0)
     rack (1.4.5)
     rack-cache (1.2)
       rack (>= 0.4)
@@ -378,6 +381,7 @@ DEPENDENCIES
   paperclip (~> 3.0)
   pg
   quiet_assets (>= 1.0.1)
+  rabl-rails
   rack-livereload
   rails (~> 3.2.11)
   rails-footnotes (>= 3.7)

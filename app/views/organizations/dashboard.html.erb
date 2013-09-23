@@ -9,15 +9,45 @@
   
 <% end %>
 
+<form action="">
+  <div class="row-fluid">
+    <div class="span2">
+      <select multiple id="available" size="7" style="width: 100%;">
+        <% resource.users.uniq{ id }.each do |user| %>
+          <option value="<%= user.id %>"><%= user.reverse_name %></option>
+        <% end %>
+      </select>
+    </div>
+    
+    <div class="span1">
+      
+      <a href="" class="add btn btn-block btn-primary"><i class="icon-long-arrow-right"></i></a>
+      <br>
+      <a href="" class="remove btn btn-block btn-primary"><i class="icon-long-arrow-left"></i></a>
+      <br>
+      <a href="" class="graph-btn btn btn-block btn-success">Update</a>
+    </div>
+    
+    <div class="span2">
+      <select multiple size="7" id="taken" style="width: 100%;">
+      </select>
+    </div>
+    
+    <div class="span7">
+      
+    </div>
+  </div>
+</form>
+
 <% groups_of = 2 %>
-<% resource.metrics.limit(2).in_groups_of(groups_of) do |metrics| %>
-  <div class="row">
+<% resource.metrics.in_groups_of(groups_of) do |metrics| %>
+  <div class="row-fluid">
     <% metrics.each do |metric| %>
       <div class="span<%= 12/groups_of %>">
         <% if metric.present? %>
           <h4><%= metric %></h4>
           <%= metric.note.present? ? simple_format(metric.note) : "<br />".html_safe %>
-          <% if metric.metric_type.name == 'Text' %>
+          <% if metric.metric_type.name == 'Text' || metric.name == "Groups" %>
             <table class="table table-striped">
               <thead>
                 <tr>
@@ -40,11 +70,14 @@
             
             <% all_metrics = resource.recorded_metrics.reorder{ recorded_on.asc }.where{ metric_id == my{metric.id} } %>
             <% dates = all_metrics.pluck('recorded_on').uniq %>
-            var _<%= metric.name.parameterize.underscore %> = [[
+            var _<%= metric.name.parameterize.underscore %>_data = [[
               <%- dates.each do |date| %>
                 <%= i > 0 ? "," : "" %><%= "['#{date.strftime('%Y-%m-%d')}',#{all_metrics.where{ recorded_on == my{date} }.average(:numerical_value)}]".html_safe %>
               <% i = i+1; end -%>
             ]];
+            var _<%= metric.name.parameterize.underscore %> = function(){ 
+              return _<%= metric.name.parameterize.underscore %>_data;
+            };
             var _<%= metric.name.parameterize.underscore %>_labels = [{label: '<%= resource.to_s %> Average'}];
             var _<%= metric.name.parameterize.underscore %>_min = '<%= dates.first.try(:strftime,'%Y-%m-%d') %>';
             var _<%= metric.name.parameterize.underscore %>_max = '<%= dates.last.try(:strftime,'%Y-%m-%d') %>';
