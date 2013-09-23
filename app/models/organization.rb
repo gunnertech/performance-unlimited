@@ -34,7 +34,7 @@ class Organization < ActiveRecord::Base
     require 'csv'
     rows = CSV.parse(file_contents, :headers => true)
     rows.headers.each_with_index do |header,i|
-      if i > 2 && self.metrics.where{ lower(name) == my{header.downcase} }.first.nil?
+      if i > 3 && self.metrics.where{ lower(name) == my{header.downcase} }.first.nil?
         self.metrics.create(name: header, metric_type: MetricType.find_or_create_by_name('Number'))
       end
     end
