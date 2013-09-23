@@ -1,23 +1,29 @@
 <%= content_for(:breadcrumb) do %>
-  <div class="span6">
+  <div class="span12">
     <ul class="breadcrumb">
       <li><%= link_to t('home'), root_path %><span class="divider">/</span></li>
+      <li><%= link_to parent, parent %><span class="divider">/</span></li>
       <li><%= link_to resource, resource %><span class="divider">/</span></li>
       <li class="active">Dashboard</li>
     </ul>
-  </div>  
-  
+  </div>
 <% end %>
+
+<div class="row-fluid">
+  <div class="span12">
+    
+  </div>
+</div>
 
 <% groups_of = 2 %>
 <% resource.metrics.in_groups_of(groups_of) do |metrics| %>
-  <div class="row">
+  <div class="row-fluid">
     <% metrics.each do |metric| %>
       <div class="span<%= 12/groups_of %>">
         <% if metric.present? %>
           <h4><%= metric %></h4>
           <%= metric.note.present? ? simple_format(metric.note) : "<br />".html_safe %>
-          <% if metric.metric_type.name == 'Text' %>
+          <% if metric.metric_type.name == 'Text' || metric.name == "Groups" %>
             <table class="table table-striped">
               <thead>
                 <tr>
@@ -37,14 +43,17 @@
           <% else %>
             <script>
             <% i=0 %>
-            var _<%= metric.name.parameterize.underscore %> = [
-              <%- resource.recorded_metrics.reorder{ recorded_on.asc }.where{ metric_id == my{metric.id}}.group_by(&:user_id).each do |user_id, recorded_metrics| %>
-                <%= i > 0 ? "," : "" %>[<%= recorded_metrics.map{|rm| "['#{rm.recorded_on.strftime('%Y-%m-%d')}',#{rm.value}]" }.join(",").html_safe %>]
+            
+            <% all_metrics = resource.recorded_metrics.reorder{ recorded_on.asc }.where{ metric_id == my{metric.id} } %>
+            <% dates = all_metrics.pluck('recorded_on').uniq %>
+            var _<%= metric.name.parameterize.underscore %> = [[
+              <%- dates.each do |date| %>
+                <%= i > 0 ? "," : "" %><%= "['#{date.strftime('%Y-%m-%d')}',#{all_metrics.where{ recorded_on == my{date} }.average(:numerical_value)}]".html_safe %>
               <% i = i+1; end -%>
-            ];
-            var _<%= metric.name.parameterize.underscore %>_labels = [<%= resource.recorded_metrics.where{ metric_id == my{metric.id}}.map{|rm| "{label: '#{rm.user.to_s}'}" }.uniq.join(",").html_safe %>];
-            var _<%= metric.name.parameterize.underscore %>_min = '<%= resource.recorded_metrics.reorder{ recorded_on.asc }.first.recorded_on.strftime('%Y-%m-%d') %>';
-            var _<%= metric.name.parameterize.underscore %>_max = '<%= resource.recorded_metrics.reorder{ recorded_on.asc }.last.recorded_on.strftime('%Y-%m-%d') %>';
+            ]];
+            var _<%= metric.name.parameterize.underscore %>_labels = [{label: '<%= resource.to_s %> Average'}];
+            var _<%= metric.name.parameterize.underscore %>_min = '<%= dates.first.try(:strftime,'%Y-%m-%d') %>';
+            var _<%= metric.name.parameterize.underscore %>_max = '<%= dates.last.try(:strftime,'%Y-%m-%d') %>';
             </script>
             <div data-graph-title="<%= metric %>" class="graph" id="graph-<%= metric.id %>" data-variable-name="_<%= metric.name.parameterize.underscore %>">
           

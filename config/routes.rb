@@ -66,7 +66,13 @@ PerformanceUnlimited::Application.routes.draw do
       get 'download_performance_template'
     end
     resources :metrics
-    resources :divisions
+    resources :divisions do
+      member do
+        get 'dashboard'
+        put 'upload_performance_data'
+        get 'download_performance_template'
+      end
+    end
   end
   
   resources :assigned_divisions #TODO: REMOVE

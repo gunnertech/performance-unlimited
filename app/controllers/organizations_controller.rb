@@ -1,7 +1,7 @@
 class OrganizationsController < InheritedResources::Base
   before_filter :create_session_variable, only: :show
   before_filter :set_record_date, only: [:show, :upload_performance_data]
-  before_filter :set_users, only: [:show]
+  before_filter :set_users, only: [:show, :download_performance_template]
   
   custom_actions resource: [:upload_performance_data,:download_performance_template,:dashboard]
   skip_load_and_authorize_resource only: [:upload_performance_data, :index,:dashboard]

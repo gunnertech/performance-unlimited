@@ -77,7 +77,7 @@ class Organization < ActiveRecord::Base
       
       
       rows.headers.each_with_index do |header,i|
-        if i > 2
+        if i > 3
           if row[header].present?
             metric = self.metrics.where{ lower(name) == my{header.downcase} }.first
             begin

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130921021220) do
+ActiveRecord::Schema.define(:version => 20130921162951) do
 
   create_table "assigned_divisions", :force => true do |t|
     t.integer  "division_id"
@@ -249,9 +249,10 @@ ActiveRecord::Schema.define(:version => 20130921021220) do
     t.integer  "user_id"
     t.string   "value"
     t.date     "recorded_on"
-    t.datetime "created_at",  :null => false
-    t.datetime "updated_at",  :null => false
+    t.datetime "created_at",                                    :null => false
+    t.datetime "updated_at",                                    :null => false
     t.integer  "metric_id"
+    t.decimal  "numerical_value", :precision => 8, :scale => 2
   end
 
   add_index "recorded_metrics", ["metric_id"], :name => "index_recorded_metrics_on_metric_id"

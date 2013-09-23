@@ -8,14 +8,14 @@
     </ul>
   </div>  
   
-  <div class="span6 btn-group">
-    <%= link_to t('.edit', :default => t("helpers.links.edit")),
-                edit_organization_path(@organization), :class => 'btn btn-large' if can?(:update, resource) %>
-    <%= link_to t('delete'),
-                organization_path(@organization),
-                :method => 'delete',
-                :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')),
-                :class => 'btn btn-danger btn-large' if can?(:destroy, resource) %>
+  <div class="span6">
+      <%= link_to t('.edit', :default => t("helpers.links.edit")),
+                  edit_organization_path(@organization), :class => 'btn' if can?(:update, resource) %>
+      <%= link_to t('delete'),
+                  organization_path(@organization),
+                  :method => 'delete',
+                  :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')),
+                  :class => 'btn btn-danger' if can?(:destroy, resource) %>
   </div>
 <% end %>
 
@@ -37,21 +37,30 @@
       </div>
       <div id="collapseUsers" class="accordion-collapse collapse in">
         <div class="accordion-body">
-          <div class="form-actions">
-            
-            <div class="btn-group pull-right">
-              <a class="btn btn-primary global-submit" href="#">Submit</a>
-              <a class="btn btn-primary" href="#upload-modal" data-toggle="modal">Upload</a>
+          <div class="row-fluid topper">
+            <div class="letter-pagination scroll-pane span8">
+              <div class="pagination pagination-small nowrap">
+                <ul>
+                  <% %w(a b c d e f g h i j k l m n o p q r s t u v w x y z).each do |letter| %>
+                    <li class="<%= (params[:letter].to_s == letter ? 'active' : '') %>"><%= link_to letter.upcase, params.merge(letter: letter) %></li>
+                  <% end %>
+                </ul>
+              </div>
             </div>
           
-            <div class="pull-right">
-              <form class="form-inline" action="" method="get">
+            <div class="span4">
+              <form class="form-inline pull-right" action="" method="get" style="margin-right: 20px;">
                 <div class="input-append">
-                  <!-- <label style="display:inline;">Date Recorded:</label> -->
                   <input type="text" name="record_date" class="base-date datepicker input-small" value="<%= params[:record_date].strftime('%m/%d/%Y') %>" />
                   <input type="submit" class="btn btn-primary" value="Change Date" />
                 </div>
               </form>
+              
+              <div class="btn-group pull-right" style="margin-right: 20px;">
+                <a class="btn btn-primary global-submit" href="#">Submit</a>
+                <a class="btn btn-primary" href="#upload-modal" data-toggle="modal">Upload</a>
+              </div>
+              <div style="clear:both;"></div>
             </div>
           </div>
           <div class="scroll-pane">
@@ -89,32 +98,16 @@
                         <% end %>
                       </td>
                     <% end %>
-                    <!-- <td>
-                                        <%= link_to t('.edit', :default => t("helpers.links.edit")),
-                                                    [:edit, user], :class => 'btn btn-mini' %>
-                                        <%= link_to t('record_metric'),
-                                                    new_user_recorded_metric_path(user), :class => 'btn btn-mini' %>
-                                        <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
-                                                    user,
-                                                    :method => :delete,
-                                                    :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')),
-                                                    :class => 'btn btn-mini btn-danger' %>
-                                      </td> -->
                   </tr>
                 <% end %>
               </tbody>
             </table>
           </div>
-          <div class="pagination" style="margin-left: 20px;">
-            <ul>
-              <% %w(a b c d e f g h i j k l m n o p q r s t u v w x y z).each do |letter| %>
-                <li class="<%= (params[:letter].to_s == letter ? 'active' : '') %>"><%= link_to letter.upcase, params.merge(letter: letter) %></li>
-              <% end %>
-            </ul>
-          </div>
+          
           <div class="form-actions">
             <a class="btn btn-primary global-submit" href="#">Submit</a>
           </div>
+          
         </div>
       </div>
     </div>

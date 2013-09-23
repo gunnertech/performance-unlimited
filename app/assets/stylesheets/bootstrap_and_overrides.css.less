@@ -8,18 +8,20 @@ body {
 
 // Set the correct sprite paths
 @iconSpritePath: asset-path('twitter/bootstrap/glyphicons-halflings.png');
-@iconWhiteSpritePath: asset-path('twitter/bootstrap/glyphicons-halflings-white.png');
+@iconSpritePath: asset-path("twitter/bootstrap/glyphicons-halflings.png");
+@iconWhiteSpritePath: asset-path("twitter/bootstrap/glyphicons-halflings-white.png");
 
 // Set the Font Awesome (Font Awesome is default. You can disable by commenting below lines)
-// Note: If you use asset_path() here, your compiled boostrap_and_overrides.css will not 
+// Note: If you use asset_path() here, your compiled bootstrap_and_overrides.css will not
 //       have the proper paths. So for now we use the absolute path.
-@fontAwesomeEotPath: '/assets/fontawesome-webfont.eot';
-@fontAwesomeWoffPath: '/assets/fontawesome-webfont.woff';
-@fontAwesomeTtfPath: '/assets/fontawesome-webfont.ttf';
-@fontAwesomeSvgPath: '/assets/fontawesome-webfont.svg';
+@fontAwesomeEotPath: asset-path("fontawesome-webfont.eot?v=3.0.2");
+@fontAwesomeEotPath_iefix: asset-path("fontawesome-webfont.eot?#iefix&v=3.0.2");
+@fontAwesomeWoffPath: asset-path("fontawesome-webfont.woff?v=3.0.2");
+@fontAwesomeTtfPath: asset-path("fontawesome-webfont.ttf?v=3.0.2");
+@fontAwesomeSvgPath: asset-path("fontawesome-webfont.svg?v=3.0.2");
 
 // Font Awesome
-@import "fontawesome";
+@import "fontawesome/font-awesome";
 
 // Your custom LESS stylesheets goes here
 //
@@ -44,4 +46,54 @@ border-radius: 4px 0 0 4px !important;
 
 .scroll-pane {
   overflow: scroll;
+}
+
+.accordion-group {
+  .form-actions.small {
+    padding-bottom: 0px;
+  }
+}
+
+.pagination-mini ul > li:first-child > a,
+.pagination-small ul > li:first-child > a,
+.pagination-mini ul > li:first-child > span,
+.pagination-small ul > li:first-child > span {
+  -webkit-border-bottom-left-radius: 3px;
+          border-bottom-left-radius: 3px;
+  -webkit-border-top-left-radius: 3px;
+          border-top-left-radius: 3px;
+  -moz-border-radius-bottomleft: 3px;
+  -moz-border-radius-topleft: 3px;
+}
+
+.pagination-mini ul > li:last-child > a,
+.pagination-small ul > li:last-child > a,
+.pagination-mini ul > li:last-child > span,
+.pagination-small ul > li:last-child > span {
+  -webkit-border-top-right-radius: 3px;
+          border-top-right-radius: 3px;
+  -webkit-border-bottom-right-radius: 3px;
+          border-bottom-right-radius: 3px;
+  -moz-border-radius-topright: 3px;
+  -moz-border-radius-bottomright: 3px;
+}
+
+.pagination-small ul > li > a,
+.pagination-small ul > li > span {
+  padding: 2px 10px;
+  font-size: 11.9px;
+}
+
+.letter-pagination {
+  .pagination-small {
+    width: 880px;
+    margin-left: 20px;
+  }
+  
+  .pagination {
+  }
+}
+
+.topper {
+  margin-bottom: 20px;
 }
