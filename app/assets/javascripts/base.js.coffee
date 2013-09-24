@@ -37,7 +37,7 @@ $(->
     converted_start_date = "#{start_date_pieces[2]}-#{start_date_pieces[0]}-#{start_date_pieces[1]}"
     converted_end_date = "#{end_date_pieces[2]}-#{end_date_pieces[0]}-#{end_date_pieces[1]}"
     
-    $.ajax("/recorded_metrics/average?organization_id=1&start_date=#{$('#start-date').val()}&end_date=#{$('#end-date').val()}",
+    $.ajax("/recorded_metrics/average?#{$('#entity').data('variable')}=#{$('#entity').data('value')}&start_date=#{$('#start-date').val()}&end_date=#{$('#end-date').val()}",
       dataType: 'script'
     ).done( ->
       $.each(window['_metrics'],(i,key) ->
