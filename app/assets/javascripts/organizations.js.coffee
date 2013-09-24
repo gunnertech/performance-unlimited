@@ -6,10 +6,11 @@ $( ->
     if !window[$(this).data('variable-name')]
       return;
     try
-      g = $.jqplot($(this).attr("id"), [], {
+      g = $.jqplot($(this).attr("id"), window["#{$(this).data('variable-name')}_data"], {
+      # g = $.jqplot($(this).attr("id"), [], {
         # seriesColors: ["rgba(78, 135, 194, 0.7)", "rgb(211, 235, 59)"]
         # title: 'Formulary vs NonFormulary Costs'
-        dataRenderer: window[$(this).data('variable-name')]
+        # dataRenderer: window[$(this).data('variable-name')]
         highlighter:
           show: true,
           sizeAdjust: 1

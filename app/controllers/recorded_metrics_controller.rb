@@ -1,12 +1,17 @@
 class RecordedMetricsController < InheritedResources::Base
-  belongs_to :user
+  belongs_to :user, optional: true
+  
+  custom_actions collection: [:average]
   
   load_resource :user
-  load_and_authorize_resource :recorded_metric, through: :user, except: [:index]
+  load_and_authorize_resource :recorded_metric, through: :user, except: [:index, :average]
   
   respond_to :json
+  respond_to :js, only: [:average]
   
   prepend_before_filter :fix_recorded_on_parameter
+  before_filter :set_dates, only: [:index,:average]
+  before_filter :set_entity, only: [:average]
   
   
   before_filter :authorize_parent
@@ -15,17 +20,40 @@ class RecordedMetricsController < InheritedResources::Base
     create! { parent }
   end
   
+  def average
+    
+  end
+  
   def update
     update! { parent }
   end
   
   protected
   
+  def set_entity
+    if params[:organization_id].present?
+      @entity = Organization.find(params[:organization_id])
+    elsif params[:division_id].present?
+      @entity = Division.find(params[:division_id])
+    elsif params[:group_id].present?
+      @entity = Group.find(params[:group_id])
+    end
+  end
+  
+  def set_dates
+    params[:start_date] ||= 1.year.ago
+    params[:end_date] ||= Date.today
+    
+    params[:start_date] = params[:start_date].is_a?(String) ? DateTime.strptime(params[:start_date],'%m/%d/%Y') : params[:start_date]
+    params[:end_date] = params[:end_date].is_a?(String) ? DateTime.strptime(params[:end_date],'%m/%d/%Y') : params[:end_date]
+  end
+  
   def collection
     return @recorded_metrics if @recorded_metrics
     
     @recorded_metrics = end_of_association_chain.accessible_by(current_ability)
     @recorded_metrics = @recorded_metrics.joins{ metric }.where{ metric.name == my{params[:name]}} if params[:name].present?
+    @recorded_metrics = @recorded_metrics.where{ recorded_on >> my{params[:start_date]..params[:end_date]}}
     
     
     @recorded_metrics

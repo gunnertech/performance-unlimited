@@ -2,6 +2,7 @@ class OrganizationsController < InheritedResources::Base
   before_filter :create_session_variable, only: :show
   before_filter :set_record_date, only: [:show, :upload_performance_data]
   before_filter :set_users, only: [:show, :download_performance_template, :dashboard]
+  before_filter :set_dates, only: :dashboard
   
   custom_actions resource: [:upload_performance_data,:download_performance_template,:dashboard]
   skip_load_and_authorize_resource only: [:upload_performance_data, :index,:dashboard]
@@ -60,6 +61,14 @@ class OrganizationsController < InheritedResources::Base
   end
   
   protected
+  
+  def set_dates
+    params[:start_date] ||= 1.year.ago
+    params[:end_date] ||= Date.today
+    
+    params[:start_date] = params[:start_date].is_a?(String) ? DateTime.strptime(params[:start_date],'%m/%d/%Y') : params[:start_date]
+    params[:end_date] = params[:end_date].is_a?(String) ? DateTime.strptime(params[:end_date],'%m/%d/%Y') : params[:end_date]
+  end
   
   def create_session_variable
     session[:organization_id] = params[:id]

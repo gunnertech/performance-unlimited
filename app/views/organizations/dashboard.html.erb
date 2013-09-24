@@ -1,5 +1,5 @@
 <%= content_for(:breadcrumb) do %>
-  <div class="span6">
+  <div class="span12">
     <ul class="breadcrumb">
       <li><%= link_to t('home'), root_path %><span class="divider">/</span></li>
       <li><%= link_to resource, resource %><span class="divider">/</span></li>
@@ -20,12 +20,11 @@
     </div>
     
     <div class="span1">
-      
+      <br>
       <a href="" class="add btn btn-block btn-primary"><i class="icon-long-arrow-right"></i></a>
       <br>
       <a href="" class="remove btn btn-block btn-primary"><i class="icon-long-arrow-left"></i></a>
       <br>
-      <a href="" class="graph-btn btn btn-block btn-success">Update</a>
     </div>
     
     <div class="span2">
@@ -33,13 +32,24 @@
       </select>
     </div>
     
-    <div class="span7">
-      
+    <div class="span3">
+      <label for="start-date">From:</label>
+      <input type="text" class="base-date datepicker input" id="start-date" value="<%= 1.year.ago.strftime('%m/%d/%Y') %>" />
+      <label for="end-date">To:</label>
+      <input type="text" class="base-date datepicker input" id="end-date" value="<%= Date.today.strftime('%m/%d/%Y') %>" />
+    </div>
+    
+    <div class="span4">
+      <br><br>
+      <a href="" class="graph-btn btn-large btn btn-success">Update</a>
     </div>
   </div>
 </form>
 
 <% groups_of = 2 %>
+<script>
+var _metrics = [];
+</script>
 <% resource.metrics.in_groups_of(groups_of) do |metrics| %>
   <div class="row-fluid">
     <% metrics.each do |metric| %>
@@ -68,8 +78,9 @@
             <script>
             <% i=0 %>
             
-            <% all_metrics = resource.recorded_metrics.reorder{ recorded_on.asc }.where{ metric_id == my{metric.id} } %>
+            <% all_metrics = resource.recorded_metrics.reorder{ recorded_on.asc }.where{ recorded_on >> my{params[:start_date]..params[:end_date]}}.where{ metric_id == my{metric.id} } %>
             <% dates = all_metrics.pluck('recorded_on').uniq %>
+             _metrics.push('<%= metric.name.parameterize.underscore %>');
             var _<%= metric.name.parameterize.underscore %>_data = [[
               <%- dates.each do |date| %>
                 <%= i > 0 ? "," : "" %><%= "['#{date.strftime('%Y-%m-%d')}',#{all_metrics.where{ recorded_on == my{date} }.average(:numerical_value)}]".html_safe %>
@@ -79,8 +90,10 @@
               return _<%= metric.name.parameterize.underscore %>_data;
             };
             var _<%= metric.name.parameterize.underscore %>_labels = [{label: '<%= resource.to_s %> Average'}];
-            var _<%= metric.name.parameterize.underscore %>_min = '<%= dates.first.try(:strftime,'%Y-%m-%d') %>';
-            var _<%= metric.name.parameterize.underscore %>_max = '<%= dates.last.try(:strftime,'%Y-%m-%d') %>';
+            //var _<%= metric.name.parameterize.underscore %>_min = '<%= dates.first.try(:strftime,'%Y-%m-%d') %>';
+            //var _<%= metric.name.parameterize.underscore %>_max = '<%= dates.last.try(:strftime,'%Y-%m-%d') %>';
+            var _<%= metric.name.parameterize.underscore %>_min = '<%= params[:start_date].try(:strftime,'%Y-%m-%d') %>';
+            var _<%= metric.name.parameterize.underscore %>_max = '<%= params[:end_date].try(:strftime,'%Y-%m-%d') %>';
             </script>
             <div data-graph-title="<%= metric %>" class="graph" id="graph-<%= metric.id %>" data-variable-name="_<%= metric.name.parameterize.underscore %>">
           

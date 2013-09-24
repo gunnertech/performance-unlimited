@@ -78,6 +78,12 @@ PerformanceUnlimited::Application.routes.draw do
   resources :assigned_divisions #TODO: REMOVE
   resources :completed_surveys #TODO: REMOVE
   
+  resources :recorded_metrics, only: [] do
+    collection do
+      get 'average'
+    end
+  end
+  
   resources :users, only: [:show,:update,:create] do
     resources :assigned_divisions
     resources :completed_surveys
