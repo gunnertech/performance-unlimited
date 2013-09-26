@@ -3,6 +3,7 @@ class OrganizationsController < InheritedResources::Base
   before_filter :set_record_date, only: [:show, :upload_performance_data]
   before_filter :set_users, only: [:show, :download_performance_template, :dashboard]
   before_filter :set_dates, only: :dashboard
+  before_filter :set_graph_type
   
   custom_actions resource: [:upload_performance_data,:download_performance_template,:dashboard]
   skip_load_and_authorize_resource only: [:upload_performance_data, :index,:dashboard]
@@ -78,9 +79,11 @@ class OrganizationsController < InheritedResources::Base
     request.env['omniauth.auth']
   end
   
-  def set_record_date
-    
+  def set_graph_type
     params[:graph_type] ||= 'line'
+  end
+  
+  def set_record_date
     
     if params[:recorded_date].present? && params[:recorded_date].to_s.match(/\//)
       params[:recorded_date] = DateTime.strptime(params[:recorded_date],'%m/%d/%Y')
