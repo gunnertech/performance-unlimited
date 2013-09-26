@@ -1,0 +1,23 @@
+<script>
+<% i=0 %>
+
+<% all_metrics = resource.recorded_metrics.reorder{ recorded_on.asc }.where{ recorded_on >> my{params[:start_date]..params[:end_date]}}.where{ metric_id == my{metric.id} } %>
+<% dates = all_metrics.pluck('recorded_on').uniq %>
+ _metrics.push('<%= metric.name.parameterize.underscore %>');
+var _<%= metric.name.parameterize.underscore %>_data = [[
+  <%- dates.each do |date| %>
+    <%= i > 0 ? "," : "" %><%= "['#{date.strftime('%Y-%m-%d')}',#{all_metrics.where{ recorded_on == my{date} }.average(:numerical_value)}]".html_safe %>
+  <% i = i+1; end -%>
+]];
+var _<%= metric.name.parameterize.underscore %> = function(){ 
+  return _<%= metric.name.parameterize.underscore %>_data;
+};
+var _<%= metric.name.parameterize.underscore %>_labels = [{label: '<%= resource.to_s %> Average'}];
+//var _<%= metric.name.parameterize.underscore %>_min = '<%= dates.first.try(:strftime,'%Y-%m-%d') %>';
+//var _<%= metric.name.parameterize.underscore %>_max = '<%= dates.last.try(:strftime,'%Y-%m-%d') %>';
+var _<%= metric.name.parameterize.underscore %>_min = '<%= params[:start_date].try(:strftime,'%Y-%m-%d') %>';
+var _<%= metric.name.parameterize.underscore %>_max = '<%= params[:end_date].try(:strftime,'%Y-%m-%d') %>';
+</script>
+<div data-graph-title="<%= metric %>" class="graph" id="graph-<%= metric.id %>" data-variable-name="_<%= metric.name.parameterize.underscore %>">
+
+</div>

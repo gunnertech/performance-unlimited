@@ -14,6 +14,8 @@ class Group < ActiveRecord::Base
   
   acts_as_list scope: :division
   
+  validates :name, uniqueness: {scope: :division_id}
+  
   def to_s
     name
   end

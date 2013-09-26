@@ -1,0 +1,22 @@
+<script>
+<% i=0 %>
+
+<% all_metrics = resource.recorded_metrics.reorder{ recorded_on.desc }.limit(1).where{ metric_id == my{metric.id} } %>
+<% dates = all_metrics.pluck('recorded_on').uniq %>
+_metrics.push('<%= metric.name.parameterize.underscore %>');
+var _<%= metric.name.parameterize.underscore %>_data = [
+  <%- dates.each do |date| %>
+    <%= i > 0 ? "," : "" %><%= "#{all_metrics.where{ recorded_on == my{date} }.average(:numerical_value)}".html_safe %>
+  <% i = i+1; end -%>
+];
+
+var _<%= metric.name.parameterize.underscore %>_data_orig = _<%= metric.name.parameterize.underscore %>_data.slice(0);
+var _<%= metric.name.parameterize.underscore %> = function(){ 
+  return _<%= metric.name.parameterize.underscore %>_data;
+};
+var _<%= metric.name.parameterize.underscore %>_labels = ['<%= resource.to_s %> Average'];
+var _<%= metric.name.parameterize.underscore %>_labels_orig = _<%= metric.name.parameterize.underscore %>_labels.slice(0);
+</script>
+<div data-graph-title="<%= metric %>" class="graph" id="graph-<%= metric.id %>" data-variable-name="_<%= metric.name.parameterize.underscore %>">
+
+</div>

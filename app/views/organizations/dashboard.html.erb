@@ -14,7 +14,9 @@
     <div class="span2">
       <select multiple id="available" size="7" style="width: 100%;">
         <% resource.users.uniq{ id }.each do |user| %>
-          <option value="<%= user.id %>"><%= user.reverse_name %></option>
+          <% unless (params[:taken_users]||"").split(",").include?(user.id.to_s) %>
+            <option value="<%= user.id %>"><%= user.reverse_name %></option>
+          <% end %>
         <% end %>
       </select>
     </div>
@@ -28,21 +30,40 @@
     </div>
     
     <div class="span2">
-      <select multiple size="7" id="taken" style="width: 100%;">
+      <select multiple size="7" name="taken_users" id="taken" style="width: 100%;">
+        <% if params[:taken_users].present? %>
+          <% User.find(params[:taken_users].split(",")).each do |user| %>
+            <option value="<%= user.id %>"><%= user.reverse_name %></option>
+          <% end %>
+        <% end %>
       </select>
     </div>
     
-    <div class="span3">
-      <label for="start-date">From:</label>
-      <input type="text" class="base-date datepicker input" id="start-date" value="<%= 1.year.ago.strftime('%m/%d/%Y') %>" />
-      <label for="end-date">To:</label>
-      <input type="text" class="base-date datepicker input" id="end-date" value="<%= Date.today.strftime('%m/%d/%Y') %>" />
+    <% if params[:graph_type] != 'bar' %>
+      <div class="span3">
+        <label for="start-date">From:</label>
+        <input type="text" class="base-date datepicker input" id="start-date" name="graph_start_date" value="<%= params[:graph_start_date] || 1.year.ago.strftime('%m/%d/%Y') %>" />
+        <label for="end-date">To:</label>
+        <input type="text" class="base-date datepicker input" id="end-date" name="graph_end_date" value="<%= params[:graph_end_date] || Date.today.strftime('%m/%d/%Y') %>" />
+      </div>
+    <% end %>
+    
+    <div class="span2">
+      <label for="graph-type">Graph Type:</label>
+      <select name="graph_type" id="graph-type" class="input-small">
+        <option value="line" <%= params[:graph_type] == 'line' ? 'selected="selected"' : '' %>>Line</option>
+        <option value="bar" <%= params[:graph_type] == 'bar' ? 'selected="selected"' : '' %>>Bar</option>
+      </select>
     </div>
     
-    <div class="span4">
+    <div class="span2">
       <br><br>
       <a href="" class="graph-btn btn-large btn btn-success">Update</a>
     </div>
+    
+    <% if params[:graph_type] == 'bar' %>
+      <div class="span3"></div>
+    <% end %>
   </div>
 </form>
 
@@ -50,7 +71,7 @@
 <script>
 var _metrics = [];
 </script>
-<% resource.metrics.in_groups_of(groups_of) do |metrics| %>
+<% resource.metrics.joins{ metric_type }.where{ metric_type.name != 'Text' }.in_groups_of(groups_of) do |metrics| %>
   <div class="row-fluid">
     <% metrics.each do |metric| %>
       <div class="span<%= 12/groups_of %>">
@@ -75,29 +96,7 @@ var _metrics = [];
               </tbody>
             </table>
           <% else %>
-            <script>
-            <% i=0 %>
-            
-            <% all_metrics = resource.recorded_metrics.reorder{ recorded_on.asc }.where{ recorded_on >> my{params[:start_date]..params[:end_date]}}.where{ metric_id == my{metric.id} } %>
-            <% dates = all_metrics.pluck('recorded_on').uniq %>
-             _metrics.push('<%= metric.name.parameterize.underscore %>');
-            var _<%= metric.name.parameterize.underscore %>_data = [[
-              <%- dates.each do |date| %>
-                <%= i > 0 ? "," : "" %><%= "['#{date.strftime('%Y-%m-%d')}',#{all_metrics.where{ recorded_on == my{date} }.average(:numerical_value)}]".html_safe %>
-              <% i = i+1; end -%>
-            ]];
-            var _<%= metric.name.parameterize.underscore %> = function(){ 
-              return _<%= metric.name.parameterize.underscore %>_data;
-            };
-            var _<%= metric.name.parameterize.underscore %>_labels = [{label: '<%= resource.to_s %> Average'}];
-            //var _<%= metric.name.parameterize.underscore %>_min = '<%= dates.first.try(:strftime,'%Y-%m-%d') %>';
-            //var _<%= metric.name.parameterize.underscore %>_max = '<%= dates.last.try(:strftime,'%Y-%m-%d') %>';
-            var _<%= metric.name.parameterize.underscore %>_min = '<%= params[:start_date].try(:strftime,'%Y-%m-%d') %>';
-            var _<%= metric.name.parameterize.underscore %>_max = '<%= params[:end_date].try(:strftime,'%Y-%m-%d') %>';
-            </script>
-            <div data-graph-title="<%= metric %>" class="graph" id="graph-<%= metric.id %>" data-variable-name="_<%= metric.name.parameterize.underscore %>">
-          
-            </div>
+            <%= render partial: "#{params[:graph_type]}_graph", locals: {metric: metric} %>
           <% end %>
         <% end %>
       </div>

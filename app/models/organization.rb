@@ -48,7 +48,7 @@ class Organization < ActiveRecord::Base
           pieces = piece.split(":")
           division = self.divisions.find_or_create_by_name(pieces.first)
           group = division.groups.find_or_create_by_name(pieces.last)
-          groups.push(group)
+          groups.push(group) unless groups.include?(group)
         end
         
       end
@@ -66,7 +66,7 @@ class Organization < ActiveRecord::Base
       
       if groups.empty?
         division ||= self.divisions.find_or_create_by_name('Primary')
-        group = division.groups.create(name: "Primary")
+        group = division.groups.find_or_create_by_name("Primary")
         groups.push(group)
       end
       
@@ -86,7 +86,7 @@ class Organization < ActiveRecord::Base
                 m = self.metrics.where{ lower(name) == my{header.downcase} }.first
                 m.metric_type_id = MetricType.find_or_create_by_name('Percentage').id
                 m.save!
-              elsif row[header].match(/[a-z]/i)
+              elsif row[header].match(/Notes/i)
                 m = self.metrics.where{ lower(name) == my{header.downcase} }.first
                 m.metric_type_id = MetricType.find_or_create_by_name('Text').id
                 m.save!

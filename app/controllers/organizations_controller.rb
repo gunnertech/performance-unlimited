@@ -80,6 +80,8 @@ class OrganizationsController < InheritedResources::Base
   
   def set_record_date
     
+    params[:graph_type] ||= 'line'
+    
     if params[:recorded_date].present? && params[:recorded_date].to_s.match(/\//)
       params[:recorded_date] = DateTime.strptime(params[:recorded_date],'%m/%d/%Y')
     else
