@@ -35,7 +35,7 @@ class OrganizationsController < InheritedResources::Base
     resource.save!
     
     flash[:notice] = "Your file is processing and will be ready momentarily"
-    redirect_to resource
+    redirect_to resource_url(record_date: params[:recorded_date])
   end
   
   def add_authentication

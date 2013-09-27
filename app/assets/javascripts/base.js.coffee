@@ -303,6 +303,10 @@ $('.btn-print').live('click', (event) ->
 
 $(->
   
+  $('#record-date').change( -> 
+    $('#recorded_date').val($('#record-date').val())
+  )
+  
   window.graphs = {}
   $.jqplot._noToImageButton = true;
   
