@@ -53,7 +53,17 @@ class RecordedMetricsController < InheritedResources::Base
     
     @recorded_metrics = end_of_association_chain.accessible_by(current_ability)
     @recorded_metrics = @recorded_metrics.joins{ metric }.where{ metric.name == my{params[:name]}} if params[:name].present?
-    @recorded_metrics = @recorded_metrics.where{ recorded_on >> my{params[:start_date]..params[:end_date]}}
+    if params[:most_recent].present?
+      unique_metric_names = @recorded_metrics.joins{ metric }.select{distinct(`metrics.name`).as('metric_name')}.map(&:metric_name)
+      ids = []
+      unique_metric_names.each do |metric_name|
+        ids.push(@recorded_metrics.joins{ metric }.where{ metric.name == my{metric_name} }.reorder{ recorded_on.desc }.limit(1).first.try(:id))
+      end
+      
+      @recorded_metrics = @recorded_metrics.where{ id >> my{ids.compact}}
+    else
+      @recorded_metrics = @recorded_metrics.where{ recorded_on >> my{params[:start_date]..params[:end_date]}}
+    end
     
     
     @recorded_metrics
