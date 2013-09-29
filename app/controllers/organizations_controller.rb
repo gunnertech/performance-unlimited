@@ -3,6 +3,7 @@ class OrganizationsController < InheritedResources::Base
   before_filter :set_record_date, only: [:show, :upload_performance_data]
   before_filter :set_users, only: [:show, :download_performance_template, :dashboard]
   before_filter :set_dates, only: :dashboard
+  before_filter :set_metrics, only: :dashboard
   before_filter :set_graph_type
   
   custom_actions resource: [:upload_performance_data,:download_performance_template,:dashboard]
@@ -64,11 +65,14 @@ class OrganizationsController < InheritedResources::Base
   protected
   
   def set_dates
-    params[:start_date] ||= 1.year.ago
-    params[:end_date] ||= Date.today
+    params[:start_date] ||= 1.year.ago.to_date.strftime("%m/%d/%Y")
+    params[:end_date] ||= Date.today.strftime("%m/%d/%Y")
     
     params[:start_date] = params[:start_date].is_a?(String) ? DateTime.strptime(params[:start_date],'%m/%d/%Y') : params[:start_date]
     params[:end_date] = params[:end_date].is_a?(String) ? DateTime.strptime(params[:end_date],'%m/%d/%Y') : params[:end_date]
+    
+    params[:start_date] = params[:start_date].strftime("%m/%d/%Y")
+    params[:end_date] = params[:end_date].strftime("%m/%d/%Y")
   end
   
   def create_session_variable
@@ -105,6 +109,14 @@ class OrganizationsController < InheritedResources::Base
     end
     
     
+  end
+  
+  def set_metrics
+    @metrics = resource.metrics.joins{ metric_type }
+    @metrics = @metrics.where{ metric_type.name == 'Text' } if params[:graph_type] == 'table'
+    @metrics = @metrics.where{ metric_type.name != 'Text' } if params[:graph_type] != 'table'
+    @metrics = @metrics.where{ id != my{params[:focus_graph]} } if params[:focus_graph].present?
+    @focus_metric = resource.metrics.where{ id == my{params[:focus_graph]}}.first if params[:focus_graph].present?
   end
   
   def set_users

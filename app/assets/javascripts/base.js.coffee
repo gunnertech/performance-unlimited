@@ -216,6 +216,8 @@ plot_line_chart = (graph_element) ->
   if !window[$(graph_element).data('variable-name')]
     return;
   try
+    console.log(window["#{$(graph_element).data('variable-name')}_is_focus"])
+    placement = if window["#{$(graph_element).data('variable-name')}_is_focus"] then 'outside' else 'inside'
     g = $.jqplot($(graph_element).attr("id"), window["#{$(graph_element).data('variable-name')}_data"], {
       # seriesColors: ["rgba(78, 135, 194, 0.7)", "rgb(211, 235, 59)"]
       # title: 'Formulary vs NonFormulary Costs'
@@ -232,7 +234,7 @@ plot_line_chart = (graph_element) ->
         gridLineWidth: 2
       legend:
         show: true
-        placement: 'inside'
+        placement: placement
       seriesDefaults:
         rendererOptions:
           smooth: true
@@ -302,6 +304,19 @@ $('.btn-print').live('click', (event) ->
 
 
 $(->
+  
+  # $('.graph-holder h4 a').click( (event) ->
+  #   event.preventDefault()
+  #   $clone = $(this).parents('.graph-holder').find(".graph").remove()
+  #   console.log($clone)
+  #   $('#focus-graph').show().find('#chart-target').empty().append($clone)
+  #   $clone.height($('#chart-target').height()*0.96);
+  #   $clone.width($('#chart-target').width()*0.96);
+  #   setTimeout(->
+  #     window.graphs[$clone.data('variable-name')].replot({ resetAxes:true })
+  #   ,2000)
+  #   
+  # )
   
   $('#record-date').change( -> 
     $('#recorded_date').val($('#record-date').val())
