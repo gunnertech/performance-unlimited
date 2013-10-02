@@ -36,7 +36,11 @@ class Organization < ActiveRecord::Base
   
   def do_upload(recorded_date)
     require 'csv'
-    rows = CSV.parse(file_contents, :headers => true)
+    begin
+      rows = CSV.parse(file_contents, :headers => true)
+    rescue
+      return false
+    end
     rows.headers.each_with_index do |header,i|
       if i > 3 && self.metrics.where{ lower(name) == my{header.downcase} }.first.nil?
         self.metrics.create(name: header, metric_type: MetricType.find_or_create_by_name('Number'))
