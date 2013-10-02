@@ -1,0 +1,128 @@
+<form id="entity" data-variable="organization_id" data-value="<%= resource.id %>" action="" class="no-print">
+  <div class="row-fluid">
+    <div class="span2">
+      <select multiple id="available" size="7" style="width: 100%;">
+        <% resource.users.uniq{ id }.each do |user| %>
+          <% unless (params[:taken_users]||"").split(",").include?(user.id.to_s) %>
+            <option value="<%= user.id %>"><%= user.reverse_name %></option>
+          <% end %>
+        <% end %>
+      </select>
+    </div>
+    
+    <div class="span1">
+      <br>
+      <a href="" class="add btn btn-block btn-primary"><i class="icon-long-arrow-right"></i></a>
+      <br>
+      <a href="" class="remove btn btn-block btn-primary"><i class="icon-long-arrow-left"></i></a>
+      <br>
+    </div>
+    
+    <div class="span2">
+      <select multiple size="7" name="taken_users" id="taken" style="width: 100%;">
+        <% if params[:taken_users].present? %>
+          <% User.find(params[:taken_users].split(",")).each do |user| %>
+            <option value="<%= user.id %>"><%= user.reverse_name %></option>
+          <% end %>
+        <% end %>
+      </select>
+    </div>
+    
+    <% if params[:graph_type] != 'bar' %>
+      <div class="span3">
+        <label for="start-date">From:</label>
+        <input type="text" class="base-date datepicker input" id="start-date" name="graph_start_date" value="<%= params[:graph_start_date] || 1.year.ago.strftime('%m/%d/%Y') %>" />
+        <label for="end-date">To:</label>
+        <input type="text" class="base-date datepicker input" id="end-date" name="graph_end_date" value="<%= params[:graph_end_date] || Date.today.strftime('%m/%d/%Y') %>" />
+      </div>
+    <% end %>
+    
+    <div class="span2">
+      <label for="graph-type">Graph Type:</label>
+      <select name="graph_type" id="graph-type" class="input-small">
+        <option value="line"  <%= params[:graph_type] == 'line'  ? 'selected="selected"' : '' %>>Line</option>
+        <option value="bar"   <%= params[:graph_type] == 'bar'   ? 'selected="selected"' : '' %>>Bar</option>
+        <option value="table" <%= params[:graph_type] == 'table' ? 'selected="selected"' : '' %>>Notes</option>
+        <option value="raw"   <%= params[:graph_type] == 'raw'   ? 'selected="selected"' : '' %>>Raw</option>
+      </select>
+    </div>
+    
+    <div class="span2">
+      <br><br>
+      <a href="" class="graph-btn btn-large btn-block btn btn-success">Update</a>
+      <a href="" class="print-btn btn-large btn-block btn btn-success">Print</a>
+    </div>
+    
+    <% if params[:graph_type] == 'bar' %>
+      <div class="span3"></div>
+    <% end %>
+  </div>
+</form>
+
+<% groups_of = 3 %>
+<script>
+var _metrics = [];
+</script>
+
+<% if @focus_metric.present? %>
+  <div id="focus-graph" class="row-fluid">
+    <div class="span10" id="chart-target">
+      <h4><%= @focus_metric %></h4>
+      <% if @focus_metric.metric_type.name == 'Text' %>
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Athlete</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <% resource.recorded_metrics.where{ metric_id == my{@focus_metric.id}}.each do |recorded_metric| %>
+              <td><%= recorded_metric.recorded_on %></td>
+              <td><%= recorded_metric.user %></td>
+              <td><%= recorded_metric.value %></td>
+            <% end %>
+          </tbody>
+        </table>
+      <% else %>
+        <%= render partial: "#{params[:graph_type]}_graph", locals: {metric: @focus_metric} %>
+      <% end %>
+    </div>
+    <div class="span2"></div>
+  </div>
+<% end %>
+
+<% @metrics.in_groups_of(groups_of) do |metrics| %>
+  <div class="row-fluid">
+    <% metrics.each do |metric| %>
+      <div class="graph-holder span<%= 12/groups_of %>">
+        <% if metric.present? %>
+          <h4><%= link_to(metric, params.merge(focus_graph: metric.id)) %></h4>
+          <%= metric.note.present? ? simple_format(metric.note) : "<br />".html_safe %>
+          <% if metric.metric_type.name == 'Text' %>
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Athlete</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                <% resource.recorded_metrics.where{ metric_id == my{metric.id}}.each do |recorded_metric| %>
+                  <td><%= recorded_metric.recorded_on %></td>
+                  <td><%= recorded_metric.user %></td>
+                  <td><%= recorded_metric.value %></td>
+                <% end %>
+              </tbody>
+            </table>
+          <% else %>
+            <%= render partial: "shared/#{params[:graph_type]}_graph", locals: {metric: metric} %>
+          <% end %>
+        <% end %>
+        <div class="page-break"></div>
+      </div>
+    <% end %>
+  </div>
+<% end %>

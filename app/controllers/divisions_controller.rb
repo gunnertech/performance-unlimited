@@ -1,8 +1,11 @@
 class DivisionsController < InheritedResources::Base
   belongs_to :organization, optional: true
-  # belongs_to :user, optional: true
+
   before_filter :set_record_date, only: [:show, :upload_performance_data]
-  before_filter :set_users, only: [:show, :download_performance_template]
+  before_filter :set_users, only: [:show, :download_performance_template, :dashboard]
+  before_filter :set_dates, only: :dashboard
+  before_filter :set_metrics, only: :dashboard
+  before_filter :set_graph_type
   
   layout :get_layout
   
@@ -17,15 +20,15 @@ class DivisionsController < InheritedResources::Base
     response.headers['Content-Disposition'] = "attachment; filename=\"performance-template-#{today}.csv\""
   end
   
+  def dashboard
+    authorize! :create, RecordedMetric
+    dashboard!
+  end
+  
   def create
     @division = Division.create(params[:division].merge(creator: current_user))
     @division.assigned_divisions.create(user: current_user)
     create!
-  end
-  
-  def dashboard
-    authorize! :create, RecordedMetric
-    dashboard!
   end
   
   def leaderboard
@@ -34,6 +37,17 @@ class DivisionsController < InheritedResources::Base
   end
   
   protected
+  
+  def set_dates
+    params[:start_date] ||= 1.year.ago.to_date.strftime("%m/%d/%Y")
+    params[:end_date] ||= Date.today.strftime("%m/%d/%Y")
+    
+    params[:start_date] = params[:start_date].is_a?(String) ? DateTime.strptime(params[:start_date],'%m/%d/%Y') : params[:start_date]
+    params[:end_date] = params[:end_date].is_a?(String) ? DateTime.strptime(params[:end_date],'%m/%d/%Y') : params[:end_date]
+    
+    params[:start_date] = params[:start_date].strftime("%m/%d/%Y")
+    params[:end_date] = params[:end_date].strftime("%m/%d/%Y")
+  end
 
   def get_layout
     request.xhr? ? nil : 'application'
@@ -43,6 +57,42 @@ class DivisionsController < InheritedResources::Base
     return @divisions if @divisions
     @divisions = end_of_association_chain.accessible_by(current_ability)
     
+  end
+  
+  def set_graph_type
+    params[:graph_type] ||= 'line'
+  end
+  
+  def set_record_date
+    
+    if params[:recorded_date].present? && params[:recorded_date].to_s.match(/\//)
+      params[:recorded_date] = DateTime.strptime(params[:recorded_date],'%m/%d/%Y')
+    else
+      params[:recorded_date] ||= Date.today
+      if params[:recorded_date].is_a?(String)
+        params[:recorded_date] = Date.parse(params[:recorded_date])
+      end
+    end
+    
+    
+    if params[:record_date].present? && params[:record_date].to_s.match(/\//)
+      params[:record_date] = DateTime.strptime(params[:record_date],'%m/%d/%Y')
+    else
+      params[:record_date] ||= Date.today
+      if params[:record_date].is_a?(String)
+        params[:record_date] = Date.parse(params[:record_date])
+      end
+    end
+    
+    
+  end
+    
+  def set_metrics
+    @metrics = resource.metrics.joins{ metric_type }
+    @metrics = @metrics.where{ metric_type.name == 'Text' } if params[:graph_type] == 'table'
+    @metrics = @metrics.where{ metric_type.name != 'Text' } if params[:graph_type] != 'table'
+    @metrics = @metrics.where{ id != my{params[:focus_graph]} } if params[:focus_graph].present?
+    @focus_metric = resource.metrics.where{ id == my{params[:focus_graph]}}.first if params[:focus_graph].present?
   end
   
   def set_users

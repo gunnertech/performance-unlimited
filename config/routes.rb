@@ -55,7 +55,13 @@ PerformanceUnlimited::Application.routes.draw do
       get 'leaderboard'
       get 'dashboard'
     end
-    resources :groups
+    resources :groups do
+      member do
+        get 'dashboard'
+        put 'upload_performance_data'
+        get 'download_performance_template'
+      end
+    end
     resources :assigned_surveys
   end
 

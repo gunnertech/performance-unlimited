@@ -26,6 +26,10 @@ class Organization < ActiveRecord::Base
   
   before_save :start_upload, if: Proc.new{|resource| resource.file_contents.present? }
   
+  def organization
+    self
+  end
+  
   def start_upload
     do_upload(recorded_date)
   end

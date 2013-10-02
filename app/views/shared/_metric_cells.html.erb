@@ -1,0 +1,70 @@
+<div class="row-fluid topper">
+  <div class="letter-pagination scroll-pane span8">
+    <div class="pagination pagination-small nowrap">
+      <ul>
+        <% %w(a b c d e f g h i j k l m n o p q r s t u v w x y z).each do |letter| %>
+          <li class="<%= (params[:letter].to_s == letter ? 'active' : '') %>"><%= link_to letter.upcase, params.merge(letter: letter) %></li>
+        <% end %>
+      </ul>
+    </div>
+  </div>
+
+  <div class="span4">
+    <form class="form-inline pull-right" action="" method="get" style="margin-right: 20px;">
+      <div class="input-append">
+        <input type="text" id="record-date" name="record_date" class="base-date datepicker input-small" value="<%= params[:record_date].strftime('%m/%d/%Y') %>" />
+        <input type="submit" class="btn btn-primary" value="Change Date" />
+      </div>
+    </form>
+    
+    <div class="btn-group pull-right" style="margin-right: 20px;">
+      <a class="btn btn-primary global-submit" href="#">Submit</a>
+      <a class="btn btn-primary" href="#upload-modal" data-toggle="modal">Upload</a>
+    </div>
+    <div style="clear:both;"></div>
+  </div>
+</div>
+<div class="scroll-pane">
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th nowrap>Athlete ID</th>
+        <th nowrap>Last Name</th>
+        <th nowrap>First Name</th>
+        <th nowrap>Groups</th>
+        <% resource.metrics.each do |metric| %>
+          <th nowrap><%= link_to metric, [:edit,resource.organization,metric] %></th>
+        <% end %>
+        <!-- <th><%=t '.actions', :default => t("helpers.actions") %></th> -->
+      </tr>
+    </thead>
+    <tbody>
+      <% @users.each do |user| %>
+        <tr>
+          <td><%= link_to user.id, user %></td>
+          <td><%= link_to user.last_name, user %></td>
+          <td><%= link_to user.first_name, user %></td>
+          <td><%= user.assigned_groups.map{|ag| "#{ag.division}:#{ag.group}"}.join(", ") %></td>
+          <% resource.metrics.each do |metric| %>
+            <% recorded_metric = metric.recorded_metrics.where{ (recorded_on == my{params[:record_date].to_date}) & (user_id == my{user.id}) }.first %>
+            <td class="metric">
+              <%= simple_form_for [user,(recorded_metric||RecordedMetric.new)], :html => { :class => 'form-inline' } do |f| %>
+                <%= f.input :metric_id, as: :hidden, input_html: {value: metric.id} %>
+                <% if metric.metric_type.name == 'Text' %>
+                  <%= f.input :value, label: false %>
+                <% else %>
+                  <%= f.input :value, label: false, input_html: {type: :number, step: ".01", class: "input-mini"} %>
+                <% end %>
+                <%= f.input :recorded_on, as: :hidden, input_html: {value: params[:record_date].strftime('%m/%d/%Y'), class: 'datepicker'} %>
+              <% end %>
+            </td>
+          <% end %>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+
+<div class="form-actions">
+  <a class="btn btn-primary global-submit" href="#">Submit</a>
+</div>
