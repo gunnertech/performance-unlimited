@@ -1,0 +1,20 @@
+<% all_metrics = resource.recorded_metrics.where{ user_id >> my{params[:taken_users].split(",")} }.reorder{ recorded_on.asc }.where{ recorded_on >> my{params[:start_date]..params[:end_date]}}.where{ metric_id == my{metric.id} } %>
+
+<table class="table table-striped table-condensed">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Value</th>
+      <th>Recorded</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% all_metrics.each do |rm| %>
+      <tr>
+        <td><%= rm.user %></td>
+        <td><%= rm.value %></td>
+        <td><%= rm.recorded_on.strftime('%m-%d-%Y') %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

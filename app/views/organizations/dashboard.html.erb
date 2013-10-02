@@ -51,9 +51,10 @@
     <div class="span2">
       <label for="graph-type">Graph Type:</label>
       <select name="graph_type" id="graph-type" class="input-small">
-        <option value="line" <%= params[:graph_type] == 'line' ? 'selected="selected"' : '' %>>Line</option>
-        <option value="bar" <%= params[:graph_type] == 'bar' ? 'selected="selected"' : '' %>>Bar</option>
-        <option value="bar" <%= params[:graph_type] == 'table' ? 'selected="selected"' : '' %>>Notes</option>
+        <option value="line"  <%= params[:graph_type] == 'line'  ? 'selected="selected"' : '' %>>Line</option>
+        <option value="bar"   <%= params[:graph_type] == 'bar'   ? 'selected="selected"' : '' %>>Bar</option>
+        <option value="table" <%= params[:graph_type] == 'table' ? 'selected="selected"' : '' %>>Notes</option>
+        <option value="raw"   <%= params[:graph_type] == 'raw'   ? 'selected="selected"' : '' %>>Raw</option>
       </select>
     </div>
     
@@ -110,7 +111,7 @@ var _metrics = [];
         <% if metric.present? %>
           <h4><%= link_to(metric, params.merge(focus_graph: metric.id)) %></h4>
           <%= metric.note.present? ? simple_format(metric.note) : "<br />".html_safe %>
-          <% if metric.metric_type.name == 'Text' || metric.name == "Groups" %>
+          <% if metric.metric_type.name == 'Text' %>
             <table class="table table-striped">
               <thead>
                 <tr>
