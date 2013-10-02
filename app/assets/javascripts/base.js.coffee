@@ -352,6 +352,11 @@ $(->
     $('#taken option:selected').remove().prependTo($('#available'))
   )
   
+  $('.print-btn').click( (event) -> 
+    event.preventDefault()
+    window.print()
+  )
+  
   $(".graph-btn").click( (event) ->
     event.preventDefault()
     

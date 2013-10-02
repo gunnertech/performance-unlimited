@@ -95,3 +95,37 @@ border-radius: 4px 0 0 4px !important;
 .topper {
   margin-bottom: 20px;
 }
+
+@media print {
+  .no-print,
+  .breadcrumb,
+  .alert,
+  #ajax-message,
+  .btn,
+  form,
+  .form-inline,
+  .subnav,
+  .navbar,
+  .form-actions {
+    display: none !important;
+  }
+  
+  a[href]:after {
+    content: none !important;
+  }
+  
+  a:link:after,
+  a:visited:after {
+    content: "" !important;
+  }
+  
+  
+}
+
+@media all {
+  .page-break	{ display: none; }
+}
+
+@media print {
+  .page-break	{ display: block; page-break-before: always; }
+}

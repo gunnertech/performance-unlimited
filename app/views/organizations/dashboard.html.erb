@@ -9,7 +9,7 @@
   
 <% end %>
 
-<form id="entity" data-variable="organization_id" data-value="<%= resource.id %>" action="">
+<form id="entity" data-variable="organization_id" data-value="<%= resource.id %>" action="" class="no-print">
   <div class="row-fluid">
     <div class="span2">
       <select multiple id="available" size="7" style="width: 100%;">
@@ -59,7 +59,8 @@
     
     <div class="span2">
       <br><br>
-      <a href="" class="graph-btn btn-large btn btn-success">Update</a>
+      <a href="" class="graph-btn btn-large btn-block btn btn-success">Update</a>
+      <a href="" class="print-btn btn-large btn-block btn btn-success">Print</a>
     </div>
     
     <% if params[:graph_type] == 'bar' %>
@@ -130,6 +131,7 @@ var _metrics = [];
             <%= render partial: "#{params[:graph_type]}_graph", locals: {metric: metric} %>
           <% end %>
         <% end %>
+        <div class="page-break"></div>
       </div>
     <% end %>
   </div>
