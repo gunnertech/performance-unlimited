@@ -44,9 +44,7 @@ class Division < ActiveRecord::Base
     0.upto(biggest_group.users.active.count-1).each do |row|
       grouped_users[row] ||= []
       groups.each_with_index do |group,i|
-        grouped_users[row][i] ||= []
-        grouped_users[row][i].push(users.active.joins{ groups }.where{ groups.id >> group.id }.to_a)
-        grouped_users[row][i].flatten!
+        grouped_users[row][i] = users.active.joins{ groups }.where{ groups.id >> my{group.id} }.to_a
       end
     end
     
