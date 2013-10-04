@@ -9,7 +9,8 @@ class HomeController < ApplicationController
         @survey = @organization.surveys.find(params[:survey_id])
         @division = current_user.default_division
         @groups = @division.groups
-        @grouped_users = @division.grouped_users
+        @biggest_group_count, @total_groups, @user_array = @division.grouped_users
+        # @grouped_users = @division.grouped_users
       elsif params[:division_id]
         @division = @organization.divisions.find(params[:division_id])
       elsif current_user.default_division
@@ -25,7 +26,8 @@ class HomeController < ApplicationController
       
       if @division && @survey.nil?
         @groups = @division.groups
-        @grouped_users = @division.grouped_users
+        # @grouped_users = @division.grouped_users
+        @biggest_group_count, @total_groups, @user_array = @division.grouped_users
         @survey = @division.surveys.where{ active == true }.first
       end
     end

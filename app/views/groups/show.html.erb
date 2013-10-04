@@ -25,6 +25,12 @@
   </div>
 <% end %>
 
+<% if resource.file_contents.present? %>
+  <div class="alert alert-info">
+    Your file is still processing. Please check back in a minute.
+  </div>
+<% end %>
+
 <div class="accordion" id="accordion">
   <div class="accordion-group">
     <div class="accordion-heading">

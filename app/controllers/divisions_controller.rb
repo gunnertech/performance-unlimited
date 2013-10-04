@@ -20,6 +20,23 @@ class DivisionsController < InheritedResources::Base
     response.headers['Content-Disposition'] = "attachment; filename=\"performance-template-#{today}.csv\""
   end
   
+  def upload_performance_data
+    require 'csv'
+    authorize! :create, RecordedMetric
+    
+    if params[:file].content_type.to_s != 'text/csv'
+      flash[:error] = "You can only upload csv files. To save an excel file as csv, just choose 'Save As...' and then pick 'CSV'"
+      redirect_to resource and return false
+    end
+    
+    resource.file_contents = File.read(params[:file].tempfile, mode:'r:ISO-8859-1')
+    resource.recorded_date = params[:recorded_date]
+    resource.save!
+    
+    flash[:notice] = "Your file is processing and will be ready momentarily"
+    redirect_to resource_url(record_date: params[:recorded_date])
+  end
+  
   def dashboard
     authorize! :create, RecordedMetric
     dashboard!

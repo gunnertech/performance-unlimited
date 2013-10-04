@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130921162951) do
+ActiveRecord::Schema.define(:version => 20131004023356) do
 
   create_table "assigned_divisions", :force => true do |t|
     t.integer  "division_id"
@@ -126,6 +126,7 @@ ActiveRecord::Schema.define(:version => 20130921162951) do
     t.datetime "created_at",      :null => false
     t.datetime "updated_at",      :null => false
     t.string   "time_zone"
+    t.text     "file_contents"
   end
 
   add_index "divisions", ["organization_id"], :name => "index_divisions_on_organization_id"
@@ -133,9 +134,10 @@ ActiveRecord::Schema.define(:version => 20130921162951) do
   create_table "groups", :force => true do |t|
     t.string   "name"
     t.integer  "division_id"
-    t.datetime "created_at",  :null => false
-    t.datetime "updated_at",  :null => false
+    t.datetime "created_at",    :null => false
+    t.datetime "updated_at",    :null => false
     t.integer  "position"
+    t.text     "file_contents"
   end
 
   add_index "groups", ["division_id"], :name => "index_groups_on_division_id"

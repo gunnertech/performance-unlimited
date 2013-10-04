@@ -22,6 +22,12 @@
   </div>
 <% end %>
 
+<% if resource.file_contents.present? %>
+  <div class="alert alert-info">
+    Your file is still processing. Please check back in a minute.
+  </div>
+<% end %>
+
 <div class="accordion" id="accordion">
   <div class="accordion-group">
     <div class="accordion-heading">
@@ -34,6 +40,27 @@
     <div id="collapseUsers" class="accordion-collapse collapse in">
       <div class="accordion-body">
         <%= render 'shared/metric_cells' %>
+      </div>
+    </div>
+  </div>
+  
+  <div class="accordion-group">
+    <div class="accordion-heading">
+      <h4 class="accordion-title">
+        <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#groups">
+          <%=t 'groups' %>
+        </a>
+      </h4>
+    </div>
+    <div id="groups" class="accordion-collapse collapse">
+      <div class="accordion-body">
+        <table class="table table-striped">
+          <tbody>
+            <% resource.groups.each do |group| %>
+              <td><%= link_to group, [resource,group] %></td>
+            <% end %>
+          </tbody>
+        </table>
       </div>
     </div>
   </div>

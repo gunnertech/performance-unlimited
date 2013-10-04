@@ -21,19 +21,19 @@
         </tr>
       </thead>
       <tbody>
-        <% @grouped_users.each_with_index do |grouped_user_row,i| %>
+        <% 1.upto(@biggest_group_count).each do |i| %>
           <tr>
-            <% grouped_user_row.each do |grouped_user| %>
+            <% 1.upto(@total_groups).each do |k| %>
               <td>
-                <% if grouped_user[i] %>
-                  <a data-user_id="<%= grouped_user[i].id %>" href="#<%= @survey.assigned_question_sets.first.to_s.parameterize %>" class="user navigate"><%= grouped_user[i] %></a>
+                <% if @user_array[k-1][i-1] %>
+                  <%= link_to @user_array[k-1][i-1], @user_array[k-1][i-1] %>
                 <% else %>
                   &nbsp;
                 <% end %>
               </td>
             <% end %>
           </tr>
-        <% end %>
+         <% end %>
       </tbody>
     </table>
   </section>
