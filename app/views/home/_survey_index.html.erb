@@ -25,7 +25,7 @@
           <tr>
             <% 1.upto(@total_groups).each do |k| %>
               <td>
-                <% if @user_array[k-1][i-1] %>
+                <% if @user_array[k-1] && @user_array[k-1][i-1] %>
                   <%= link_to @user_array[k-1][i-1], @user_array[k-1][i-1] %>
                 <% else %>
                   &nbsp;
