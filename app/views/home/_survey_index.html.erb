@@ -23,17 +23,17 @@
       <tbody>
         <% 1.upto(@biggest_group_count).each do |i| %>
           <tr>
-            <% 1.upto(@total_groups).each do |k| %>
+            <% @group_array.each do |group| %>
               <td>
-                <% if @user_array[k-1] && @user_array[k-1][i-1] %>
-                  <%= link_to @user_array[k-1][i-1], @user_array[k-1][i-1] %>
+                <% if @user_array[group.id] && @user_array[group.id][i-1] %>
+                  <%= link_to @user_array[group.id][i-1], @user_array[group.id][i-1] %>
                 <% else %>
                   &nbsp;
                 <% end %>
               </td>
             <% end %>
           </tr>
-         <% end %>
+        <% end %>
       </tbody>
     </table>
   </section>

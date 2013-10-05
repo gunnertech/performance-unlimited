@@ -34,22 +34,22 @@
            <%= link_to t('take_survey'), root_path(division_id: division.id), class: 'btn  btn-info' if can?(:manage,division) %>
            <%= link_to t('metrics'), [:dashboard,division], class: 'btn  btn-info' if can?(:manage,division) %>
         </div>
+        <% biggest_group_count, total_groups, user_array, group_array = division.grouped_users %>
          <table class="table table-striped">
            <thead>
              <tr>
-               <% division.groups.each do |group| %>
+               <% group_array.each do |group| %>
                  <th><%= link_to group.name, [group.division, group] %></th>
                <% end %>
              </tr>
            </thead>
            <tbody>
-             <% biggest_group_count, total_groups, user_array = division.grouped_users %>
              <% 1.upto(biggest_group_count).each do |i| %>
               <tr>
-                <% 1.upto(total_groups).each do |k| %>
+                <% group_array.each do |group| %>
                   <td>
-                    <% if user_array[k-1] && user_array[k-1][i-1] %>
-                      <%= link_to user_array[k-1][i-1], user_array[k-1][i-1] %>
+                    <% if user_array[group.id] && user_array[group.id][i-1] %>
+                      <%= link_to user_array[group.id][i-1], user_array[group.id][i-1] %>
                     <% else %>
                       &nbsp;
                     <% end %>

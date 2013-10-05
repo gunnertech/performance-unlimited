@@ -118,7 +118,8 @@ class Division < ActiveRecord::Base
   def grouped_users
     
     biggest_group_count = groups.max_by{ |group| group.users.active.count }.users.count
-    [biggest_group_count, groups.count, users.group_by{|user| user.groups.first.id}.values]
+    grouped = users.group_by{|user| user.groups.first.id}
+    [biggest_group_count, groups.count, grouped, Group.find(grouped.keys)]
   end
   
   def set_organization
