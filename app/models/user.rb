@@ -28,6 +28,8 @@ class User < ActiveRecord::Base
   has_many :completed_surveys
   has_many :recorded_metrics
   has_many :metrics, through: :recorded_metrics
+  has_many :assigned_alerts
+  has_many :alerts, through: :assigned_alerts
   
   belongs_to :default_division, class_name: "Division", foreign_key: "division_id"
   

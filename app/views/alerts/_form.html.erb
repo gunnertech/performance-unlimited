@@ -1,0 +1,10 @@
+<%= simple_form_for [parent,resource], :html => { :class => 'form-horizontal' } do |f| %>
+  <%= f.input :alertable_type, as: :hidden, input_html: {value: f.object.alertable_type || @alertable.try(:class).try(:name) } %>
+  <%= f.input :alertable_id, as: :hidden, input_html: {value: f.object.alertable_id || @alertable.try(:id) } %>
+  <%= f.input :message %>
+  <%= f.input :threshold_minimum %>
+  <%= f.input :threshold_maximum %>
+  <div class="form-actions">
+    <%= f.button :submit, :class => 'btn-primary' %>
+  </div>
+<% end %>

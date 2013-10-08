@@ -26,97 +26,193 @@
   </div>
 <% end %>
 
-<section>
-  <h2><%=t 'completed_surveys' %></h2>
-  <table class="table table-striped">
-    <thead>
-      <tr>
-        <th><%=t 'date_taken' %></th>
-        <th><%=t 'name' %></th>
-        <th><%=t 'score' %></th>
-      </tr>
-    </thead>
-    <tbody>
-      <% @completed_surveys.each do |completed_survey| %>
-        <tr>
-          <td><%= completed_survey.date %></td>
-          <td><%= can?(:manage, @user.organizations.first) ? link_to(completed_survey, [@user,completed_survey]) : completed_survey %></td>
-          <td><%= completed_survey.score %></td>
-        </tr>
-      <% end %>
-    </tbody>
-  </table>
-  <%= will_paginate @completed_surveys %>
-</section>
-
-<section class="row-fluid">
-  <div class="span12">
-    <h2><%=t 'last_x_days', number: '5' %></h2>
-    <div class="graph" data-user_id="<%= @user.id %>" data-day_range="5"></div>
+<div class="accordion" id="accordion">
+  <div class="accordion-group">
+    <div class="accordion-heading">
+      <h4 class="accordion-title">
+        <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#alerts">
+          <%=t 'alerts' %>
+        </a>
+      </h4>
+    </div>
+    <div id="alerts" class="accordion-collapse collapse in">
+      <div class="accordion-body">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>Metric</th>
+              <th>Value</th>
+              <th>Date</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <% resource.assigned_alerts.reorder{ date.desc }.each do |aa| %>
+              <tr>
+                <td><%= aa.alert.metric.name %></td>
+                <td><%= aa.recorded_metric.value %></td>
+                <td><%= aa.date %></td>
+                <td><%= aa.alert.message %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
   </div>
-</section>
-
-<section class="row-fluid">  
-  <div class="span12">
-    <h2><%=t 'last_x_days', number: '10' %></h2>
-    <div class="graph" data-user_id="<%= @user.id %>" data-day_range="10"></div>
-  </div>
-</section>
-
-<section class="row-fluid">
-  <div class="span12">
-    <h2><%=t 'last_x_days', number: '15' %></h2>
-    <div class="graph" data-user_id="<%= @user.id %>" data-day_range="15"></div>
-  </div>
-</section>
-
-<section class="row-fluid">  
-  <div class="span12">
-    <h2><%=t 'last_x_days', number: '30' %></h2>
-    <div class="graph" data-user_id="<%= @user.id %>" data-day_range="30"></div>
-  </div>
-</section>
-
-
-<section>
-  <h2><%=t 'metrics' %></h2>
   
-  <table class="table table-striped">
-    <thead>
-      <tr>
-        <th><%=t 'metric' %></th>
-        <th><%=t 'value' %></th>
-        <th><%=t 'recorded_on' %></th>
-      </tr>
-    </thead>
-    <tbody>
-      <% @user.organizations.each do |organization| %>
-        <% organization.metrics.each do |metric| %>
-          <tr>
-            <td><%= metric %></td>
-            <td><%= @user.recorded_metrics.current_for(metric.id).first.try(:value) || 'N/A' %></td>
-            <td><%= @user.recorded_metrics.current_for(metric.id).first.try(:recorded_on) || 'N/A' %></td>
-          </tr>
-        <% end %>
-      <% end %>
-    </tbody>
-  </table>
-</section>
+  <div class="accordion-group">
+    <div class="accordion-heading">
+      <h4 class="accordion-title">
+        <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#completed_surveys">
+          <%=t 'completed_surveys' %>
+        </a>
+      </h4>
+    </div>
+    <div id="completed_surveys" class="accordion-collapse collapse">
+      <div class="accordion-body">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th><%=t 'date_taken' %></th>
+              <th><%=t 'name' %></th>
+              <th><%=t 'score' %></th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @completed_surveys.each do |completed_survey| %>
+              <tr>
+                <td><%= completed_survey.date %></td>
+                <td><%= can?(:manage, @user.organizations.first) ? link_to(completed_survey, [@user,completed_survey]) : completed_survey %></td>
+                <td><%= completed_survey.score %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+        <%= will_paginate @completed_surveys %>
+      </div>
+    </div>
+  </div>
 
-<section>
-  <h3><%= t('groups') %></h3>
-  <table class="table table-striped">
-    <thead>
-      <tr>
-        <th><%=t 'name' %></th>
-      </tr>
-    </thead>
-    <tbody>
-      <% @user.groups.each do |group| %>
-        <tr>
-          <td><%= link_to group.full_name, [group.division, group] %></td>
-        </tr>
-      <% end %>
-    </tbody>
-  </table>
-</section>
+  <div class="accordion-group">
+    <div class="accordion-heading">
+      <h4 class="accordion-title">
+        <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#last_5_days">
+          <%=t 'last_5_days', number: '5' %>
+        </a>
+      </h4>
+    </div>
+    <div id="last_5_days" class="accordion-collapse collapse">
+      <div class="accordion-body">
+        <div class="graph" data-user_id="<%= @user.id %>" data-day_range="5"></div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="accordion-group">
+    <div class="accordion-heading">
+      <h4 class="accordion-title">
+        <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#last_10_days">
+          <%=t 'last_10_days', number: '10' %>
+        </a>
+      </h4>
+    </div>
+    <div id="last_10_days" class="accordion-collapse collapse">
+      <div class="accordion-body">
+        <div class="graph" data-user_id="<%= @user.id %>" data-day_range="10"></div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="accordion-group">
+    <div class="accordion-heading">
+      <h4 class="accordion-title">
+        <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#last_15_days">
+          <%=t 'last_15_days', number: '15' %>
+        </a>
+      </h4>
+    </div>
+    <div id="last_15_days" class="accordion-collapse collapse">
+      <div class="accordion-body">
+        <div class="graph" data-user_id="<%= @user.id %>" data-day_range="15"></div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="accordion-group">
+    <div class="accordion-heading">
+      <h4 class="accordion-title">
+        <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#last_30_days">
+          <%=t 'last_30_days', number: '30' %>
+        </a>
+      </h4>
+    </div>
+    <div id="last_30_days" class="accordion-collapse collapse">
+      <div class="accordion-body">
+        <div class="graph" data-user_id="<%= @user.id %>" data-day_range="30"></div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="accordion-group">
+    <div class="accordion-heading">
+      <h4 class="accordion-title">
+        <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#metrics">
+          <%=t 'metrics' %>
+        </a>
+      </h4>
+    </div>
+    <div id="metrics" class="accordion-collapse collapse">
+      <div class="accordion-body">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th><%=t 'metric' %></th>
+              <th><%=t 'value' %></th>
+              <th><%=t 'recorded_on' %></th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @user.organizations.each do |organization| %>
+              <% organization.metrics.each do |metric| %>
+                <tr>
+                  <td><%= metric %></td>
+                  <td><%= @user.recorded_metrics.current_for(metric.id).first.try(:value) || 'N/A' %></td>
+                  <td><%= @user.recorded_metrics.current_for(metric.id).first.try(:recorded_on) || 'N/A' %></td>
+                </tr>
+              <% end %>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  
+  <div class="accordion-group">
+    <div class="accordion-heading">
+      <h4 class="accordion-title">
+        <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#groups">
+          <%=t 'groups' %>
+        </a>
+      </h4>
+    </div>
+    <div id="groups" class="accordion-collapse collapse">
+      <div class="accordion-body">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th><%=t 'name' %></th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @user.groups.each do |group| %>
+              <tr>
+                <td><%= link_to group.full_name, [group.division, group] %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

@@ -44,6 +44,7 @@ update_bar_charts = ->
   
   $('#taken option').each( ->
     _user_data = []
+    
     $.ajax("/users/#{$(this).attr('value')}/recorded_metrics?most_recent=true",
       dataType: 'json'
     ).done( (data) -> 
@@ -142,7 +143,6 @@ update_line_charts = ->
         )
       catch e
         #nothing
-      
       
       
       $('#taken option').each( ->
@@ -368,6 +368,21 @@ $(->
       location.href = "?taken_users=#{$.makeArray($('#taken option').map(-> $(this).attr('value'))).join(",")}&graph_type=#{$('#graph-type').val()}"
       return false
     
+    $('#player-alerts').empty()
+    $('#taken option').each( ->
+      $.ajax("/users/#{$(this).attr('value')}/assigned_alerts",
+        dataType: 'json'
+      ).done( (data) ->
+        if data.length
+          html = "<div class=\"alert alert-error\"><h5>#{data[0].user.name}</h5><table class=\"table table-striped\"><thead><tr><th>Metric</th><th>Value</th><th>On</th><th></th></tr></thead><tbody>"
+          $.map(data, (item,i) -> 
+            html = "#{html}<tr><td>#{item.metric.name}</td><td>#{item.recorded_metric.value}</td><td>#{item.recorded_metric.recorded_on}</td><td>#{item.alert.message}</td></tr>"
+          )
+          html = "#{html}</tbody></table></div>"
+          $('#player-alerts').append(html)
+      )
+    )
+      
     if $('#graph-type').val() == 'line'
       update_line_charts()
     else if $('#graph-type').val() == 'bar'

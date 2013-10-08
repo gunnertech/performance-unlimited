@@ -1,0 +1,33 @@
+<%- model_class = Alert -%>
+<div class="page-header">
+  <h1><%=t '.title', :default => model_class.model_name.human.titleize %></h1>
+</div>
+
+<dl class="dl-horizontal">
+  <dt><strong><%= model_class.human_attribute_name(:alertable_type) %>:</strong></dt>
+  <dd><%= @alert.alertable_type %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:alertable_id) %>:</strong></dt>
+  <dd><%= @alert.alertable_id %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:message) %>:</strong></dt>
+  <dd><%= @alert.message %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:metric_id) %>:</strong></dt>
+  <dd><%= @alert.metric_id %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:date) %>:</strong></dt>
+  <dd><%= @alert.date %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:threshold_minimum) %>:</strong></dt>
+  <dd><%= @alert.threshold_minimum %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:threshold_maximum) %>:</strong></dt>
+  <dd><%= @alert.threshold_maximum %></dd>
+</dl>
+
+<div class="form-actions">
+  <%= link_to t('.back', :default => t("helpers.links.back")),
+              alerts_path, :class => 'btn'  %>
+  <%= link_to t('.edit', :default => t("helpers.links.edit")),
+              edit_alert_path(@alert), :class => 'btn' %>
+  <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
+              alert_path(@alert),
+              :method => 'delete',
+              :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) },
+              :class => 'btn btn-danger' %>
+</div>

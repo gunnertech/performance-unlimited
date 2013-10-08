@@ -20,6 +20,12 @@ class Ability
       can :create, User
       can :manage, RecordedMetric,        :id => Organization.with_role('admin', user).joins{ recorded_metrics }.pluck('recorded_metrics.id')
       can :create, RecordedMetric
+      can :manage, Metric,                :id => Organization.with_role('admin', user).joins{ metrics }.pluck('metrics.id')
+      can :create, Metric
+      can :manage, Alert,                 :id => Organization.with_role('admin', user).map(&:alerts).flatten.map(&:id)
+      can :create, Alert
+      can :manage, AssignedAlert,         :id => Organization.with_role('admin', user).joins{ assigned_alerts }.pluck('assigned_alerts.id')
+      can :create, AssignedAlert
       can :manage, Organization,          :id => Organization.with_role('admin', user).pluck('organizations.id')
       can :manage, Survey,                :id => Organization.with_role('admin', user).joins{ surveys }.pluck('surveys.id')
       can :create, Survey

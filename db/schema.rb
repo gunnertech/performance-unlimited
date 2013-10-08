@@ -11,7 +11,35 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131004023356) do
+ActiveRecord::Schema.define(:version => 20131007235511) do
+
+  create_table "alerts", :force => true do |t|
+    t.string   "alertable_type"
+    t.integer  "alertable_id"
+    t.string   "message"
+    t.integer  "metric_id"
+    t.float    "threshold_minimum"
+    t.float    "threshold_maximum"
+    t.datetime "created_at",        :null => false
+    t.datetime "updated_at",        :null => false
+  end
+
+  add_index "alerts", ["alertable_id", "alertable_type"], :name => "index_alerts_on_alertable_id_and_alertable_type"
+  add_index "alerts", ["metric_id"], :name => "index_alerts_on_metric_id"
+
+  create_table "assigned_alerts", :force => true do |t|
+    t.integer  "user_id"
+    t.integer  "alert_id"
+    t.integer  "recorded_metric_id"
+    t.date     "date"
+    t.boolean  "cleared"
+    t.datetime "created_at",         :null => false
+    t.datetime "updated_at",         :null => false
+  end
+
+  add_index "assigned_alerts", ["alert_id"], :name => "index_assigned_alerts_on_alert_id"
+  add_index "assigned_alerts", ["recorded_metric_id"], :name => "index_assigned_alerts_on_recorded_metric_id"
+  add_index "assigned_alerts", ["user_id"], :name => "index_assigned_alerts_on_user_id"
 
   create_table "assigned_divisions", :force => true do |t|
     t.integer  "division_id"

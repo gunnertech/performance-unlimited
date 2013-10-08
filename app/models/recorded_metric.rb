@@ -2,7 +2,9 @@ class RecordedMetric < ActiveRecord::Base
   belongs_to :user
   belongs_to :metric
   has_one :metric_type, through: :metric
+  has_one :alert, through: :metric
   has_many :organizations, through: :user
+  has_many :assigned_alerts
   
   attr_accessible :recorded_on, :value, :user, :user_id, :metric, :metric_id
   
@@ -12,10 +14,25 @@ class RecordedMetric < ActiveRecord::Base
   validates :recorded_on, presence: true
   
   before_validation :set_numerical_value
+  after_save :create_alerts
   
   class << self
     def current_for(metric_id)
       joins{ metric }.order{ recorded_on.desc }.where{ metric.id == metric_id }.limit(1)
+    end
+  end
+  
+  def create_alerts
+    organizations.each do |organization|
+      organization.alerts.where{ metric_id == my{ metric.id }}.each do |alert|
+        if numerical_value <= alert.threshold_maximum && numerical_value >= alert.threshold_minimum
+          assigned_alert = user.assigned_alerts.build
+          assigned_alert.alert = alert
+          assigned_alert.recorded_metric = self
+          assigned_alert.date = recorded_on
+          assigned_alert.save
+        end
+      end
     end
   end
   

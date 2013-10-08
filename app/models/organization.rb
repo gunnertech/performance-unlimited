@@ -18,6 +18,8 @@ class Organization < ActiveRecord::Base
   has_many :mapped_domains
   has_many :recorded_metrics, through: :users
   has_many :groups, through: :divisions
+  has_many :alerts, as: :alertable
+  has_many :assigned_alerts, through: :recorded_metrics
   
   has_many :responses, through: :questions
   

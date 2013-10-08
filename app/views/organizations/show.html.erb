@@ -145,7 +145,6 @@
               <tr>
                 <th><%= model_class.human_attribute_name(:name) %></th>
                 <th><%= model_class.human_attribute_name(:metric_type_id) %></th>
-                <th><%= model_class.human_attribute_name(:decimal_places) %></th>
                 <th><%=t '.actions', :default => t("helpers.actions") %></th>
               </tr>
             </thead>
@@ -154,7 +153,6 @@
                 <tr>
                   <td><%= link_to metric, organization_metric_path(@organization,metric) %></td>
                   <td><%= metric.metric_type %></td>
-                  <td><%= metric.decimal_places %></td>
                   <td>
                     <%= link_to t('.edit', :default => t("helpers.links.edit")),
                                 edit_organization_metric_path(@organization,metric), :class => 'btn btn-mini' %>

@@ -1,5 +1,6 @@
 PerformanceUnlimited::Application.routes.draw do
 
+
   resources :metric_types
 
   match '/auth/:provider/callback', to: 'organizations#add_authentication'
@@ -90,7 +91,12 @@ PerformanceUnlimited::Application.routes.draw do
     end
   end
   
+  resources :metrics, only: [] do
+    resources :alerts
+  end
+  
   resources :users, only: [:show,:update,:create] do
+    resources :assigned_alerts
     resources :assigned_divisions
     resources :completed_surveys
     resources :assigned_groups
