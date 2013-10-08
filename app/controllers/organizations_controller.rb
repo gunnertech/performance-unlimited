@@ -26,8 +26,8 @@ class OrganizationsController < InheritedResources::Base
     require 'csv'
     authorize! :create, RecordedMetric
     
-    if params[:file].content_type.to_s != 'text/csv'
-      flash[:error] = "You can only upload csv files. To save an excel file as csv, just choose 'Save As...' and then pick 'CSV'"
+    if !params[:file].content_type.match(/csv/) && !params[:file].content_type.match(/comma/)
+      flash[:error] = "You tried to upload a #{params[:file].content_type} file. You can only upload csv files. To save an excel file as csv, just choose 'Save As...' and then pick 'CSV'"
       redirect_to resource and return false
     end
     
