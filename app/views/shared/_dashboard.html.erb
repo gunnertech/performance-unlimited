@@ -135,11 +135,13 @@ var _metric_ids = [];
               <%= f.button :submit, :class => 'btn-primary', value: "Submit" %>
             <% end %>
             <div class="messages">
-              <% single_user.comments.where{ metric_id == my{metric.id}}.reorder{ id.desc }.each do |comment| %>
-                <blockquote>
-                  <p><%= comment.body %></p>
-                  <small><%= comment.commenter %> <cite><%= comment.created_at.to_date %></cite></small>
-                </blockquote>
+              <% if single_user %>
+                <% single_user.comments.where{ metric_id == my{metric.id}}.reorder{ id.desc }.each do |comment| %>
+                  <blockquote>
+                    <p><%= comment.body %></p>
+                    <small><%= comment.commenter %> <cite><%= comment.created_at.to_date %></cite></small>
+                  </blockquote>
+                <% end %>
               <% end %>
             </div>
           </div>
