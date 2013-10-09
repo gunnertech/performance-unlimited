@@ -127,9 +127,10 @@ var _metric_ids = [];
           <% end %>
           <% single_user = User.find((params[:taken_users]||"").split(",").first) if (params[:taken_users]||"").split(",").length == 1 %>
           <div class="comments" id="<%= metric.name.parameterize %>-comments" style="<%= single_user ? 'display:block;' : 'display:none;' %>">
-            <%= simple_form_for [single_user, Comment.new], url: user_comments_path(single_user,format: :json), remote: true, :html => { :class => 'form-inline' } do |f| %>
+            <%= simple_form_for Comment.new, url: comments_path(format: :json), remote: true, :html => { :class => 'form-inline' } do |f| %>
               <%= f.input :body, as: :string, placeholder: "Comment on #{single_user}...", label: false %>
               <%= f.input :by_user_id, as: :hidden, input_html: {value: current_user.id} %>
+              <%= f.input :for_user_id, as: :hidden, input_html: {value: single_user.try(:id)} %>
               <%= f.input :metric_id, as: :hidden, input_html: {value: metric.id} %>
               <%= f.button :submit, :class => 'btn-primary', value: "Submit" %>
             <% end %>

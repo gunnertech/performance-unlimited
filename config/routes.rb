@@ -95,6 +95,8 @@ PerformanceUnlimited::Application.routes.draw do
     resources :alerts
   end
   
+  resources :comments, only: [:create]
+  
   resources :users, only: [:show,:update,:create] do
     resources :comments
     resources :assigned_alerts

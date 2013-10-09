@@ -1,5 +1,5 @@
 class CommentsController < InheritedResources::Base
-  belongs_to :user
+  belongs_to :user, optional: true
   respond_to :json
   
   protected
