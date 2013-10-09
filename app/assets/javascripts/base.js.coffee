@@ -10,11 +10,10 @@ clone = (obj) ->
   temp
 
 update_comments = ->
-  $.each(window['_metric_ids'],(i,hash) ->
-    $("##{hash.key.replace(/_/g,"-")}-comments .messages").empty()
-    
-    if $('#taken option').length == 1
-    
+  if $('#taken option').length == 1
+    $(".comments").show()
+    $.each(window['_metric_ids'],(i,hash) ->
+      $("##{hash.key.replace(/_/g,"-")}-comments .messages").empty()    
       $('#taken option').each( ->
 
         $.ajax("/users/#{$(this).attr('value')}/comments?metric_id=#{hash.id}",
@@ -26,7 +25,7 @@ update_comments = ->
           )
         )
       )
-  )
+    )
 
 update_bar_charts = ->
   update_comments()
