@@ -20,6 +20,7 @@ class Organization < ActiveRecord::Base
   has_many :groups, through: :divisions
   has_many :alerts, as: :alertable
   has_many :assigned_alerts, through: :recorded_metrics
+  has_many :comments, through: :metrics
   
   has_many :responses, through: :questions
   

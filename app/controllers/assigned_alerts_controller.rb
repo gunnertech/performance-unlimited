@@ -3,6 +3,8 @@ class AssignedAlertsController < InheritedResources::Base
   
   respond_to :json
   
+  protected
+  
   def collection
     return @assigned_alerts if @assigned_alerts
     

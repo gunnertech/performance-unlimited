@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131007235511) do
+ActiveRecord::Schema.define(:version => 20131008213535) do
 
   create_table "alerts", :force => true do |t|
     t.string   "alertable_type"
@@ -119,6 +119,19 @@ ActiveRecord::Schema.define(:version => 20131007235511) do
 
   add_index "authentications", ["authenticationable_id", "authenticationable_type"], :name => "a_id_and_a_type_on_authenticiations"
   add_index "authentications", ["authenticationable_type", "authenticationable_id"], :name => "a_type_and_a_id_on_authenticiations"
+
+  create_table "comments", :force => true do |t|
+    t.integer  "by_user_id"
+    t.integer  "for_user_id"
+    t.text     "body"
+    t.integer  "metric_id"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
+  end
+
+  add_index "comments", ["by_user_id"], :name => "index_comments_on_by_user_id"
+  add_index "comments", ["for_user_id"], :name => "index_comments_on_for_user_id"
+  add_index "comments", ["metric_id"], :name => "index_comments_on_metric_id"
 
   create_table "completed_surveys", :force => true do |t|
     t.date     "date"

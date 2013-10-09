@@ -62,6 +62,7 @@
 <% groups_of = 3 %>
 <script>
 var _metrics = [];
+var _metric_ids = [];
 </script>
 
 <% if @focus_metric.present? %>
@@ -124,8 +125,27 @@ var _metrics = [];
           <% else %>
             <%= render partial: "shared/#{params[:graph_type]}_graph", locals: {metric: metric} %>
           <% end %>
+          <div class="comments" id="<%= metric.name.parameterize %>-comments">
+            <% if (params[:taken_users]||"").split(",").length == 1 %>
+              <% single_user = User.find((params[:taken_users]||"").split(",").first) %>
+              <%= simple_form_for [single_user, Comment.new], url: user_comments_path(single_user,format: :json), remote: true, :html => { :class => 'form-inline' } do |f| %>
+                <%= f.input :body, as: :string, placeholder: "Comment on #{single_user}...", label: false %>
+                <%= f.input :by_user_id, as: :hidden, input_html: {value: current_user.id} %>
+                <%= f.input :metric_id, as: :hidden, input_html: {value: metric.id} %>
+                <%= f.button :submit, :class => 'btn-primary', value: "Submit" %>
+              <% end %>
+              <div class="messages">
+                <% single_user.comments.where{ metric_id == my{metric.id}}.reorder{ id.desc }.each do |comment| %>
+                  <blockquote>
+                    <p><%= comment.body %></p>
+                    <small><%= comment.commenter %> <cite><%= comment.created_at.to_date %></cite></small>
+                  </blockquote>
+                <% end %>
+              </div>
+            <% end %>
+          </div>
+          <div class="page-break"></div>
         <% end %>
-        <div class="page-break"></div>
       </div>
     <% end %>
   </div>

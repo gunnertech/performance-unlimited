@@ -30,6 +30,8 @@ class User < ActiveRecord::Base
   has_many :metrics, through: :recorded_metrics
   has_many :assigned_alerts
   has_many :alerts, through: :assigned_alerts
+  has_many :left_comments, class_name: "Comment", foreign_key: "by_user_id"
+  has_many :comments, class_name: "Comment", foreign_key: "for_user_id"
   
   belongs_to :default_division, class_name: "Division", foreign_key: "division_id"
   

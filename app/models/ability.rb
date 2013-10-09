@@ -39,6 +39,8 @@ class Ability
       can :create, Response
       can :manage, Response,              :id => Organization.with_role('admin', user).joins{ responses }.pluck('responses.id')
       can :create, Group
+      can :manage, Comment,               :id => Organization.with_role('admin', user).joins{ comments }.pluck('comments.id')
+      can :create, Comment
       can :manage, Group,                 :id => Organization.with_role('admin', user).joins{ groups }.pluck('groups.id')
       can :create, Authentication
       can :manage, Authentication,        :id => Organization.with_role('admin', user).joins{ authentications }.pluck('authentications.id')

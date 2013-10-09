@@ -96,6 +96,7 @@ PerformanceUnlimited::Application.routes.draw do
   end
   
   resources :users, only: [:show,:update,:create] do
+    resources :comments
     resources :assigned_alerts
     resources :assigned_divisions
     resources :completed_surveys

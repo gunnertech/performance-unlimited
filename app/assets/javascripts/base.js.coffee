@@ -8,9 +8,31 @@ clone = (obj) ->
   for key of obj
     temp[key] = clone(obj[key])
   temp
-  
+
+update_comments = ->
+  $.each(window['_metric_ids'],(i,hash) ->
+    $("##{hash.key.replace(/_/g,"-")}-comments .messages").empty()
+    
+    if $('#taken option').length == 1
+    
+      $('#taken option').each( ->
+
+        $.ajax("/users/#{$(this).attr('value')}/comments?metric_id=#{hash.id}",
+          dataType: 'json'
+        ).done( (items) ->
+          $.each(items, (i,data) ->
+            html = "<blockquote><p>#{data.body}</p><small>#{data.commenter.name} <cite>#{data.left_on}</cite></small></blockquote>"
+            $("##{hash.key.replace(/_/g,"-")}-comments .messages").prepend($(html))
+          )
+        )
+      )
+  )
+
 update_bar_charts = ->
+  update_comments()
+  
   $.each(window['_metrics'],(i,key) ->
+    
     window["_#{key}_data"] = window["_#{key}_data_orig"].slice(0)
     window["_#{key}_labels"] = window["_#{key}_labels_orig"].slice(0)
     # try
@@ -29,20 +51,10 @@ update_bar_charts = ->
             ticks: window["_#{key}_labels"]
           highlighter: { show: false }
       )
-      # $.each(graph.series, (k,series) ->
-      #   graph.replot(
-      #     data: [window["_#{key}_data_orig"]]
-      #     axes: 
-      #       xaxis:
-      #         ticks: window["_#{key}_labels_orig"]
-      #   )
-      # )
-    # catch e
-    #   console.log(e)
-    #   #nothing
   )
   
   $('#taken option').each( ->
+    
     _user_data = []
     
     $.ajax("/users/#{$(this).attr('value')}/recorded_metrics?most_recent=true",
@@ -51,24 +63,7 @@ update_bar_charts = ->
       user_id = if data.length then data[0].user.id else null
       name = if data.length then data[0].user.name else null
       window['dynamically_added'] = window['dynamically_added'] || {}
-      # 
-      # if window['dynamically_added'][user_id]
-      #   $.each(window['_metrics'],(i,key) ->
-      #     try
-      #       graph = window.graphs["_#{key}"]
-      #       $.each(graph.series, (i,item) ->
-      #         if i > 0
-      #           series.show = true
-      #           graph.replot()
-      #       )
-      #       
-      #     catch e
-      #       #nothing
-      # 
-      #   )
-      #   return true
-      # 
-      # window['dynamically_added'][user_id] = {}
+
 
       grouped_arr = _.groupBy(data, (item, key) -> 
         return item.metric.name
@@ -115,6 +110,8 @@ update_bar_charts = ->
   )
   
 update_line_charts = ->
+  update_comments()
+  
   start_date_pieces = $('#start-date').val().split('/')
   end_date_pieces = $('#end-date').val().split('/')
   
@@ -125,6 +122,7 @@ update_line_charts = ->
     dataType: 'script'
   ).done( ->
     $.each(window['_metrics'],(i,key) ->
+      
       try
         graph = window.graphs["_#{key}"]
         $.each(graph.series, (k,series) ->
@@ -302,6 +300,10 @@ $('.btn-print').live('click', (event) ->
   window.print()
 )
 
+$(document).on("ajax:success",".comments form", (evt, data, status, xhr) ->
+  html = "<blockquote><p>#{data.body}</p><small>#{data.commenter.name} <cite>#{data.left_on}</cite></small></blockquote>"
+  $(evt.currentTarget).parents('.comments').find('.messages').prepend($(html))
+)
 
 $(->
   

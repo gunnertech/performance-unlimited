@@ -3,7 +3,8 @@
 
 <% all_metrics = resource.recorded_metrics.reorder{ recorded_on.asc }.where{ recorded_on >> my{params[:start_date]..params[:end_date]}}.where{ metric_id == my{metric.id} } %>
 <% dates = all_metrics.pluck('recorded_on').uniq %>
- _metrics.push('<%= metric.name.parameterize.underscore %>');
+_metrics.push('<%= metric.name.parameterize.underscore %>');
+_metric_ids.push({id: '<%= metric.id %>', key: '<%= metric.name.parameterize.underscore %>'});
 var _<%= metric.name.parameterize.underscore %>_data = [[
   <%- dates.each do |date| %>
     <%= i > 0 ? "," : "" %><%= "['#{date.strftime('%Y-%m-%d')}',#{all_metrics.where{ recorded_on == my{date} }.average(:numerical_value)}]".html_safe %>
