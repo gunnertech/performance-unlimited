@@ -15,7 +15,7 @@ update_comments = ->
     $.each(window['_metric_ids'],(i,hash) ->
       $("##{hash.key.replace(/_/g,"-")}-comments .messages").empty()    
       $('#taken option').each( ->
-        $("##{hash.key.replace(/_/g,"-")}-comments .messages #comment_for_user_id").val($(this).attr('value'))
+        $("##{hash.key.replace(/_/g,"-")}-comments #comment_for_user_id").val($(this).attr('value'))
         $.ajax("/users/#{$(this).attr('value')}/comments?metric_id=#{hash.id}",
           dataType: 'json'
         ).done( (items) ->
