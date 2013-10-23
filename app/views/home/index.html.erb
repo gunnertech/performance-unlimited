@@ -1,1 +1,76 @@
-<%= render partial: "#{@division.nil? ? 'divisions' : @survey.nil? ? 'no_survey' : 'survey'}_index" %>
+<div class="row-fluid">
+  <div class="span6">
+    <h2>My Links</h2>
+    <ul class="unstyled">
+      <% organizations_listed = [] %>
+      <% divisions_listed = [] %>
+      <% groups_listed = [] %>
+      <% Group.where{ id >> my{Organization.with_role('admin', current_user).joins{ groups }.pluck('groups.id')}}.each do |group| %>
+        <li>
+          <ul>
+            <% if !organizations_listed.include?(group.organization) %>
+              <% if can?(:update, group.organization) %>
+                <% organizations_listed.push(group.organization) %>
+                <li><strong><%= group.organization %></strong></li>
+                <li>
+                  <%= link_to 'Admin', group.organization %>
+                </li>
+                <li>
+                  <%= link_to 'Dashboard', [:dashboard, group.organization] %>
+                </li>
+              <% end %>
+              <% group.organization.divisions.each do |division| %>
+                <% if !divisions_listed.include?(divisions_listed) %>
+                  <% if can?(:update, division) %>
+                    <% divisions_listed.push(division) %>
+                    <li><strong><%= division %></strong></li>
+                    <li>
+                      <%= link_to 'Admin', division %>
+                    </li>
+                    <li>
+                      <%= link_to 'Dashboard', [:dashboard, division] %>
+                    </li>
+                  <% end %>
+                  <% division.groups.each do |group| %>
+                    <% if !groups_listed.include?(group) %>
+                      <% groups_listed.push(group) %>
+                      <li><strong><%= group %></strong></li>
+                      <li>
+                        <%= link_to 'Admin', group %>
+                      </li>
+                      <li>
+                        <%= link_to 'Dashboard', [:dashboard, group] %>
+                      </li>
+                    <% end %>
+                  <% end %>
+                <% end %>
+              <% end %>
+            <% end %>
+          </ul>
+        </li>
+      <% end %>
+    </ul>
+  </div>
+  <div class="span6">
+    <h2>Recent Activity</h2>
+    <% Comment.where{ (created_at > my{current_user.last_sign_in_at}) & (for_user_id >> my{current_user.users.pluck('users.id')})}.each do |comment| %>
+      <blockquote><p><%= comment.body %></p> <small><%= comment.commenter.name %> on <%= comment.user %> <cite><%= comment.left_on %></cite></small></blockquote>
+    <% end %>
+  </div>
+</div>
+
+
+<div class="row-fluid">
+  <div class="span6">
+    <h2>Surveys</h2>
+    <%= render partial: "#{@division.nil? ? 'divisions' : @survey.nil? ? 'no_survey' : 'survey'}_index" %>
+  </div>
+  <div class="span6">
+    <h2>Recent Alerts</h2>
+    <% AssignedAlert.where{ (created_at > my{current_user.last_sign_in_at}) & (user_id >> my{current_user.users.pluck('users.id')})}.each do |assigned_alert| %>
+      <blockquote><p><span class="label label-important"><%= assigned_alert.alert.metric %></span> <%= assigned_alert.alert.message %></p> <small><%= assigned_alert.user %> <cite><%= assigned_alert.created_at.to_date %></cite></small></blockquote>
+    <% end %>
+  </div>
+</div>
+
+

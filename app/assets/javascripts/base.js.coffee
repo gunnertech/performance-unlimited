@@ -31,25 +31,24 @@ update_bar_charts = ->
   update_comments()
   
   $.each(window['_metrics'],(i,key) ->
-    
-    window["_#{key}_data"] = window["_#{key}_data_orig"].slice(0)
-    window["_#{key}_labels"] = window["_#{key}_labels_orig"].slice(0)
-    # try
+    window["_#{key}_data"] = if window['averages_off'] then window["_#{key}_data_orig"].slice(1) else window["_#{key}_data_orig"].slice(0)
+    window["_#{key}_labels"] = if window['averages_off'] then window["_#{key}_labels_orig"].slice(1) else window["_#{key}_labels_orig"].slice(0)
     graph = window.graphs["_#{key}"]
     if graph
       id = $(graph.targetId).attr('id')
       graph.destroy()
-      $.jqplot(id, [window["_#{key}_data"]],
-        animate: !$.jqplot.use_excanvas
-        seriesDefaults:
-          renderer:$.jqplot.BarRenderer
-          pointLabels: { show: true }
-        axes:
-          xaxis:
-            renderer: $.jqplot.CategoryAxisRenderer
-            ticks: window["_#{key}_labels"]
-          highlighter: { show: false }
-      )
+      if window["_#{key}_data"].length
+        $.jqplot(id, [window["_#{key}_data"]],
+          animate: !$.jqplot.use_excanvas
+          seriesDefaults:
+            renderer:$.jqplot.BarRenderer
+            pointLabels: { show: true }
+          axes:
+            xaxis:
+              renderer: $.jqplot.CategoryAxisRenderer
+              ticks: window["_#{key}_labels"]
+            highlighter: { show: false }
+        )
   )
   
   $('#taken option').each( ->
@@ -95,14 +94,6 @@ update_bar_charts = ->
                 ticks: window["#{dk}_labels"]
               highlighter: { show: false }
           )
-          # 
-          # 
-          # graph.replot(
-          #   data: [window["#{dk}_data"]]
-          #   axes: 
-          #     xaxis:
-          #       ticks: window["#{dk}_labels"]
-          # )
         return false
       )
     )
@@ -125,9 +116,10 @@ update_line_charts = ->
       try
         graph = window.graphs["_#{key}"]
         $.each(graph.series, (k,series) ->
-          if k > 0
+          if !series.label.match(/Average/)
             graph.series[k].show = false
             graph.replot()
+            
           else
             graph.replot(
               data: window["_#{key}_data"]
@@ -137,11 +129,14 @@ update_line_charts = ->
                   min: converted_start_date
                   max: converted_end_date
             )
+            
+            graph.series[0].show = !window['averages_off']
+            graph.replot()
         )
       catch e
         #nothing
       
-      
+      window['dynamically_added'] = {}
       $('#taken option').each( ->
         _user_data = []
         $.ajax("/users/#{$(this).attr('value')}/recorded_metrics?start_date=#{$('#start-date').val()}&end_date=#{$('#end-date').val()}",
@@ -149,6 +144,7 @@ update_line_charts = ->
         ).done( (data) -> 
           user_id = if data.length then data[0].user.id else null
           name = if data.length then data[0].user.name else null
+          
           window['dynamically_added'] = window['dynamically_added'] || {}
 
           # return if window['dynamically_added'][user_id]
@@ -158,7 +154,7 @@ update_line_charts = ->
               try
                 graph = window.graphs["_#{key}"]
                 $.each(graph.series, (i,item) ->
-                  if i > 0
+                  if !item.match(/Average/)
                     series.show = true
                     graph.replot()
                 )
@@ -185,10 +181,13 @@ update_line_charts = ->
             graph = window.graphs["_#{key.toLowerCase().replace(/\W/,"_")}"]
             if graph
               dk = "_#{key.toLowerCase().replace(/\W/,"_")}"
+              
               window["#{dk}_data"].push(data)
-              window["#{dk}_labels"].push({
-                label: name
-              })
+              if(!_.find(window["#{dk}_labels"],(item) -> item.label == name))
+                window["#{dk}_labels"].push({
+                  label: name
+                })
+                
               window['dynamically_added'][user_id] = {
                 label: {
                   label: name
@@ -196,11 +195,17 @@ update_line_charts = ->
                 data: data
                 index: window["#{dk}_data"].length - 1
               }
+              
+              
               graph.replot(
                 data: window["#{dk}_data"]
                 series: window["#{dk}_labels"]
               )
+              
+              graph.series[0].show = !window['averages_off']
+              graph.replot()
           )
+          
         )
       )
     )
@@ -213,7 +218,6 @@ plot_line_chart = (graph_element) ->
   if !window[$(graph_element).data('variable-name')]
     return;
   try
-    console.log(window["#{$(graph_element).data('variable-name')}_is_focus"])
     placement = if window["#{$(graph_element).data('variable-name')}_is_focus"] then 'outside' else 'inside'
     g = $.jqplot($(graph_element).attr("id"), window["#{$(graph_element).data('variable-name')}_data"], {
       # seriesColors: ["rgba(78, 135, 194, 0.7)", "rgb(211, 235, 59)"]
@@ -266,6 +270,8 @@ plot_line_chart = (graph_element) ->
             showMark: false
     });
     window.graphs[$(graph_element).data('variable-name')] = g
+    window.graph_arr = window.graph_arr || []
+    window.graph_arr.push(g)
   catch e
     console.log(e)
 
@@ -304,20 +310,38 @@ $(document).on("ajax:success",".comments form", (evt, data, status, xhr) ->
   $(evt.currentTarget).parents('.comments').find('.messages').prepend($(html))
 )
 
+$(document).on("click",".scroll-pane tbody tr *", (evt) ->
+  console.log($(this).parents('tr'))
+  $(this).parents('tbody').find('tr').removeClass('highlighted')
+  $(this).parents('tr').addClass('highlighted')
+)
+
+# $(document).on("click",".scroll-pane tbody tr", (evt) ->
+#   console.log('hi')
+#   $(this).parents('tbody').find('tr').removeClass('highlighted')
+#   $(this).addClass('highlighted')
+# )
+
+
+
 $(->
   
-  # $('.graph-holder h4 a').click( (event) ->
-  #   event.preventDefault()
-  #   $clone = $(this).parents('.graph-holder').find(".graph").remove()
-  #   console.log($clone)
-  #   $('#focus-graph').show().find('#chart-target').empty().append($clone)
-  #   $clone.height($('#chart-target').height()*0.96);
-  #   $clone.width($('#chart-target').width()*0.96);
-  #   setTimeout(->
-  #     window.graphs[$clone.data('variable-name')].replot({ resetAxes:true })
-  #   ,2000)
-  #   
-  # )
+  $('.toggle-averages-off').click( (event) -> 
+    window['redraw'] = true
+    $(this).addClass('active')
+    $('.toggle-averages-on').removeClass('active')
+    event.preventDefault()
+    window['averages_off'] = true
+  )
+  
+  $('.toggle-averages-on').click( (event) -> 
+    window['redraw'] = true
+    $(this).addClass('active')
+    $('.toggle-averages-off').removeClass('active')
+    event.preventDefault()
+    window['averages_off'] = false
+  )
+  
   
   $('#record-date').change( -> 
     $('#recorded_date').val($('#record-date').val())

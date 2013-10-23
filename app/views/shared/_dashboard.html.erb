@@ -1,4 +1,4 @@
-<form id="entity" data-variable="organization_id" data-value="<%= resource.id %>" action="" class="no-print">
+<form id="entity" data-variable="<%= controller_name.singularize %>_id" data-value="<%= resource.id %>" action="" class="no-print">
   <div class="row-fluid">
     <div class="span2">
       <select multiple id="available" size="7" style="width: 100%;">
@@ -45,11 +45,26 @@
         <option value="table" <%= params[:graph_type] == 'table' ? 'selected="selected"' : '' %>>Notes</option>
         <option value="raw"   <%= params[:graph_type] == 'raw'   ? 'selected="selected"' : '' %>>Raw</option>
       </select>
+      
+      <br />
+      Averages:
+      <br />
+      <div class="btn-group">
+        <a href="" class="toggle-averages-on btn<%= params[:hide_averages].blank? ? ' active' : '' %>">On</a>
+        <a href="" class="toggle-averages-off btn<%= params[:hide_averages].present? ? ' active' : '' %>">Off</a>
+      </div>
     </div>
     
+    <% if params[:hide_averages].present? %>
+      <script>
+        window['hide_averages'] = true;
+      </script>
+    <% end %>
+    
     <div class="span2">
-      <br><br>
+      <br>
       <a href="" class="graph-btn btn-large btn-block btn btn-success">Update</a>
+      <br />
       <a href="" class="print-btn btn-large btn-block btn btn-success">Print</a>
     </div>
     
@@ -87,7 +102,7 @@ var _metric_ids = [];
           </tbody>
         </table>
       <% else %>
-        <%= render partial: "#{params[:graph_type]}_graph", locals: {metric: @focus_metric} %>
+        <%= render partial: "shared/#{params[:graph_type]}_graph", locals: {metric: @focus_metric} %>
       <% end %>
     </div>
     <div class="span2"></div>

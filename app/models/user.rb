@@ -49,6 +49,11 @@ class User < ActiveRecord::Base
     def active
       where{ active == true }
     end
+    
+  end
+  
+  def users
+    User.where{ id >> my{Organization.with_role('admin', self).joins{ users }.pluck('users.id')} }
   end
   
   def reverse_name

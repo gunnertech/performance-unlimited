@@ -44,11 +44,24 @@ border-radius: 4px 0 0 4px !important;
 
 .scroll-pane {
   overflow: scroll;
+  input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button {
+      /* display: none; <- Crashes Chrome on hover */
+      -webkit-appearance: none;
+      margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+  }
 }
 
 .accordion-group {
   .form-actions.small {
     padding-bottom: 0px;
+  }
+}
+
+.highlighted {
+  background-color: @warningBackground !important;
+  td {
+    background-color: @warningBackground !important;
   }
 }
 
