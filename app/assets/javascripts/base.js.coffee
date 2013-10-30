@@ -13,6 +13,7 @@ update_comments = ->
   if $('#taken option').length == 1
     $(".comments").show()
     $.each(window['_metric_ids'],(i,hash) ->
+      $("##{hash.key.replace(/_/g,"-")}-comments #comment_body").attr('placeholder', "Comment on #{$('#taken option:first').text()}...")
       $("##{hash.key.replace(/_/g,"-")}-comments .messages").empty()    
       $('#taken option').each( ->
         $("##{hash.key.replace(/_/g,"-")}-comments #comment_for_user_id").val($(this).attr('value'))
@@ -306,12 +307,12 @@ $('.btn-print').live('click', (event) ->
 )
 
 $(document).on("ajax:success",".comments form", (evt, data, status, xhr) ->
+  $(evt.currentTarget).find('#comment_body').val("")
   html = "<blockquote><p>#{data.body}</p><small>#{data.commenter.name} <cite>#{data.left_on}</cite></small></blockquote>"
   $(evt.currentTarget).parents('.comments').find('.messages').prepend($(html))
 )
 
 $(document).on("click",".scroll-pane tbody tr *", (evt) ->
-  console.log($(this).parents('tr'))
   $(this).parents('tbody').find('tr').removeClass('highlighted')
   $(this).parents('tr').addClass('highlighted')
 )
