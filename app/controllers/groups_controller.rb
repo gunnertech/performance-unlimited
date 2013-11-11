@@ -25,7 +25,7 @@ class GroupsController < InheritedResources::Base
     require 'csv'
     authorize! :create, RecordedMetric
     
-    if params[:file].content_type.to_s != 'text/csv'
+    if !params[:file].content_type.match(/csv/) && !params[:file].content_type.match(/comma/) && !params[:file].content_type.match(/application\/vnd\.ms\-excel/)
       flash[:error] = "You can only upload csv files. To save an excel file as csv, just choose 'Save As...' and then pick 'CSV'"
       redirect_to resource and return false
     end

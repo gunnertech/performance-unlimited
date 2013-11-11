@@ -25,8 +25,7 @@ class OrganizationsController < InheritedResources::Base
   def upload_performance_data
     require 'csv'
     authorize! :create, RecordedMetric
-    
-    if !params[:file].content_type.match(/csv/) && !params[:file].content_type.match(/comma/)
+    if !params[:file].content_type.match(/csv/) && !params[:file].content_type.match(/comma/) && !params[:file].content_type.match(/application\/vnd\.ms\-excel/)
       flash[:error] = "You tried to upload a #{params[:file].content_type} file. You can only upload csv files. To save an excel file as csv, just choose 'Save As...' and then pick 'CSV'"
       redirect_to resource and return false
     end
