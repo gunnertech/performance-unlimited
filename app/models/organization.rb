@@ -67,11 +67,11 @@ class Organization < ActiveRecord::Base
       if row['Athlete ID'].present?
         user = User.find_by_id(row['Athlete ID'])
       else
-        user = self.users.where{ (first_name == my{row['First Name']}) & (last_name == my{row['Last Name']}) }.first
+        user = self.users.where{ (first_name == my{row['First Name'].try(:squish)}) & (last_name == my{row['Last Name'].try(:squish)}) }.first
       end
       
       if user.nil?
-        user = User.new(first_name: row['First Name'], last_name: row['Last Name'])
+        user = User.new(first_name: row['First Name'].try(:squish), last_name: row['Last Name'].try(:squish))
         user.save!
       end
       

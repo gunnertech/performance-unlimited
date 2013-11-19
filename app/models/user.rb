@@ -86,14 +86,14 @@ class User < ActiveRecord::Base
   end
   
   def set_name
-    self.name ||= "#{self.first_name} #{self.last_name}"
+    self.name ||= "#{self.first_name} #{self.last_name}".squish
   end
   
   def set_first_name_and_last_name
     if name
       name_pieces = name.split(" ")
-      self.first_name = name_pieces.first
-      self.last_name = (name_pieces - [name_pieces.first]).join(" ").strip
+      self.first_name = name_pieces.first.squish
+      self.last_name = (name_pieces - [name_pieces.first]).join(" ").squish
     end
   end
   
