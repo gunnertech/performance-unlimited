@@ -1,31 +1,37 @@
 <form id="entity" data-variable="<%= controller_name.singularize %>_id" data-value="<%= resource.id %>" action="" class="no-print">
   <div class="row-fluid">
     <div class="span2">
-      <select multiple id="available" size="7" style="width: 100%;">
-        <% resource.users.uniq{ id }.each do |user| %>
-          <% unless (params[:taken_users]||"").split(",").include?(user.id.to_s) %>
-            <option value="<%= user.id %>"><%= user.reverse_name %></option>
+      <% if resource.class.name != "User" %>
+        <select multiple id="available" size="7" style="width: 100%;">
+          <% resource.users.uniq{ id }.each do |user| %>
+            <% unless (params[:taken_users]||"").split(",").include?(user.id.to_s) %>
+              <option value="<%= user.id %>"><%= user.reverse_name %></option>
+            <% end %>
           <% end %>
-        <% end %>
-      </select>
+        </select>
+      <% end %>
     </div>
     
     <div class="span1">
-      <br>
-      <a href="" class="add btn btn-block btn-primary"><i class="icon-long-arrow-right"></i></a>
-      <br>
-      <a href="" class="remove btn btn-block btn-primary"><i class="icon-long-arrow-left"></i></a>
-      <br>
+      <% if resource.class.name != "User" %>
+        <br>
+        <a href="" class="add btn btn-block btn-primary"><i class="icon-long-arrow-right"></i></a>
+        <br>
+        <a href="" class="remove btn btn-block btn-primary"><i class="icon-long-arrow-left"></i></a>
+        <br>
+      <% end %>
     </div>
     
     <div class="span2">
-      <select multiple size="7" name="taken_users" id="taken" style="width: 100%;">
-        <% if params[:taken_users].present? %>
-          <% User.find(params[:taken_users].split(",")).each do |user| %>
-            <option value="<%= user.id %>"><%= user.reverse_name %></option>
+      <% if resource.class.name != "User" %>
+        <select multiple size="7" name="taken_users" id="taken" style="width: 100%;">
+          <% if params[:taken_users].present? %>
+            <% User.find(params[:taken_users].split(",")).each do |user| %>
+              <option value="<%= user.id %>"><%= user.reverse_name %></option>
+            <% end %>
           <% end %>
-        <% end %>
-      </select>
+        </select>
+      <% end %>
     </div>
     
     <% if params[:graph_type] != 'bar' %>

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131008213535) do
+ActiveRecord::Schema.define(:version => 20131204210202) do
 
   create_table "alerts", :force => true do |t|
     t.string   "alertable_type"
@@ -214,6 +214,7 @@ ActiveRecord::Schema.define(:version => 20131008213535) do
     t.datetime "created_at",      :null => false
     t.datetime "updated_at",      :null => false
     t.string   "note"
+    t.integer  "position"
   end
 
   add_index "metrics", ["metric_type_id"], :name => "index_metrics_on_metric_type_id"

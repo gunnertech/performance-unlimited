@@ -148,9 +148,9 @@
                 <th><%=t '.actions', :default => t("helpers.actions") %></th>
               </tr>
             </thead>
-            <tbody>
-              <% @organization.metrics.each do |metric| %>
-                <tr>
+            <tbody class="sortable">
+              <% @organization.metrics.order{ position.asc }.each do |metric| %>
+                <tr data-object-id="<%= metric.id %>" data-object-type="<%= metric.class.name.underscore.downcase %>" data-object-url="<%= url_for [resource,metric] %>">
                   <td><%= link_to metric, organization_metric_path(@organization,metric) %></td>
                   <td><%= metric.metric_type %></td>
                   <td>

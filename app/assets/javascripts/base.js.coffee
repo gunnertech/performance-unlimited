@@ -473,7 +473,7 @@ $(->
       )
       return ui
     update: (e,ui) ->      
-      position = ui.item.index()+1
+      position = ui.item.index()
       
       $.ajax(
         $(ui.item).data("object-url"),

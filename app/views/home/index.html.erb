@@ -36,7 +36,7 @@
                       <% groups_listed.push(group) %>
                       <li><strong><%= group %></strong></li>
                       <li>
-                        <%= link_to 'Admin', group %>
+                        <%= link_to 'Admin', [division,group] %>
                       </li>
                       <li>
                         <%= link_to 'Dashboard', [:dashboard, group] %>
