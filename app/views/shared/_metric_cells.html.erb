@@ -32,7 +32,7 @@
         <th nowrap>Last Name</th>
         <th nowrap>First Name</th>
         <th nowrap>Groups</th>
-        <% resource.metrics.each do |metric| %>
+        <% resource.metrics.reorder{ position.asc }.each do |metric| %>
           <th nowrap><%= link_to metric, [:edit,resource.organization,metric] %></th>
         <% end %>
         <!-- <th><%=t '.actions', :default => t("helpers.actions") %></th> -->
