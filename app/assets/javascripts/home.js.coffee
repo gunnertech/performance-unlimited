@@ -1,6 +1,35 @@
-# Place all the behaviors and hooks related to the matching controller here.
-# All this logic will automatically be available in application.js.
-# You can use CoffeeScript in this file: http://jashkenas.github.com/coffee-script/
+$('#division_id').live('change', (event) ->
+  
+  html = "<option></option>"
+  $(".division-#{$(this).val()}").each( ->
+    html = "#{html}<option value='#{$(this).val()}'>#{$(this).data('name')}</option>"
+  )
+  $("#group_id").html(html)
+)
+  
+
+$('#dropdown-nav').live('submit', (event) ->
+  event.preventDefault()
+  
+  organization_id = $("#organization_id").val()
+  division_id = $("#division_id").val()
+  group_id = $("#group_id").val()
+  location = $("#location").val()
+  
+  if division_id
+    uri = "/divisions/#{division_id}"
+    if group_id
+      uri = "#{uri}/groups/#{group_id}"
+  else
+    uri = "/organizations/#{organization_id}"
+  
+  if location
+    uri = "#{uri}/#{location}"
+    
+  
+  window.location.href = uri
+  
+)
 
 $('.user.navigate').live('click', (event) ->
   _this = this

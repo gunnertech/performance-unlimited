@@ -1,55 +1,73 @@
 <div class="row-fluid">
   <div class="span6">
-    <h2>My Links</h2>
-    <ul class="unstyled">
-      <% organizations_listed = [] %>
-      <% divisions_listed = [] %>
-      <% groups_listed = [] %>
-      <% Group.where{ id >> my{Organization.with_role('admin', current_user).joins{ groups }.pluck('groups.id')}}.each do |group| %>
-        <li>
-          <ul>
-            <% if !organizations_listed.include?(group.organization) %>
-              <% if can?(:update, group.organization) %>
-                <% organizations_listed.push(group.organization) %>
-                <li><strong><%= group.organization %></strong></li>
-                <li>
-                  <%= link_to 'Admin', group.organization %>
-                </li>
-                <li>
-                  <%= link_to 'Dashboard', [:dashboard, group.organization] %>
-                </li>
-              <% end %>
-              <% group.organization.divisions.each do |division| %>
-                <% if !divisions_listed.include?(divisions_listed) %>
-                  <% if can?(:update, division) %>
-                    <% divisions_listed.push(division) %>
-                    <li><strong><%= division %></strong></li>
+    <h2>Navigation</h2>
+    
+    <%= form_tag('#', method: 'get', id: "dropdown-nav") do -%>
+      <% if @possible_organizations.count > 1 %>
+      <% else %>
+        <%= hidden_field_tag :organization_id, @possible_organizations.first.id %>
+      <% end %>
+      
+      <%= @possible_groups.map{|group| "<input class='division-#{group.division.id}' type='hidden' data-name='#{group.to_s}' data-division-id='#{group.division.id}' value='#{group.id}' />".html_safe }.join("").html_safe %>
+      
+      <%= select_tag :division_id, options_from_collection_for_select(@possible_divisions, "id", "to_s"), include_blank: true, class: 'input-small'  %>
+      <%= select_tag :group_id, "", include_blank: true, class: 'input-small' %>
+      <%= select_tag :location, options_for_select([ ["Admin",""], ["Dashboard","dashboard"] ], "Admin"), class: 'input-small' %>
+      
+      <%= submit_tag('Go', class: "btn btn-primary", style: "margin-bottom: 11px;") %>
+    <% end %>
+    
+    
+        
+        <!-- <ul class="unstyled">
+          <% organizations_listed = [] %>
+          <% divisions_listed = [] %>
+          <% groups_listed = [] %>
+          <% Group.where{ id >> my{Organization.with_role('admin', current_user).joins{ groups }.pluck('groups.id')}}.each do |group| %>
+            <li>
+              <ul>
+                <% if !organizations_listed.include?(group.organization) %>
+                  <% if can?(:update, group.organization) %>
+                    <% organizations_listed.push(group.organization) %>
+                    <li><strong><%= group.organization %></strong></li>
                     <li>
-                      <%= link_to 'Admin', division %>
+                      <%= link_to 'Admin', group.organization %>
                     </li>
                     <li>
-                      <%= link_to 'Dashboard', [:dashboard, division] %>
+                      <%= link_to 'Dashboard', [:dashboard, group.organization] %>
                     </li>
                   <% end %>
-                  <% division.groups.each do |group| %>
-                    <% if !groups_listed.include?(group) %>
-                      <% groups_listed.push(group) %>
-                      <li><strong><%= group %></strong></li>
-                      <li>
-                        <%= link_to 'Admin', [division,group] %>
-                      </li>
-                      <li>
-                        <%= link_to 'Dashboard', [:dashboard, group] %>
-                      </li>
+                  <% group.organization.divisions.each do |division| %>
+                    <% if !divisions_listed.include?(divisions_listed) %>
+                      <% if can?(:update, division) %>
+                        <% divisions_listed.push(division) %>
+                        <li><strong><%= division %></strong></li>
+                        <li>
+                          <%= link_to 'Admin', division %>
+                        </li>
+                        <li>
+                          <%= link_to 'Dashboard', [:dashboard, division] %>
+                        </li>
+                      <% end %>
+                      <% division.groups.each do |group| %>
+                        <% if !groups_listed.include?(group) %>
+                          <% groups_listed.push(group) %>
+                          <li><strong><%= group %></strong></li>
+                          <li>
+                            <%= link_to 'Admin', [division,group] %>
+                          </li>
+                          <li>
+                            <%= link_to 'Dashboard', [:dashboard, group] %>
+                          </li>
+                        <% end %>
+                      <% end %>
                     <% end %>
                   <% end %>
                 <% end %>
-              <% end %>
-            <% end %>
-          </ul>
-        </li>
-      <% end %>
-    </ul>
+              </ul>
+            </li>
+          <% end %>
+        </ul> -->
   </div>
   <div class="span6">
     <h2>Recent Activity</h2>
