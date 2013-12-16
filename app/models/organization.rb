@@ -45,7 +45,7 @@ class Organization < ActiveRecord::Base
       return false
     end
     rows.headers.each_with_index do |header,i|
-      if i > 3 && self.metrics.where{ lower(name) == my{header.downcase} }.first.nil?
+      if header.present? && i > 3 && self.metrics.where{ lower(name) == my{header.downcase} }.first.nil?
         self.metrics.create(name: header, metric_type: MetricType.find_or_create_by_name('Number'))
       end
     end
