@@ -101,7 +101,7 @@ class Division < ActiveRecord::Base
     self.file_contents = nil
     self.save!
   end
-  handle_asynchronously :do_upload
+  handle_asynchronously :do_upload, run_at: Proc.new { 1.minutes.from_now }
   
   def recorded_metrics
     organization.recorded_metrics.joins{ user }.where{ user.id >> my{ users.pluck('users.id') }}
