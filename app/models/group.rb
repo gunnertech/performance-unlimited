@@ -87,7 +87,7 @@ class Group < ActiveRecord::Base
                 m.metric_type_id = MetricType.find_or_create_by_name('Text').id
                 m.save!
               end
-              recorded_metric = metric.recorded_metrics.where{ (recorded_on == my{recorded_on}) & (user_id == my{user.try(:id)}) }.first
+              recorded_metric = metric.recorded_metrics.where{ (recorded_on == my{recorded_date}) & (user_id == my{user.try(:id)}) }.first
               if recorded_metric.present?
                 recorded_metric.value = row[header]
                 recorded_metric.save
