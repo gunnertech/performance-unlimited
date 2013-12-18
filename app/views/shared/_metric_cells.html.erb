@@ -45,7 +45,7 @@
           <td><%= link_to user.last_name, user %></td>
           <td><%= link_to user.first_name, user %></td>
           <td><%= user.assigned_groups.map{|ag| "#{ag.division}:#{ag.group}"}.join(", ") %></td>
-          <% resource.metrics.each do |metric| %>
+          <% resource.metrics.reorder{ position.asc }.each do |metric| %>
             <% recorded_metric = metric.recorded_metrics.where{ (recorded_on == my{params[:record_date].to_date}) & (user_id == my{user.id}) }.first %>
             <td class="metric">
               <%= simple_form_for [user,(recorded_metric||RecordedMetric.new)], :html => { :class => 'form-inline' } do |f| %>
