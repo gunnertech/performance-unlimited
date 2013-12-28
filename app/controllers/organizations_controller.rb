@@ -64,6 +64,9 @@ class OrganizationsController < InheritedResources::Base
   protected
   
   def set_dates
+    params[:start_date] = params[:graph_start_date] if params[:graph_start_date].present? && params[:start_date].blank?
+    params[:end_date] = params[:end_start_date] if params[:end_start_date].present? && params[:end_date].blank?
+      
     params[:start_date] ||= 1.year.ago.to_date.strftime("%m/%d/%Y")
     params[:end_date] ||= Date.today.strftime("%m/%d/%Y")
     

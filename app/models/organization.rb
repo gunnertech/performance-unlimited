@@ -184,7 +184,11 @@ class Organization < ActiveRecord::Base
         oauth_token: authentication.token,
         oauth_token_secret: authentication.secret
       )
-      @client.user(screen_name).description
+      begin
+        @client.user(screen_name).description
+      rescue
+        ""
+      end
     end
   end
   
