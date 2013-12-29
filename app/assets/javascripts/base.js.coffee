@@ -75,10 +75,10 @@ update_bar_charts = ->
       )
 
       _.each(grouped_arr, (data,key,obj) ->
-        graph = window.graphs["_#{key.toLowerCase().replace(/\W/,"_")}"]
+        graph = window.graphs["_#{key.toLowerCase().replace(/\W+/g,"_")}"]
         if graph
           
-          dk = "_#{key.toLowerCase().replace(/\W/,"_")}"
+          dk = "_#{key.toLowerCase().replace(/\W+/g,"_")}"
           window["#{dk}_data"].push(parseFloat(data[data.length-1]))
           window["#{dk}_labels"].push(name)
           
@@ -113,6 +113,8 @@ update_line_charts = ->
     dataType: 'script'
   ).done( ->
     $.each(window['_metrics'],(i,key) ->
+      
+      
       
       try
         graph = window.graphs["_#{key}"]
@@ -151,19 +153,22 @@ update_line_charts = ->
           # return if window['dynamically_added'][user_id]
 
           if window['dynamically_added'][user_id]
-            $.each(window['_metrics'],(i,key) ->
-              try
-                graph = window.graphs["_#{key}"]
-                $.each(graph.series, (i,item) ->
-                  if !item.match(/Average/)
-                    series.show = true
-                    graph.replot()
-                )
-                
-              catch e
-                #nothing
-
-            )
+            # $.each(window['_metrics'],(i,key) ->
+            #   # try
+            #   graph = window.graphs["_#{key}"]
+            #   if graph
+            #     $.each(graph.series, (i,item) ->
+            #       if !item.label.match(/Average/)
+            #         graph.series[i].show = true
+            #         graph.replot()
+            #     )
+            #   else
+            #     
+            #   # catch e
+            #     # console.log(key)
+            #     #nothing
+            # 
+            # )
             return true
 
           window['dynamically_added'][user_id] = {}
@@ -179,9 +184,11 @@ update_line_charts = ->
           )
 
           _.each(grouped_arr, (data,key,obj) ->
-            graph = window.graphs["_#{key.toLowerCase().replace(/\W/,"_")}"]
+            graph = window.graphs["_#{key.toLowerCase().replace(/\W+/g,"_")}"]
             if graph
-              dk = "_#{key.toLowerCase().replace(/\W/,"_")}"
+              dk = "_#{key.toLowerCase().replace(/\W+/g,"_")}"
+              
+              # console.log(dk)
               
               window["#{dk}_data"].push(data)
               if(!_.find(window["#{dk}_labels"],(item) -> item.label == name))
@@ -197,6 +204,7 @@ update_line_charts = ->
                 index: window["#{dk}_data"].length - 1
               }
               
+              # console.log(window["#{dk}_labels"])
               
               graph.replot(
                 data: window["#{dk}_data"]
@@ -205,6 +213,8 @@ update_line_charts = ->
               
               graph.series[0].show = !window['averages_off']
               graph.replot()
+            else
+              # console.log("NO GRAPH FOR: _#{key.toLowerCase().replace(/\W+/g,"_")}")
           )
           
         )
@@ -274,7 +284,8 @@ plot_line_chart = (graph_element) ->
     window.graph_arr = window.graph_arr || []
     window.graph_arr.push(g)
   catch e
-    console.log(e)
+    # console.log($(graph_element).data('variable-name'))
+    # console.log(e)
 
 
 plot_bar_chart = (graph_element) ->
@@ -327,8 +338,12 @@ $(document).on("click",".scroll-pane tbody tr *", (evt) ->
 
 $(->
   
-  $('.toggle-averages-off').click( (event) -> 
+  $('#start-date, #end-date').change( (event) ->
     window['redraw'] = true
+  )
+  
+  $('.toggle-averages-off').click( (event) -> 
+    # window['redraw'] = true
     $(this).addClass('active')
     $('.toggle-averages-on').removeClass('active')
     event.preventDefault()
@@ -336,7 +351,7 @@ $(->
   )
   
   $('.toggle-averages-on').click( (event) -> 
-    window['redraw'] = true
+    # window['redraw'] = true
     $(this).addClass('active')
     $('.toggle-averages-off').removeClass('active')
     event.preventDefault()
@@ -393,6 +408,9 @@ $(->
     if $('#graph-type').data('changed')
       location.href = "?taken_users=#{$.makeArray($('#taken option').map(-> $(this).attr('value'))).join(",")}&graph_type=#{$('#graph-type').val()}"
       return false
+    
+    else if window['redraw']
+      location.href = "?graph_start_date=#{$('#start-date').val()}&graph_end_date=#{$('#end-date').val()}&taken_users=#{$.makeArray($('#taken option').map(-> $(this).attr('value'))).join(",")}&graph_type=#{$('#graph-type').val()}"
     
     $('#player-alerts').empty()
     $('#taken option').each( ->
