@@ -40,14 +40,14 @@ class Division < ActiveRecord::Base
     (rows||[]).each_with_index do |row, i|
       next if row['First Name'].blank?
       user = nil
-      groups = []
+      group_arr = []
       
       if row['Groups'].present?
         (row['Groups'].split(",")||[]).each do |piece|
           pieces = piece.split(":")
           division = self
           group = division.groups.find_or_create_by_name(pieces.last)
-          groups.push(group) unless groups.include?(group)
+          group_arr.push(group) unless group_arr.include?(group)
         end
         
       end
@@ -63,13 +63,13 @@ class Division < ActiveRecord::Base
         user.save!
       end
       
-      if groups.empty?
+      if group_arr.empty?
         division = self
         group = division.groups.find_or_create_by_name("Primary")
-        groups.push(group)
+        group_arr.push(group)
       end
       
-      groups.each do |group|
+      group_arr.each do |group|
         user.add_role('athlete', group) unless user.has_role?('athlete',group)
         user.groups << group unless user.groups.include?(group)
       end
@@ -117,7 +117,7 @@ class Division < ActiveRecord::Base
   
   def grouped_users
     
-    biggest_group_count = groups.max_by{ |group| group.users.active.count }.users.count
+    biggest_group_count = groups.max_by{ |group| group.users.active.count }.try(:users).try(:count) || 0
     grouped = users.group_by{|user| user.groups.first.id}
     [biggest_group_count, groups.count, grouped, Group.find(grouped.keys)]
   end
