@@ -26,7 +26,7 @@ class User < ActiveRecord::Base
   has_many :divisions, through: :groups
   has_many :organizations, through: :divisions
   has_many :completed_surveys
-  has_many :recorded_metrics
+  has_many :recorded_metrics, dependent: :destroy
   has_many :metrics, through: :recorded_metrics
   has_many :assigned_alerts
   has_many :alerts, through: :assigned_alerts
