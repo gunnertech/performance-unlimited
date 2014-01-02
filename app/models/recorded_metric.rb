@@ -25,7 +25,7 @@ class RecordedMetric < ActiveRecord::Base
   def create_alerts
     organizations.each do |organization|
       organization.alerts.where{ metric_id == my{ metric.id }}.each do |alert|
-        if numerical_value <= alert.threshold_maximum && numerical_value >= alert.threshold_minimum
+        if numerical_value && numerical_value <= alert.threshold_maximum && numerical_value >= alert.threshold_minimum
           assigned_alert = user.assigned_alerts.build
           assigned_alert.alert = alert
           assigned_alert.recorded_metric = self
