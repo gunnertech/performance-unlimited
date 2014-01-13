@@ -9,11 +9,12 @@ class User < ActiveRecord::Base
 
   # Setup accessible (or protected) attributes for your model
   attr_accessible :name, :email, :password, :password_confirmation, :remember_me, :first_name, :last_name, :score, :average, 
-                  :active, :language, :division_id, :assigned_roles, :change_roles, :group_ids
+                  :active, :language, :division_id, :assigned_roles, :change_roles, :group_ids, :transfer_to
   
-  attr_accessor :assigned_roles, :editor, :change_roles
+  attr_accessor :assigned_roles, :editor, :change_roles, :transfer_to
   
   before_validation :set_first_name_and_last_name
+  before_validation :transfer, if: Proc.new{ |user| user.transfer_to.present? }
   after_save :assign_roles
   before_save :set_name
   
@@ -50,6 +51,18 @@ class User < ActiveRecord::Base
       where{ active == true }
     end
     
+  end
+  
+  def transfer
+    target = User.find_by_name(transfer_to)
+    if target
+      target.comments << self.comments
+      target.assigned_alerts << self.assigned_alerts
+      target.recorded_metrics << self.recorded_metrics
+      target.completed_surveys << self.completed_surveys
+      target.save!
+    end
+    self.destroy
   end
   
   def users
@@ -90,7 +103,7 @@ class User < ActiveRecord::Base
   end
   
   def set_first_name_and_last_name
-    if name
+    if name && first_name.blank? && last_name.blank?
       name_pieces = name.split(" ")
       self.first_name = name_pieces.first.squish
       self.last_name = (name_pieces - [name_pieces.first]).join(" ").squish

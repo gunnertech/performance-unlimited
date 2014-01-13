@@ -9,6 +9,7 @@ PerformanceUnlimited::Application.routes.draw do
     resources :users do
       member do
         get 'dashboard'
+        put 'transfer'
       end
     end
   end

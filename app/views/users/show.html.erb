@@ -215,4 +215,29 @@
       </div>
     </div>
   </div>
+  
+  <div class="accordion-group">
+    <div class="accordion-heading">
+      <h4 class="accordion-title">
+        <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#merge">
+          <%=t 'merge' %>
+        </a>
+      </h4>
+    </div>
+    <div id="merge" class="accordion-collapse collapse">
+      <div class="accordion-body">
+        <p>The merge tool will allow you to copy all an athletes data to another player.</p>
+        <p>Use this tool if you misspelled someone's name and then inadvertently created a new athlete with the correct spelling.</p>
+        <p>Submitting the form below will copy all data from this athlete to the target athlete selected and completely remove this athlete, so make sure this is what you want to do.</p>
+        
+        <%= simple_form_for resource, :html => { :class => 'form-horizontal' } do |f| %>
+          <%= f.input :transfer_to %>
+          <div class="form-actions">
+            <%= f.button :submit, :class => 'btn-primary' %>
+          </div>
+        <% end %>
+        
+      </div>
+    </div>
+  </div>
 </div>

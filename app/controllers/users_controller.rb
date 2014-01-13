@@ -8,12 +8,17 @@ class UsersController < InheritedResources::Base
   before_filter :set_metrics, only: :dashboard
   before_filter :set_graph_type
   
-  custom_actions resource: [:dashboard]
-  skip_load_and_authorize_resource only: [:dashboard]
+  custom_actions resource: [:dashboard,:transer]
+  skip_load_and_authorize_resource only: [:dashboard,:transer]
   
   def dashboard
     authorize! :create, RecordedMetric
     dashboard!
+  end
+  
+  def transfer
+    authorize! :update, resource
+    transfer!{ users_url }
   end
   
   def new
