@@ -97,7 +97,7 @@ class Organization < ActiveRecord::Base
                 m = self.metrics.where{ lower(name) == my{header.downcase} }.first
                 m.metric_type_id = MetricType.find_or_create_by_name('Percentage').id
                 m.save!
-              elsif row[header].to_s.squish.present? && row[header].to_s.gsub(/\./,"").match(/\D/)
+              elsif row[header].to_s.squish.present? && row[header].to_s.match(/[a-z]/i)
                 m = self.metrics.where{ lower(name) == my{header.downcase} }.first
                 m.metric_type_id = MetricType.find_or_create_by_name('Text').id
                 m.save!
