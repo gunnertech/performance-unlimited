@@ -2,7 +2,7 @@ class GroupsController < InheritedResources::Base
   belongs_to :division, optional: true
   
   before_filter :set_record_date, only: [:show, :upload_performance_data]
-  before_filter :set_users, only: [:show, :dashboard]
+  before_filter :set_users, only: [:show, :download_performance_template, :dashboard]
   before_filter :set_dates, only: :dashboard
   before_filter :set_metrics, only: :dashboard
   before_filter :set_graph_type
@@ -120,8 +120,12 @@ class GroupsController < InheritedResources::Base
   end
   
   def set_users
-    params[:letter] ||= 'a'
-    @users = User.where{ (id >> my{resource.users.pluck('users.id')}) & (last_name =~ my{"#{params[:letter]}%"}) }.order{ [last_name.asc, first_name.asc] }
+    if action_name == 'download_performance_template'
+      @users = resource.users
+    else
+      params[:letter] ||= 'a'
+      @users = User.where{ (id >> my{resource.users.pluck('users.id')}) & (last_name =~ my{"#{params[:letter]}%"}) }.order{ [last_name.asc, first_name.asc] }
+    end
   end
   
   def set_record_date
