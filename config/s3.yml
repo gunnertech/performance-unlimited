@@ -1,16 +1,16 @@
 development:
-  access_key_id: AKIAJLZSJ7DLDBAIC3QA
-  secret_access_key: "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'"
+  access_key_id: ENV['S3_KEY']
+  secret_access_key: ENV['S3_SECRET']
   bucket: com.gunnertech.performance-unlimited.development
 test:
-  access_key_id: AKIAJLZSJ7DLDBAIC3QA
-  secret_access_key: "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'"
+  access_key_id: ENV['S3_KEY']
+  secret_access_key: ENV['S3_SECRET']
   bucket: circlestreet-test
 production:
-  access_key_id: AKIAJLZSJ7DLDBAIC3QA
-  secret_access_key: "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"
+  access_key_id: ENV['S3_KEY']
+  secret_access_key: ENV['S3_SECRET']
   bucket: com.gunnertech.performance-unlimited.production
 staging:
-  access_key_id: AKIAJLZSJ7DLDBAIC3QA 
-  secret_access_key: "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"
+  access_key_id: ENV['S3_KEY']
+  secret_access_key: ENV['S3_SECRET']
   bucket: com.gunnertech.performance-unlimited.staging
