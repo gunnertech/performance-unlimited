@@ -23,6 +23,7 @@ class Organization < ActiveRecord::Base
   has_many :comments, through: :metrics
   
   has_many :responses, through: :questions
+  has_many :data_files, as: :data_fileable
   
   attr_accessible :name, :logo, :file, :file_contents
   attr_accessor :file, :recorded_date
@@ -34,18 +35,42 @@ class Organization < ActiveRecord::Base
   end
   
   def start_upload
+    self.data_files.create(file_contents: file_contents)
+    self.file_contents = nil
+    save!
     do_upload(recorded_date)
   end
   
   def do_upload(recorded_date)
+    file_to_parse = self.data_files.where{ processing == false }.first
+    file_to_parse.processing = true
+    file_to_parse.save!
+    
+    return true if file_to_parse.nil?
+    
     require 'csv'
     begin
-      rows = CSV.parse(file_contents, :headers => true)
+      rows = CSV.parse(file_to_parse.file_contents, :headers => true)
     rescue
       return false
     end
+    
     rows.headers.each_with_index do |header,i|
-      if header.present? && i > 3 && self.metrics.where{ lower(name) == my{header.downcase} }.first.nil?
+      if row['Date'].present?
+        offset = 4
+        date_pieces = row['Date'].split("/")
+        if date_pieces.last.length > 2
+          recorded_date = Date.strptime(row['Date'], "%m/%d/%Y")
+        else
+          recorded_date = Date.strptime(row['Date'], "%m/%d/%y")
+        end
+      else
+        offset = 3
+      end
+    end
+    
+    rows.headers.each_with_index do |header,i|
+      if header.present? && i > offset && self.metrics.where{ lower(name) == my{header.downcase} }.first.nil?
         self.metrics.create(name: header, metric_type: MetricType.find_or_create_by_name('Number'))
       end
     end
@@ -63,6 +88,7 @@ class Organization < ActiveRecord::Base
         end
         
       end
+      
       
       if row['Athlete ID'].present?
         user = User.find_by_id(row['Athlete ID'])
@@ -88,7 +114,7 @@ class Organization < ActiveRecord::Base
       
       
       rows.headers.each_with_index do |header,i|
-        if i > 3
+        if i > offset
           if row[header].present?
             metric = self.metrics.where{ lower(name) == my{header.downcase} }.first
             begin
@@ -102,16 +128,24 @@ class Organization < ActiveRecord::Base
                 m.metric_type_id = MetricType.find_or_create_by_name('Text').id
                 m.save!
               end
-              metric.recorded_metrics.create!(value: row[header], recorded_on: recorded_date, user: user)
+              recorded_metric = metric.recorded_metrics.where{ (value == my{row[header]}) & (recorded_on == my{recorded_date}) & (user_id == my{user.id})}.first
+              if recorded_metric
+                recorded_metric.update_attributes(value: row[header], recorded_on: recorded_date, user: user)
+              else
+                metric.recorded_metrics.create!(value: row[header], recorded_on: recorded_date, user: user)
+              end
+              
             rescue
-              #raise metric.to_s
+              puts metric.to_s
             end
           end
         end
       end
     end
+    file_to_parse.destroy
     self.file_contents = nil
     self.save!
+    do_upload(nil)
   end
   handle_asynchronously :do_upload, run_at: Proc.new { 1.minutes.from_now }
   

@@ -1,7 +1,7 @@
 class OrganizationsController < InheritedResources::Base
   before_filter :create_session_variable, only: :show
   before_filter :set_record_date, only: [:show, :upload_performance_data]
-  before_filter :set_users, only: [:show, :download_performance_template, :dashboard]
+  before_filter :set_users, only: [:show, :dashboard]
   before_filter :set_dates, only: :dashboard
   before_filter :set_metrics, only: :dashboard
   before_filter :set_graph_type

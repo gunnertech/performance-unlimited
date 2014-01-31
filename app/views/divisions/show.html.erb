@@ -22,7 +22,7 @@
   </div>
 <% end %>
 
-<% if resource.file_contents.present? %>
+<% if resource.data_files.count > 0 %>
   <div class="alert alert-info">
     Your file is still processing. Please check back in a minute.
   </div>

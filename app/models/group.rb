@@ -5,6 +5,7 @@ class Group < ActiveRecord::Base
   has_many :users, through: :assigned_groups
   
   has_many :metrics, through: :organization
+  has_many :data_files, as: :data_fileable
   # has_many :recorded_metrics, through: :metrics
   
   attr_accessible :name, :global_position, :position, :file, :file_contents
@@ -19,21 +20,46 @@ class Group < ActiveRecord::Base
   before_save :start_upload, if: Proc.new{|resource| resource.file_contents.present? }
   
   def start_upload
+    self.data_files.create(file_contents: file_contents)
+    self.file_contents = nil
+    save!
     do_upload(recorded_date)
   end
   
   def do_upload(recorded_date)
+    file_to_parse = self.data_files.where{ processing == false }.first
+    file_to_parse.processing = true
+    file_to_parse.save!
+    
+    return true if file_to_parse.nil?
+    
     require 'csv'
     begin
-      rows = CSV.parse(file_contents, :headers => true)
+      rows = CSV.parse(file_to_parse.file_contents, :headers => true)
     rescue
       return false
     end
+    
     rows.headers.each_with_index do |header,i|
-      if i > 3 && self.organization.metrics.where{ lower(name) == my{header.downcase} }.first.nil?
-        self.organization.metrics.create(name: header, metric_type: MetricType.find_or_create_by_name('Number'))
+      if row['Date'].present?
+        offset = 4
+        date_pieces = row['Date'].split("/")
+        if date_pieces.last.length > 2
+          recorded_date = Date.strptime(row['Date'], "%m/%d/%Y")
+        else
+          recorded_date = Date.strptime(row['Date'], "%m/%d/%y")
+        end
+      else
+        offset = 3
       end
     end
+    
+    rows.headers.each_with_index do |header,i|
+      if header.present? && i > offset && self.metrics.where{ lower(name) == my{header.downcase} }.first.nil?
+        self.metrics.create(name: header, metric_type: MetricType.find_or_create_by_name('Number'))
+      end
+    end
+    
     (rows||[]).each_with_index do |row, i|
       next if row['First Name'].blank?
       user = nil
@@ -73,7 +99,7 @@ class Group < ActiveRecord::Base
       
       
       rows.headers.each_with_index do |header,i|
-        if i > 3
+        if i > offset
           if row[header].present?
             metric = self.organization.metrics.where{ lower(name) == my{header.downcase} }.first
             # begin
@@ -101,8 +127,10 @@ class Group < ActiveRecord::Base
         end
       end
     end
+    file_to_parse.destroy
     self.file_contents = nil
     self.save!
+    do_upload(nil)
   end
   handle_asynchronously :do_upload, run_at: Proc.new { 1.minutes.from_now }
   

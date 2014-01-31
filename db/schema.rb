@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131204210202) do
+ActiveRecord::Schema.define(:version => 20140130203922) do
 
   create_table "alerts", :force => true do |t|
     t.string   "alertable_type"
@@ -144,6 +144,17 @@ ActiveRecord::Schema.define(:version => 20131204210202) do
 
   add_index "completed_surveys", ["survey_id"], :name => "index_completed_surveys_on_survey_id"
   add_index "completed_surveys", ["user_id"], :name => "index_completed_surveys_on_user_id"
+
+  create_table "data_files", :force => true do |t|
+    t.string   "data_fileable_type"
+    t.integer  "data_fileable_id"
+    t.text     "file_contents"
+    t.boolean  "processing",         :default => false
+    t.datetime "created_at",                            :null => false
+    t.datetime "updated_at",                            :null => false
+  end
+
+  add_index "data_files", ["data_fileable_type", "data_fileable_id"], :name => "index_data_files_on_data_fileable_type_and_data_fileable_id"
 
   create_table "delayed_jobs", :force => true do |t|
     t.integer  "priority",   :default => 0, :null => false

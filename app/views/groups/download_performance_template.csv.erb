@@ -3,7 +3,7 @@ require 'csv'
 csv_lib = RUBY_VERSION =~ /^1.8/ ? FasterCSV : CSV
  
 csv_output = csv_lib.generate(headers: true) do |csv|
-  csv << ["Athlete ID", "Last Name", "First Name", "Groups", resource.metrics.map(&:to_s) ].flatten
+  csv << ["Athlete ID", "Last Name", "First Name", "Groups", "Date", resource.metrics.map(&:to_s) ].flatten
   @users.each do |user|
     csv << [user.id, user.last_name, user.first_name, user.assigned_groups.map{|ag| "#{ag.division}:#{ag.group}"}.join(", ")].flatten
   end
