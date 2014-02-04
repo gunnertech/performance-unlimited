@@ -76,11 +76,16 @@ class Organization < ActiveRecord::Base
       if row['Date'].present?
         date_pieces = row['Date'].split("/")
         if date_pieces.last.length > 2
-          recorded_date = Date.strptime(row['Date'], "%m/%d/%Y")
+          recorded_date = Date.strptime(row['Date'], "%m/%d/%Y") rescue nil
         else
-          recorded_date = Date.strptime(row['Date'], "%m/%d/%y")
+          recorded_date = Date.strptime(row['Date'], "%m/%d/%y") rescue nil
         end
       else
+        recorded_date = original_recorded_date
+      end
+      
+      if recorded_date.nil?
+        puts "^^^^^^^^^^^^^^^^^^ LOOK AT ME HERE: #{row['Date']} ^^^^^^^^^^"
         recorded_date = original_recorded_date
       end
       
