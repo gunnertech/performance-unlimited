@@ -46,13 +46,14 @@ class Division < ActiveRecord::Base
       return false
     end
     
+    offset = 3
+    
     rows.headers.each_with_index do |header,i|
       if header.to_s.squish.downcase == 'date'
         offset = 4
-      else
-        offset = 3
       end
     end
+
     
     rows.headers.each_with_index do |header,i|
       if header.present? && i > offset && self.metrics.where{ lower(name) == my{header.downcase} }.first.nil?
