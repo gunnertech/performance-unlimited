@@ -1,16 +1,18 @@
+common: &common
+  access_key_id: AKIAI67VTVS4637QSLEQA
+  secret_access_key: 8SJg5B+ZT5De8WRgbKcWmvmgMjc0NxWnoKv6+e/z
+  
 development:
-  access_key_id: AKIAJLZSJ7DLDBAIC3QA
-  secret_access_key: "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'"
+  <<: *common
   bucket: com.gunnertech.performance-unlimited.development
+  
 test:
-  access_key_id: AKIAJLZSJ7DLDBAIC3QA
-  secret_access_key: "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'"
+  <<: *common
   bucket: circlestreet-test
+  
 production:
-  access_key_id: AKIAJLZSJ7DLDBAIC3QA
-  secret_access_key: "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"
+  <<: *common
   bucket: com.gunnertech.performance-unlimited.production
+  
 staging:
-  access_key_id: AKIAJLZSJ7DLDBAIC3QA 
-  secret_access_key: "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"
   bucket: com.gunnertech.performance-unlimited.staging
