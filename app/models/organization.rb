@@ -42,6 +42,7 @@ class Organization < ActiveRecord::Base
   end
   
   def do_upload(recorded_date)
+    original_recorded_date = recorded_date
     file_to_parse = self.data_files.where{ processing == false }.first
     
     return true if file_to_parse.nil?
@@ -58,14 +59,8 @@ class Organization < ActiveRecord::Base
     end
     
     rows.headers.each_with_index do |header,i|
-      if row['Date'].present?
+      if header.to_s.squish.downcase == 'date'
         offset = 4
-        date_pieces = row['Date'].split("/")
-        if date_pieces.last.length > 2
-          recorded_date = Date.strptime(row['Date'], "%m/%d/%Y")
-        else
-          recorded_date = Date.strptime(row['Date'], "%m/%d/%y")
-        end
       else
         offset = 3
       end
@@ -78,6 +73,17 @@ class Organization < ActiveRecord::Base
     end
     (rows||[]).each_with_index do |row, i|
       next if row['First Name'].blank?
+      if row['Date'].present?
+        date_pieces = row['Date'].split("/")
+        if date_pieces.last.length > 2
+          recorded_date = Date.strptime(row['Date'], "%m/%d/%Y")
+        else
+          recorded_date = Date.strptime(row['Date'], "%m/%d/%y")
+        end
+      else
+        recorded_date = original_recorded_date
+      end
+      
       user = nil
       group_arr = []
       
