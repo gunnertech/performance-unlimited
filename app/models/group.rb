@@ -28,10 +28,14 @@ class Group < ActiveRecord::Base
   
   def do_upload(recorded_date)
     file_to_parse = self.data_files.where{ processing == false }.first
+    
+    return true if file_to_parse.nil?
+    
+    
     file_to_parse.processing = true
     file_to_parse.save!
     
-    return true if file_to_parse.nil?
+    
     
     require 'csv'
     begin
