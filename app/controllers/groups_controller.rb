@@ -5,6 +5,7 @@ class GroupsController < InheritedResources::Base
   before_filter :set_users, only: [:show, :download_performance_template, :dashboard]
   before_filter :set_dates, only: :dashboard
   before_filter :set_metrics, only: :dashboard
+  before_filter :set_hide_averages, only: :dashboard
   before_filter :set_graph_type
   
   layout :get_layout
@@ -149,5 +150,9 @@ class GroupsController < InheritedResources::Base
     end
     
     
+  end
+  
+  def set_hide_averages
+    params[:hide_averages] = params[:hide_averages].present? ? params[:hide_averages] : 1
   end
 end

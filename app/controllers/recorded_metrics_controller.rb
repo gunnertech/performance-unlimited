@@ -65,6 +65,7 @@ class RecordedMetricsController < InheritedResources::Base
       @recorded_metrics = @recorded_metrics.where{ recorded_on >> my{params[:start_date]..params[:end_date]}}
     end
     
+    # raise @recorded_metrics.joins{ metric }.where{metric.name == 'Weight'}.count.to_s
     
     @recorded_metrics
   end

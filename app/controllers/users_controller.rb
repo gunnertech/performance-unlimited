@@ -6,6 +6,7 @@ class UsersController < InheritedResources::Base
   # before_filter :set_users, only: :dashboard
   before_filter :set_dates, only: :dashboard
   before_filter :set_metrics, only: :dashboard
+  before_filter :set_hide_averages, only: :dashboard
   before_filter :set_graph_type
   
   custom_actions resource: [:dashboard,:transer]
@@ -114,5 +115,9 @@ class UsersController < InheritedResources::Base
   
   def set_graph_type
     params[:graph_type] ||= 'line'
+  end
+  
+  def set_hide_averages
+    params[:hide_averages] = params[:hide_averages].present? ? params[:hide_averages] : 1
   end
 end

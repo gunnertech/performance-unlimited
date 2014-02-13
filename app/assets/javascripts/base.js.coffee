@@ -1,4 +1,5 @@
 window.graphs = {}
+window['averages_off'] = true
 $.jqplot._noToImageButton = true
 $.jqplot.config.enablePlugins = true
 
@@ -178,17 +179,25 @@ update_line_charts = ->
           )
 
           _.each(grouped_arr, (data,key,obj) ->
-            grouped_arr[key] = _.map(data, (item, key) -> 
-              return [item.recorded_on, item.numerical_value]
+            grouped_arr[key] = _.map(data, (item, k) -> 
+              console.log(key)
+              if key == "Weight"
+                console.log(item.recorded_on)
+                console.log(item.numerical_value)
+                console.log(item.value)
+              return [item.recorded_on, item.numerical_value||item.value]
             )
           )
 
           _.each(grouped_arr, (data,key,obj) ->
+            
             graph = window.graphs["_#{key.toLowerCase().replace(/\W+/g,"_")}"]
             if graph
               dk = "_#{key.toLowerCase().replace(/\W+/g,"_")}"
               
               # console.log(dk)
+              
+              data = _.sortBy(data, (d) -> return d[0] )
               
               window["#{dk}_data"].push(data)
               if(!_.find(window["#{dk}_labels"],(item) -> item.label == name))
@@ -206,10 +215,14 @@ update_line_charts = ->
               
               # console.log(window["#{dk}_labels"])
               
+              
+              
               graph.replot(
                 data: window["#{dk}_data"]
                 series: window["#{dk}_labels"]
               )
+              
+              
               
               graph.series[0].show = !window['averages_off']
               graph.replot()
@@ -280,6 +293,12 @@ plot_line_chart = (graph_element) ->
             # formatString: "$%'d"
             showMark: false
     });
+    
+    if window['averages_off']
+      g.series[0].show = false
+      g.replot()
+      
+    
     window.graphs[$(graph_element).data('variable-name')] = g
     window.graph_arr = window.graph_arr || []
     window.graph_arr.push(g)

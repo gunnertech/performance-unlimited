@@ -10,7 +10,7 @@
     </tr>
   </thead>
   <tbody>
-    <% all_metrics.each do |rm| %>
+    <% all_metrics.uniq.each do |rm| %>
       <tr>
         <td><%= rm.user %></td>
         <td><%= rm.value %></td>

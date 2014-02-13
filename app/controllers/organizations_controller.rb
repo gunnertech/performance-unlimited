@@ -4,6 +4,7 @@ class OrganizationsController < InheritedResources::Base
   before_filter :set_users, only: [:show, :download_performance_template, :dashboard]
   before_filter :set_dates, only: :dashboard
   before_filter :set_metrics, only: :dashboard
+  before_filter :set_hide_averages, only: :dashboard
   before_filter :set_graph_type
   
   custom_actions resource: [:upload_performance_data,:download_performance_template,:dashboard]
@@ -62,6 +63,10 @@ class OrganizationsController < InheritedResources::Base
   end
   
   protected
+  
+  def set_hide_averages
+    params[:hide_averages] = params[:hide_averages].present? ? params[:hide_averages] : 1
+  end
   
   def set_dates
     params[:start_date] = params[:graph_start_date] if params[:graph_start_date].present? && params[:start_date].blank?
