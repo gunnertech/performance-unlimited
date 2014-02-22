@@ -41,7 +41,7 @@ class Organization < ActiveRecord::Base
     do_upload(recorded_date)
   end
   
-  def do_upload(recorded_date)
+  def do_upload(recorded_date=nil)
     original_recorded_date = recorded_date
     file_to_parse = self.data_files.where{ processing == false }.first
     
