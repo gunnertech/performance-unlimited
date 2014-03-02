@@ -278,7 +278,7 @@ plot_line_chart = (graph_element) ->
           tickRenderer: $.jqplot.CanvasAxisTickRenderer
           tickOptions:
             formatString: "%b %e %Y"
-            angle: -30
+            angle: -60
             textColor: '#000000'
           min: window["#{$(graph_element).data('variable-name')}_min"]
           max: window["#{$(graph_element).data('variable-name')}_max"]
