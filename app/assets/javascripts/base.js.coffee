@@ -279,7 +279,7 @@ plot_line_chart = (graph_element) ->
           tickOptions:
             formatString: "%b %e %Y"
             angle: -30
-            textColor: '#dddddd'
+            textColor: '#000000'
           min: window["#{$(graph_element).data('variable-name')}_min"]
           max: window["#{$(graph_element).data('variable-name')}_max"]
           # tickInterval: "2 days"
