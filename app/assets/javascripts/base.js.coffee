@@ -425,7 +425,7 @@ $(->
       return false
     
     if $('#graph-type').data('changed')
-      location.href = "?taken_users=#{$.makeArray($('#taken option').map(-> $(this).attr('value'))).join(",")}&graph_type=#{$('#graph-type').val()}"
+      location.href = "?taken_users=#{$.makeArray($('#taken option').map(-> $(this).attr('value'))).join(",")}&graph_type=#{$('#graph-type').val()}&graph_start_date=#{$('#start-date').val()}&graph_end_date=#{$('#end-date').val()}"
       return false
     
     else if window['redraw']
