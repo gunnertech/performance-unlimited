@@ -357,6 +357,8 @@ $(document).on("click",".scroll-pane tbody tr *", (evt) ->
 
 $(->
   
+  update_comments()
+  
   $('#start-date, #end-date').change( (event) ->
     window['redraw'] = true
   )
