@@ -156,9 +156,9 @@ class Division < ActiveRecord::Base
   end
   
   def grouped_users
-    
+    group_ids = groups.pluck('id')
     biggest_group_count = groups.max_by{ |group| group.users.active.count }.try(:users).try(:count) || 0
-    grouped = users.group_by{|user| user.groups.first.id}
+    grouped = users.group_by{|user| user.groups.where{ id >> my{group_ids}}.first.id}
     [biggest_group_count, groups.count, grouped, Group.find(grouped.keys)]
   end
   
