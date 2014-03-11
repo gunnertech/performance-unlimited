@@ -91,7 +91,7 @@ class OrganizationsController < InheritedResources::Base
   end
   
   def set_graph_type
-    params[:graph_type] ||= 'line'
+    params[:graph_type] ||= 'raw'
   end
   
   def set_record_date
