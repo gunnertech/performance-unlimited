@@ -394,7 +394,7 @@ $(->
       plot_bar_chart(this)
   )
   
-  if $('#taken option').length && $('#graph-type').val() != 'raw'
+  if $('#taken option').length && $('#graph-type').val() != 'raw' && $('#graph-type').val() != 'table'
     setTimeout(->
       $('.graph-btn').trigger('click')
     ,100)
@@ -422,7 +422,7 @@ $(->
   $(".graph-btn").click( (event) ->
     event.preventDefault()
     
-    if $('#graph-type').val() == 'raw'
+    if $('#graph-type').val() == 'raw' || $('#graph-type').val() == 'table'
       location.href = "?taken_users=#{$.makeArray($('#taken option').map(-> $(this).attr('value'))).join(",")}&graph_type=#{$('#graph-type').val()}&graph_end_date=#{$('#end-date').val()}&graph_start_date=#{$('#start-date').val()}"
       return false
     

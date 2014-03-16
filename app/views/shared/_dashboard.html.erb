@@ -136,7 +136,10 @@ var _metric_ids = [];
                 </tr>
               </thead>
               <tbody>
-                <% resource.recorded_metrics.where{ metric_id == my{metric.id}}.each do |recorded_metric| %>
+                <% user_ids = resource.is_a?(User) ? resource.id : (params[:taken_users]||'').split(",") %>
+                <% all_metrics = resource.recorded_metrics.where{ user_id >> my{user_ids} }.reorder{ recorded_on.asc }.where{ recorded_on >> my{params[:start_date]..params[:end_date]}}.where{ metric_id == my{metric.id} } %>
+                
+                <% all_metrics.where{ metric_id == my{metric.id}}.each do |recorded_metric| %>
                   <td><%= recorded_metric.recorded_on %></td>
                   <td><%= recorded_metric.user %></td>
                   <td><%= recorded_metric.value %></td>
