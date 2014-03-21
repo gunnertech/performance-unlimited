@@ -14,10 +14,15 @@ class Group < ActiveRecord::Base
   after_save :update_positions
   
   acts_as_list scope: :division
+  before_validation :format_name
   
   validates :name, uniqueness: {scope: :division_id}
   
   before_save :start_upload, if: Proc.new{|resource| resource.file_contents.present? }
+  
+  def format_name
+    self.name = name.squish
+  end
   
   def start_upload
     self.data_files.create(file_contents: file_contents)

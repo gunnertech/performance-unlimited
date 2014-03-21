@@ -99,6 +99,8 @@ class User < ActiveRecord::Base
   end
   
   def set_name
+    self.last_name = self.last_name.titlecase if self.last_name
+    self.first_name = self.first_name.titlecase if self.first_name
     self.name ||= "#{self.first_name} #{self.last_name}".squish
   end
   
