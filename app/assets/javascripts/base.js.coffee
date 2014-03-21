@@ -306,6 +306,21 @@ plot_line_chart = (graph_element) ->
     # console.log($(graph_element).data('variable-name'))
     # console.log(e)
 
+draw_alerts = ->
+  $('#player-alerts').empty()
+  $('#taken option').each( ->
+    $.ajax("/users/#{$(this).attr('value')}/assigned_alerts",
+      dataType: 'json'
+    ).done( (data) ->
+      if data.length
+        html = "<div class=\"alert alert-error\"><h5>#{data[0].user.name}</h5><table class=\"table table-striped\"><thead><tr><th>Metric</th><th>Value</th><th>On</th><th></th></tr></thead><tbody>"
+        $.map(data, (item,i) -> 
+          html = "#{html}<tr><td>#{item.metric.name}</td><td>#{item.recorded_metric.value}</td><td>#{item.recorded_metric.recorded_on}</td><td>#{item.alert.message}</td></tr>"
+        )
+        html = "#{html}</tbody></table></div>"
+        $('#player-alerts').append(html)
+    )
+  )
 
 plot_bar_chart = (graph_element) ->
   s1 = [2, 6, 7, 10]
@@ -358,6 +373,7 @@ $(document).on("click",".scroll-pane tbody tr *", (evt) ->
 $(->
   
   update_comments()
+  draw_alerts()
   
   $('#start-date, #end-date').change( (event) ->
     window['redraw'] = true
@@ -433,20 +449,7 @@ $(->
     else if window['redraw']
       location.href = "?graph_start_date=#{$('#start-date').val()}&graph_end_date=#{$('#end-date').val()}&taken_users=#{$.makeArray($('#taken option').map(-> $(this).attr('value'))).join(",")}&graph_type=#{$('#graph-type').val()}"
     
-    $('#player-alerts').empty()
-    $('#taken option').each( ->
-      $.ajax("/users/#{$(this).attr('value')}/assigned_alerts",
-        dataType: 'json'
-      ).done( (data) ->
-        if data.length
-          html = "<div class=\"alert alert-error\"><h5>#{data[0].user.name}</h5><table class=\"table table-striped\"><thead><tr><th>Metric</th><th>Value</th><th>On</th><th></th></tr></thead><tbody>"
-          $.map(data, (item,i) -> 
-            html = "#{html}<tr><td>#{item.metric.name}</td><td>#{item.recorded_metric.value}</td><td>#{item.recorded_metric.recorded_on}</td><td>#{item.alert.message}</td></tr>"
-          )
-          html = "#{html}</tbody></table></div>"
-          $('#player-alerts').append(html)
-      )
-    )
+    draw_alerts()
       
     if $('#graph-type').val() == 'line'
       update_line_charts()

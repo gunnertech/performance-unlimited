@@ -4,7 +4,7 @@ class RecordedMetric < ActiveRecord::Base
   has_one :metric_type, through: :metric
   has_one :alert, through: :metric
   has_many :organizations, through: :user
-  has_many :assigned_alerts
+  has_many :assigned_alerts, dependent: :destroy
   
   attr_accessible :recorded_on, :value, :user, :user_id, :metric, :metric_id
   
