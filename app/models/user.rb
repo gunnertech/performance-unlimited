@@ -55,14 +55,14 @@ class User < ActiveRecord::Base
   
   def transfer
     target = User.find_by_name(transfer_to)
-    if target
+    if target && target != self
       target.comments << self.comments
       target.assigned_alerts << self.assigned_alerts
       target.recorded_metrics << self.recorded_metrics
       target.completed_surveys << self.completed_surveys
       target.save!
+      self.destroy
     end
-    self.destroy
   end
   
   def users
