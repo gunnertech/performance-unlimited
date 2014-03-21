@@ -21,12 +21,17 @@ class Division < ActiveRecord::Base
   
   after_create :set_organization
   before_save :start_upload, if: Proc.new{|resource| resource.file_contents.present? }
+  before_validation :format_name
   
   def start_upload
     self.data_files.create(file_contents: file_contents)
     self.file_contents = nil
     save!
     do_upload(recorded_date)
+  end
+  
+  def format_name
+    self.name = name.squish
   end
   
   def do_upload(recorded_date=nil)

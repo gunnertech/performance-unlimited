@@ -50,7 +50,11 @@
             <% resource.assigned_alerts.reorder{ date.desc }.each do |aa| %>
               <tr>
                 <td><%= aa.alert.metric.name %></td>
-                <td><%= aa.recorded_metric.value %></td>
+                <% if aa.recorded_metric %>
+                  <td><%= aa.recorded_metric.value %></td>
+                <% else %>
+                  <td><%= aa.recorded_metric_id %></td>
+                <% end %>
                 <td><%= aa.date %></td>
                 <td><%= aa.alert.message %></td>
               </tr>
