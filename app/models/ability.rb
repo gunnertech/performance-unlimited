@@ -24,6 +24,7 @@ class Ability
       can :create, Metric
       can :manage, Alert,                 :id => Organization.with_role('admin', user).map(&:alerts).flatten.map(&:id)
       can :create, Alert
+      can :read, Alert
       can :manage, AssignedAlert,         :id => Organization.with_role('admin', user).joins{ assigned_alerts }.pluck('assigned_alerts.id')
       can :create, AssignedAlert
       can :manage, Organization,          :id => Organization.with_role('admin', user).pluck('organizations.id')
