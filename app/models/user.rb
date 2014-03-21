@@ -57,9 +57,13 @@ class User < ActiveRecord::Base
     target = User.find_by_name(transfer_to)
     if target && target != self
       target.comments << self.comments
-      target.assigned_alerts << self.assigned_alerts
       target.recorded_metrics << self.recorded_metrics
+      self.recorded_metrics = []
       target.completed_surveys << self.completed_surveys
+      self.completed_surveys = []
+      target.assigned_alerts << self.assigned_alerts
+      self.assigned_alerts = []
+      self.save!
       target.save!
       self.destroy
     end
