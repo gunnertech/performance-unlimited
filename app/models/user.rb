@@ -53,19 +53,28 @@ class User < ActiveRecord::Base
     
   end
   
+  def run_transfer_to(target)
+    target.comments << self.comments
+    target.recorded_metrics << self.recorded_metrics
+    # self.recorded_metrics = []
+    target.completed_surveys << self.completed_surveys
+    # self.completed_surveys = []
+    target.assigned_alerts << self.assigned_alerts
+    # self.assigned_alerts = []
+    self.save!
+    target.save!
+    self.destroy
+    
+  end
+  handle_asynchronously :run_transfer_to
+  
   def transfer
     target = User.find_by_name(transfer_to)
+    # raise target.inspect
+    # 2073
+    # 1589
     if target && target != self
-      target.comments << self.comments
-      target.recorded_metrics << self.recorded_metrics
-      self.recorded_metrics = []
-      target.completed_surveys << self.completed_surveys
-      self.completed_surveys = []
-      target.assigned_alerts << self.assigned_alerts
-      self.assigned_alerts = []
-      self.save!
-      target.save!
-      self.destroy
+      run_transfer_to(target)
     end
   end
   

@@ -59,8 +59,8 @@ class UsersController < InheritedResources::Base
     else
       @user.update(params[:user])
     end
-    
-    update!
+    notice = params[:user][:transfer_to].present? ? "Transfer scheduled. All data will be transfered to #{params[:user][:transfer_to]} and then this user will be deleted" : "User was successfully updated."
+    update!(notice: notice)
   end
   
   
