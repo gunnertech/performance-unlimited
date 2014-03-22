@@ -13,7 +13,7 @@ class Alert < ActiveRecord::Base
   def add_alerts
     recorded_metrics.find_in_batches do |group|
       sleep(5)
-      group.each { |recorded_metric| recorded_metric.create_alerts unless recorded_metric.alerts.count > 0 }
+      group.each { |recorded_metric| recorded_metric.create_alerts unless recorded_metric.assigned_alerts.count > 0 }
     end
   end
   handle_asynchronously :add_alerts
