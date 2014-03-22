@@ -2,7 +2,7 @@ class RecordedMetric < ActiveRecord::Base
   belongs_to :user
   belongs_to :metric
   has_one :metric_type, through: :metric
-  has_one :alert, through: :metric
+  has_many :alerts, through: :metric
   has_many :organizations, through: :user
   has_many :assigned_alerts, dependent: :destroy
   
@@ -35,6 +35,7 @@ class RecordedMetric < ActiveRecord::Base
       end
     end
   end
+  handle_asynchronously :create_alerts
   
   def set_numerical_value
     self.numerical_value = value.to_d unless metric_type.name == 'Text'
