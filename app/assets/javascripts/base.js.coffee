@@ -180,11 +180,10 @@ update_line_charts = ->
 
           _.each(grouped_arr, (data,key,obj) ->
             grouped_arr[key] = _.map(data, (item, k) -> 
-              console.log(key)
-              if key == "Weight"
-                console.log(item.recorded_on)
-                console.log(item.numerical_value)
-                console.log(item.value)
+              # if key == "Weight"
+              #   console.log(item.recorded_on)
+              #   console.log(item.numerical_value)
+              #   console.log(item.value)
               return [item.recorded_on, item.numerical_value||item.value]
             )
           )
