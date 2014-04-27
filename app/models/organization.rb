@@ -85,7 +85,6 @@ class Organization < ActiveRecord::Base
       end
       
       if recorded_date.nil?
-        puts "^^^^^^^^^^^^^^^^^^ LOOK AT ME HERE: #{row['Date']} ^^^^^^^^^^"
         recorded_date = original_recorded_date
       end
       
@@ -111,7 +110,6 @@ class Organization < ActiveRecord::Base
       
       if user.nil?
         user = User.new(first_name: row['First Name'].try(:squish), last_name: row['Last Name'].try(:squish))
-        user.save!
       end
       
       if group_arr.empty?
@@ -122,7 +120,16 @@ class Organization < ActiveRecord::Base
       
       group_arr.each do |group|
         user.add_role('athlete', group) unless user.has_role?('athlete',group)
-        user.groups << group unless user.groups.include?(group)
+        if user.new_record?
+          group.users << user
+        else
+          begin
+            user.groups << group unless user.groups.include?(group)
+          rescue
+            logger.error("LOOOK AT ME")
+            logger.error(user.inspect)
+          end
+        end
       end
       
       
@@ -141,15 +148,22 @@ class Organization < ActiveRecord::Base
                 m.metric_type_id = MetricType.find_or_create_by_name('Text').id
                 m.save!
               end
-              recorded_metric = metric.recorded_metrics.where{ (value == my{row[header]}) & (recorded_on == my{recorded_date}) & (user_id == my{user.id})}.first
+              recorded_metric = metric.recorded_metrics.where{ (recorded_on == my{recorded_date}) & (user_id == my{user.id})}.first
               if recorded_metric
-                recorded_metric.update_attributes(value: row[header], recorded_on: recorded_date, user: user)
+                logger.error("THERE WAS A METRIC")
+                logger.error(recorded_date)
+                logger.error(recorded_metric.inspect)
+                recorded_metric.update_attributes(value: row[header], recorded_on: recorded_date, user_id: user.try(:id))
               else
-                metric.recorded_metrics.create!(value: row[header], recorded_on: recorded_date, user: user)
+                logger.error("NO METRIC")
+                logger.error(recorded_date)
+                logger.error(recorded_metric.inspect)
+                metric.recorded_metrics.create!(value: row[header], recorded_on: recorded_date, user_id: user.try(:id))
               end
               
             rescue
-              puts metric.to_s
+              logger.error("ERROR WTF?")
+              logger.error(metric.inspect)
             end
           end
         end
