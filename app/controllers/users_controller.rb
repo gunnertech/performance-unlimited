@@ -12,6 +12,8 @@ class UsersController < InheritedResources::Base
   custom_actions resource: [:dashboard,:transer]
   skip_load_and_authorize_resource only: [:dashboard,:transer]
   
+  respond_to :json
+  
   def dashboard
     authorize! :create, RecordedMetric
     dashboard!
@@ -66,6 +68,8 @@ class UsersController < InheritedResources::Base
   
   def show
     @completed_surveys = resource.completed_surveys.joins{ survey }.where{ survey.active == true }.paginate(:page => params[:page])
+
+    @metrics = Metric.where{ id >> my{resource.metrics.pluck('metrics.id')} }.reorder{ name }
     show! do |success|
       success.html
       success.csv {
@@ -87,6 +91,12 @@ class UsersController < InheritedResources::Base
   def collection
     return @users if @users
     @users = end_of_association_chain.accessible_by(current_ability).paginate(:page => params[:page])
+    
+    if params[:term].present?
+      @users = @users.search(params[:term])
+    end
+    
+    @users
   end
   
   def set_metrics

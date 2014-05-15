@@ -93,6 +93,10 @@ PerformanceUnlimited::Application.routes.draw do
   end
   
   resources :metrics, only: [] do
+    member do
+      get 'calculations'
+    end
+    
     resources :alerts
   end
   

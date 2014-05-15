@@ -371,6 +371,36 @@ $(document).on("click",".scroll-pane tbody tr *", (evt) ->
 
 $(->
   
+  $('.inlinesparkline').sparkline('html',{width:'100px'})
+  
+  $(".performance-calculation").each( -> 
+    $.ajax(
+      "/metrics/#{$(this).data('for_metric')}/calculations.json?user_id=#{$(this).data('for_user')}",
+      data: {}
+      type: 'get'
+      dataType: 'json'
+    ).done( (data) -> 
+      $dom = $("#performance-calculation-#{data.id}-#{data.user_id}")
+      $dom.find(".rank").html("#{data.rank}/#{data.population}")
+      $dom.find(".percentile").html("#{data.percentile}%")
+      $dom.find(".z-score").html("#{data.z_score}")
+    )
+  )
+  
+  $(document).on("focus", ".live-search", (event) ->
+
+    $(event.target).autocomplete({
+      source: $(event.target).data("url")
+      minLength: 2
+      open: (event, ui) ->
+        $(".ui-autocomplete").addClass("typeahead").addClass("dropdown-menu")
+      select: ( evt, ui ) ->
+        location.href = "#{ui.item.url}"
+    })
+  )
+
+  
+  
   update_comments()
   draw_alerts()
   

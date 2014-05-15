@@ -5,6 +5,7 @@ class Metric < ActiveRecord::Base
   has_many :comments
   
   has_many :recorded_metrics, dependent: :destroy
+  has_many :users, through: :recorded_metrics
   attr_accessible :decimal_places, :name, :metric_type, :metric_type_id, :note, :position
   
   validates :metric_type, presence: true
@@ -20,5 +21,13 @@ class Metric < ActiveRecord::Base
   
   def set_position
     insert_at(position)
+  end
+  
+  def recorded_for(user)
+    if user.is_a?(Array)
+      recorded_metrics.where{ user_id >> my{user} }
+    else
+      recorded_metrics.where{ user_id == my{user.id}}
+    end
   end
 end

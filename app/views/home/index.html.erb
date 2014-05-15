@@ -80,13 +80,24 @@
 
 <div class="row-fluid">
   <div class="span6">
-    <h2>Surveys</h2>
+    <h2>Look Up Athlete</h2>
+    <form id="player-search-form" class="form-inline">
+      <div class="control-group">
+        <div class="controls">
+          <input type="text" class="string optional" id="player-search-name" placeholder="Start typing athlete's name...">
+        </div>
+      </div>
+    </form>
+    
+    <h2 style="clear:both;">Surveys</h2>
     <%= render partial: "#{@division.nil? ? 'divisions' : @survey.nil? ? 'no_survey' : 'survey'}_index" %>
   </div>
   <div class="span6">
-    <h2>Recent Alerts</h2>
-    <% AssignedAlert.where{ (created_at > my{current_user.last_sign_in_at}) & (user_id >> my{current_user.users.pluck('users.id')})}.each do |assigned_alert| %>
-      <blockquote><p><span class="label label-important"><%= assigned_alert.alert.metric %></span> <%= assigned_alert.alert.message %></p> <small><%= assigned_alert.user %> <cite><%= assigned_alert.created_at.to_date %></cite></small></blockquote>
+    <h2>Recent Alerts <small>Since your last login</small></h2>
+    <% cache(cache_key_for_alerts(current_user)) do %>
+      <% AssignedAlert.recent_for(current_user).each do |assigned_alert| %>
+        <blockquote><p><span class="label label-important"><%= assigned_alert.alert.metric %></span> <%= assigned_alert.alert.message %></p> <small><%= assigned_alert.user %> <cite><%= assigned_alert.created_at.to_date %></cite></small></blockquote>
+      <% end %>
     <% end %>
   </div>
 </div>

@@ -51,6 +51,76 @@ class User < ActiveRecord::Base
       where{ active == true }
     end
     
+    def search(term)
+      relation = scoped
+
+      pieces = term.split(" ")
+      if term =~ /\d\d/
+        relation = relation.where{ code =~ "#{term}%" }
+      elsif term =~ / / && !(term =~ /,/)
+        if pieces.length <= 2
+          if term =~ / $/
+            first_n = pieces.join(" ")
+            last_n = ""
+          else
+            first_n = pieces[0]
+            last_n = pieces[1]
+          end
+        else
+          last_n = pieces.last
+          first_n = (pieces - [pieces.last]).join(" ")
+        end
+        relation = relation.where{(last_name =~ "#{last_n.to_s.strip}%") & (first_name =~ "#{first_n.to_s.strip}%")}
+      else
+        last_n, first_n = term.split(",")
+        relation = relation.where{(last_name =~ "#{last_n.to_s.strip}%") & (first_name =~ "#{first_n.to_s.strip}%")}
+      end
+
+      relation.reorder{ [last_name, first_name] }.group{ id }
+    end
+    
+  end
+  
+  def rank_for(recorded_metric, among_users, for_date=nil)
+    rank = 1
+    values = []
+    target_value = recorded_metric.numerical_value
+    for_metric = recorded_metric.metric
+    
+    among_users.each_with_index do |user,i|
+      rm = RecordedMetric.where{ (user_id == my{user}) & (metric_id == my{for_metric.id }) }.reorder{ recorded_on.desc }.limit(1).pluck('numerical_value').first
+
+      if rm
+        values.push(rm) 
+      end
+    end
+        
+    values = values.sort.reverse
+    
+    values.each_with_index do |v,i|
+      if target_value >= v
+        rank = i+1 
+        break
+      end
+    end 
+    
+    [rank, values]
+  end
+  
+  def as_json(options={})
+    super({methods: [:label, :value, :url]}.merge(options))
+  end
+  
+  def label
+    "#{last_name}, #{first_name}"
+  end
+  
+  def value
+    "#{last_name}, #{first_name}"
+  end
+  
+  def url
+    "/admin/users/#{id}"
   end
   
   def run_transfer_to(target)

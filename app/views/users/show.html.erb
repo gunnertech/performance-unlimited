@@ -8,6 +8,7 @@
         <li><%= link_to resource.organization, [resource.organization] %><span class="divider">/</span></li>
       <% end %>
       <li><%= link_to t('divisions'), [current_user, :divisions] %><span class="divider">/</span></li>
+      <li><%= link_to resource.divisions.first, resource.divisions.first  %><span class="divider">/</span></li>
       <li class="active"><%= resource %></li>
     </ul>
   </div>  
@@ -25,6 +26,46 @@
     <% end %>
   </div>
 <% end %>
+
+<h2>Performance Profile</h2>
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Metric</th>
+      <th>History</th>
+      <th>Zone</th>
+      <th>Last value</th>
+      <th>Last Date</th>
+      <th>Rank</th>
+      <th>Percentile</th>
+      <th>Z-Score</th>
+      <th>Bad</th>
+      <th>Average</th>
+      <th>Excellent</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @metrics.each do |m| %>
+      <% rm = m.recorded_for(resource).reorder{ recorded_on.desc } %>
+      <tr id="performance-calculation-<%= m.id %>-<%= resource.id %>" class="performance-calculation" data-for_metric="<%= m.id %>" data-for_user="<%= resource.id %>">
+        <td><%= m %></td>
+        <td><div class="inlinesparkline"><%= rm.pluck('recorded_metrics.numerical_value').to_a.join(",") %></div></td>
+        <td></td>
+        <td><%= rm.limit(1).first.numerical_value %></td>
+        <td><%= rm.limit(1).first.recorded_on %></td>
+        <td class="rank"></td>
+        <td class="percentile"></td>
+        <td class="z-score"></td>
+        <td><%= rm.minimum(:numerical_value) %></td>
+        <td><%= number_with_precision(rm.average(:numerical_value), precision: 1) %></td>
+        <td><%= rm.maximum(:numerical_value) %></td>
+      </tr>
+    <% end %>
+    
+  </tbody>
+  
+</table>
 
 <div class="accordion" id="accordion">
   <div class="accordion-group">
