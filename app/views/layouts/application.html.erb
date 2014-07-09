@@ -106,7 +106,7 @@
     <header class="navbar navbar-fixed-top">
       <nav class="navbar-inner">
         <div class="container-fluid">
-          <% if current_user.try(:has_role?,'admin') %>
+          <% if current_user.admined_organizations.count > 0 %>
             <%= render 'layouts/navigation' %>
           <% else %>
             <%= render 'layouts/athlete_navigation' %>
