@@ -18,6 +18,21 @@ class OrganizationsController < InheritedResources::Base
     response.headers['Content-Disposition'] = "attachment; filename=\"performance-template-#{today}.csv\""
   end
   
+  def show
+    @comparison = params[:compare_id].present? ? Metric.find(params[:compare_id]) : resource.metrics.first
+    show! do |success|
+      success.html
+      success.csv {
+        today = Time.now.in_time_zone(parent.time_zone).to_date
+        start_date = Date.strptime(params[:start_date], "%m/%d/%Y") rescue (today-30.days)
+        end_date = Date.strptime(params[:end_date], "%m/%d/%Y") rescue today
+        
+        @dates = (start_date..end_date).map{ |date| date }
+        response.headers['Content-Disposition'] = "attachment; filename=\"#{parent.name.parameterize}-#{@group.name.parameterize}-#{today}.csv\""
+      }
+    end
+  end
+  
   def dashboard
     authorize! :create, RecordedMetric
     dashboard!

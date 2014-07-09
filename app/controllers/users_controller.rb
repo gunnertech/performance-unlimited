@@ -68,6 +68,11 @@ class UsersController < InheritedResources::Base
   
   def show
     @completed_surveys = resource.completed_surveys.joins{ survey }.where{ survey.active == true }.paginate(:page => params[:page])
+    if params[:compare_type].present? && params[:compare_id].present?
+      @comparison = params[:compare_type].classify.constantize.find(params[:compare_id])
+    else
+      @comparison = resource.organizations.first || Organization.first
+    end
 
     @metrics = Metric.where{ id >> my{resource.metrics.pluck('metrics.id')} }.reorder{ name }
     show! do |success|

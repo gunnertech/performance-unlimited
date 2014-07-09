@@ -148,3 +148,54 @@ border-radius: 4px 0 0 4px !important;
 @media print {
   .page-break	{ display: block; page-break-before: always; }
 }
+
+.z-score-wrapper {
+  position: relative;
+  height: 21px;
+  
+  .good {
+    margin-left: 50%;
+    background: darken(@successBackground,10%);
+    position: absolute;
+    left: 0;
+    height: 100%;
+  }
+  
+  .score {
+    position: absolute;
+    z-index: 3;
+    width: 100px;
+    text-align: center;
+  }
+  
+  .poor {
+    position: absolute;
+    right: 0;
+    background: darken(@errorBackground,10%);
+    height: 100%;
+    margin-right: 50%;
+  }
+}
+
+.percentile-wrapper {
+  position: relative;
+  background: darken(@infoBackground,10%);
+  height: 21px;
+  
+  .score {
+    position: absolute;
+    z-index: 3;
+    width: 100px;
+    text-align: center;
+  }
+}
+
+td {
+  &.min {
+    color: @errorText;
+  }
+  
+  &.max {
+    color: @successText;
+  }
+}

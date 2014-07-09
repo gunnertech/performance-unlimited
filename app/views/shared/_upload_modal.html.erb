@@ -1,5 +1,5 @@
 <div id="upload-modal" class="modal hide fade">
-  <%= form_tag((resource.is_a?(Organization) ? [:upload_performance_data,resource] : [:upload_performance_data, (parent? ? parent : resource.organization),resource]), method: :put, multipart: true, class: 'horizontal') do %>
+  <%= form_tag([:upload_performance_data,resource], method: :put, multipart: true, class: 'horizontal') do %>
     <div class="modal-header">
       <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
       <h3>Upload Performance Data</h3>

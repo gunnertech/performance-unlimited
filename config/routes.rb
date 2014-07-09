@@ -52,6 +52,23 @@ PerformanceUnlimited::Application.routes.draw do
     resources :point_ranges
   end
   
+  resources :groups do
+    member do
+      get 'dashboard'
+      put 'upload_performance_data'
+      get 'download_performance_template'
+    end
+  end
+  
+  resources :divisions do
+    member do
+      get 'dashboard'
+      put 'upload_performance_data'
+      get 'download_performance_template'
+    end
+  end
+  
+  
   resources :divisions do
     member do
       get 'leaderboard'

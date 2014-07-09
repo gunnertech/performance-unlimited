@@ -345,9 +345,28 @@ $('.back').live('click', (event) ->
   history.go(-1)
 )
 
-$('.btn-print').live('click', (event) ->
+$(document).on('click','.btn-print', (event) ->
   event.preventDefault()
   window.print()
+)
+
+$(document).on('click','.user-home.nav.nav-pills a', (event) ->
+  event.preventDefault()
+  $(this).parents(".nav-pills").find("li").removeClass("active")
+  $(this).parents("li").addClass("active")
+  $(".player-panel").hide().filter($(this).data('target')).show()
+  $('.inlinesparkline').sparkline('html',{width:'100px'})
+)
+
+$(document).on('click','#performance-toggle', (event) ->
+  event.preventDefault()
+  if $(this).data('collapsed') == 1
+    $(this).data('collapsed',0)
+    $('#performance-content').removeClass('span10').addClass('span12')
+    $('#performance-nav').remove()
+  else
+    $(this).data('collapsed',1)
+    $('#performance-content').removeClass('span12').addClass('span10').parents(".row-fluid:first").prepend($performance_nav_html)
 )
 
 $(document).on("ajax:success",".comments form", (evt, data, status, xhr) ->
@@ -367,23 +386,42 @@ $(document).on("click",".scroll-pane tbody tr *", (evt) ->
 #   $(this).addClass('highlighted')
 # )
 
+$performance_nav_html = ""
 
+percentage_length_for = (side,result) -> 
+  result = parseFloat(result)
+  if side == 'good' 
+    return '0' if result < 0
+    return ((Math.abs(result) / 2.0) * 50.0)
+  else
+    return '0' if result > 0
+    return ((Math.abs(result) / 2.0) * 50.0)
 
 $(->
   
+  $performance_nav_html = "<div id='performance-nav' class='span2'>#{$('#performance-nav').html()}</div>"
+  $('#performance-nav').remove()
+  
   $('.inlinesparkline').sparkline('html',{width:'100px'})
   
+  
+  compare_type = $("#compare-type").val()
+  compare_id = $("#compare-id").val()
   $(".performance-calculation").each( -> 
     $.ajax(
-      "/metrics/#{$(this).data('for_metric')}/calculations.json?user_id=#{$(this).data('for_user')}",
-      data: {}
+      "/metrics/#{$(this).data('for_metric')}/calculations.json",
+      data: 
+        compare_type: compare_type
+        compare_id: compare_id
+        user_id: $(this).data('for_user')
       type: 'get'
       dataType: 'json'
     ).done( (data) -> 
+      z_score = if data.z_score.toString() == "-0.0" then "0.0" else data.z_score
       $dom = $("#performance-calculation-#{data.id}-#{data.user_id}")
       $dom.find(".rank").html("#{data.rank}/#{data.population}")
-      $dom.find(".percentile").html("#{data.percentile}%")
-      $dom.find(".z-score").html("#{data.z_score}")
+      $dom.find(".percentile").html("<div class='percentile-wrapper' style='width:#{data.percentile}%;'><div class='score'>#{data.percentile}%</div></div>")
+      $dom.find(".z-score").html("<div class='z-score-wrapper'><div style='width: #{percentage_length_for('poor',data.z_score)}%;' class='poor'></div><div class='score'>#{z_score}</div><div style='width: #{percentage_length_for('good',data.z_score)}%;' class='good'></div></div>")
     )
   )
   

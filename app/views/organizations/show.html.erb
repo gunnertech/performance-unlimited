@@ -25,6 +25,54 @@
   </div>
 <% end %>
 
+<h2>Performance Profile</h2>
+<h5>Comparing: <strong><%= @comparison %></strong> <small>(<a id="performance-toggle" href="#">Change</a>)</small></h5>
+
+<form style="display:none;">
+  <input type="hidden" id="compare-id" value="<%= resource.id %>">
+  <input type="hidden" id="compare-type" value="<%= resource.class.name %>">
+</form>
+<div class="row-fluid">
+  <div class="span2" style="display:none;" id="performance-nav">
+    <ul class="nav nav-pills nav-stacked">
+      <% resource.metrics.each do |metric| %>
+        <li class="<%= metric == @comparison ? 'active' : '' %>"><a href="?compare_id=<%= metric.id %>"><%= metric %></a></li>
+      <% end %>
+    </ul>
+  </div>
+  <div class="span12" id="performance-content">
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Athlete</th>
+          <th style="text-align: right;">Last value</th>
+          <th>Last Date</th>
+          <th style="text-align: center;">Rank</th>
+          <th style="text-align: center; width: 100px;">Percentile</th>
+          <th style="text-align: center; width: 100px;">Z-Score</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% resource.users.each do |m| %>
+          <% rm = m.recorded_metrics.where{ metric_id == my{@comparison.id}}.reorder{ recorded_on.desc } %>
+          <% if rm.limit(1).first %>
+            <tr id="performance-calculation-<%= @comparison.id %>-<%= m.id %>" class="performance-calculation" data-for_metric="<%= @comparison.id %>" data-for_user="<%= m.id %>">
+              <td><%= link_to m, "/admin/users/#{m.id}?compare_id=#{resource.id}&amp;compare_type=#{resource.class.name}" %></td>
+              <td style="text-align: right;"><%= rm.limit(1).first.numerical_value %></td>
+              <td><%= rm.limit(1).first.recorded_on %></td>
+              <td style="text-align: center;" class="rank"></td>
+              <td style="text-align: center;"class="percentile"></td>
+              <td style="text-align: center;" class="z-score"></td>
+            </tr>
+          <% end %>
+        <% end %>
+    
+      </tbody>
+  
+    </table>
+  </div>
+</div>
+
 <% if can?(:update, resource) %>
   <div class="accordion" id="accordion">
     <div class="accordion-group">

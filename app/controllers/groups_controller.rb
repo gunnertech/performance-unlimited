@@ -45,6 +45,7 @@ class GroupsController < InheritedResources::Base
   end
   
   def show
+    @comparison = params[:compare_id].present? ? Metric.find(params[:compare_id]) : resource.metrics.first
     show! do |success|
       success.html
       success.csv {
