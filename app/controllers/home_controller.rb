@@ -1,6 +1,7 @@
 class HomeController < ApplicationController
 
   def index
+    raise request.domain.to_s
     @mapped_domain = MappedDomain.find_by_domain(request.domain.to_s) || MappedDomain.find_by_domain(DEFAULT_DOMAIN)
     @organization = @mapped_domain.organization
     # authorize! :read, @organization
@@ -34,7 +35,6 @@ class HomeController < ApplicationController
         # @grouped_users = @division.grouped_users
         @biggest_group_count, @total_groups, @user_array, @group_array = @division.grouped_users
         @survey = @division.surveys.where{ active == true }.first
-        raise @survey.inspect
       end
     end
   end
