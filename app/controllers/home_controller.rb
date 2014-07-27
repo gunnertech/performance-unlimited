@@ -34,6 +34,7 @@ class HomeController < ApplicationController
         # @grouped_users = @division.grouped_users
         @biggest_group_count, @total_groups, @user_array, @group_array = @division.grouped_users
         @survey = @division.surveys.where{ active == true }.first
+        raise @survey.inspect
       end
     end
   end
