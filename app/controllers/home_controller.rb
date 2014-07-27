@@ -3,7 +3,7 @@ class HomeController < ApplicationController
   def index
     @mapped_domain = MappedDomain.find_by_domain(request.domain.to_s) || MappedDomain.find_by_domain(DEFAULT_DOMAIN)
     @organization = @mapped_domain.organization
-    authorize! :read, @organization
+    # authorize! :read, @organization
     
     @possible_organizations = Organization.with_role('admin', current_user)
     @possible_divisions = Division.where{ id >> my{Organization.with_role('admin', current_user).joins{ divisions }.pluck('divisions.id')}}
@@ -29,7 +29,7 @@ class HomeController < ApplicationController
         @division = Division.with_role('athlete', current_user).first
       end
       
-      if @division && @survey.nil?
+      if @division.present? && @survey.nil?
         @groups = @division.groups
         # @grouped_users = @division.grouped_users
         @biggest_group_count, @total_groups, @user_array, @group_array = @division.grouped_users
