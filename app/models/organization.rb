@@ -76,13 +76,9 @@ class Organization < ActiveRecord::Base
       if row['Date'].present?
         date_pieces = row['Date'].split("/")
         if date_pieces.last.length > 2
-          logger.error("~~~~~~~~~~~~~~~~~~~SHORT")
           recorded_date = Date.strptime(row['Date'], "%m/%d/%Y") rescue nil
-          logger.error(recorded_date)
         else
-          logger.error("~~~~~~~~~~~~~~~~~~~LONG")
           recorded_date = Date.strptime(row['Date'], "%m/%d/%y") rescue nil
-          logger.error(recorded_date)
         end
       else
         recorded_date = original_recorded_date
@@ -99,9 +95,7 @@ class Organization < ActiveRecord::Base
         (row['Groups'].split(",")||[]).each do |piece|
           pieces = piece.split(":")
           division = self.divisions.find_or_create_by_name(pieces.first.squish)
-          logger.error("~~~~~~~~~~~~~~~~~~~DIVISION: #{division.try(:name)}")
           group = division.groups.find_or_create_by_name(pieces.last.squish)
-          logger.error("~~~~~~~~~~~~~~~~~~~DIVISION: #{group.try(:name)}")
           group_arr.push(group) unless group_arr.include?(group)
         end
         
@@ -111,9 +105,8 @@ class Organization < ActiveRecord::Base
       if row['Athlete ID'].present?
         user = User.find_by_id(row['Athlete ID'])
       else
-        logger.error("~~~~~~~~~~~~~~~~~~~HERE IT IS")
-        logger.error(self.users.where{ (first_name =~ my{row['First Name'].try(:squish)}) & (last_name =~ my{row['Last Name'].try(:squish)}) }.to_sql)
-        user = self.users.where{ (first_name =~ my{row['First Name'].try(:squish)}) & (last_name =~ my{row['Last Name'].try(:squish)}) }.first
+        logger.error("~~~~~~~~~~~~~~~~~~~LOOOK AT NAME")
+        user = self.users.where{ (first_name =~ my{row['First Name'].try(:squish).try(:titlecase)}) & (last_name =~ my{row['Last Name'].try(:squish).try(:titlecase)}) }.first
       end
       
       if user.nil?
@@ -158,14 +151,8 @@ class Organization < ActiveRecord::Base
               end
               recorded_metric = metric.recorded_metrics.where{ (recorded_on == my{recorded_date}) & (user_id == my{user.id})}.first
               if recorded_metric
-                logger.error("~~~~~~~~~~~~~~~~~~~THERE WAS A METRIC for #{metric.name}")
-                logger.error(recorded_date)
-                logger.error(recorded_metric.inspect)
                 recorded_metric.update_attributes(value: row[header], recorded_on: recorded_date, user_id: user.try(:id))
               else
-                logger.error("~~~~~~~~~~~~~~~~~~~NO METRIC for #{metric.name}")
-                logger.error(recorded_date)
-                logger.error(recorded_metric.inspect)
                 metric.recorded_metrics.create!(value: row[header], recorded_on: recorded_date, user_id: user.try(:id))
               end
               

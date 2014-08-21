@@ -67,16 +67,17 @@
 <div id="dashboard" class="player-panel">
   <div class="row-fluid">
     <div class="span4">
-      <h3>Alerts</h3>
-      <% AssignedAlert.limit(4).each do |assigned_alert| %>
+      <h3><%= t('alerts') %></h3>
+      <% resource.assigned_alerts.reorder{ date.desc }.each do |assigned_alert| %>
+        
         <blockquote><p><span class="label label-important"><%= assigned_alert.alert.metric %></span> <%= assigned_alert.alert.message %></p> <small><%= assigned_alert.user %> <cite><%= assigned_alert.created_at.to_date %></cite></small></blockquote>
       <% end %>
-    
+          
     </div>
   
     <div class="span4">
       <h3>Trainer Comments</h3>
-      <% Comment.all.each do |comment| %>
+      <% resource.comments.each do |comment| %>
         <blockquote><p><%= comment.body %></p> <small><%= comment.commenter.name %> on <%= comment.user %> <cite><%= comment.left_on %></cite></small></blockquote>
       <% end %>
     </div>
@@ -140,29 +141,32 @@
     </div>
     
     <div class="span4">
-      <h3>Surveys</h3>
+      <h3><%= t('surveys') %></h3>
       <table class="table table-striped">
+        <thead>
+          <tr>
+            <th><%=t 'date_taken' %></th>
+            <th><%=t 'name' %></th>
+            <th><%=t 'score' %></th>
+          </tr>
+        </thead>
         <tbody>
-          <tr>
-            <td>10/10/1014 Recovery Survey</td>
-            <td><a href="#">Take Now</a></td>
-          </tr>
-          <tr>
-            <td>1/10/1014 Recovery Survey</td>
-            <td><a href="#">See Results</a></td>
-          </tr>
-          <tr>
-            <td>1/10/1013 Recovery Survey</td>
-            <td><span class="label label-important">Misssed</span></td>
-          </tr>
+          <% @completed_surveys.each do |completed_survey| %>
+            <tr>
+              <td><%= completed_survey.date %></td>
+              <td><%= can?(:manage, @user.organizations.first) ? link_to(completed_survey, [@user,completed_survey]) : completed_survey %></td>
+              <td><%= completed_survey.score %></td>
+            </tr>
+          <% end %>
         </tbody>
       </table>
+      <%= will_paginate @completed_surveys %>
     </div>
     
     <div class="span4">
       <h3>Announcements</h3>
-      <blockquote><h5>Workouts Cancelled</h5><p>The team will not be meeting for normal workouts tomorrow</p> <small>Brendon Huttmann<cite>2014-01-05</cite></small></blockquote>
-      <blockquote><h5>Kyle Mcpherson</h5><p>Kyle is rejoining the team after 3 weeks on the self. Let's welcome him back</p> <small>Brendon Huttmann<cite>2013-01-05</cite></small></blockquote>
+      <blockquote><h5>Workouts Cancelled</h5><p>The team will not be meeting for normal workouts tomorrow</p> <small>Brendon Huttmann <cite>2014-01-05</cite></small></blockquote>
+      <blockquote><h5>Kyle Mcpherson</h5><p>Kyle is rejoining the team after 3 weeks on the self. Let's welcome him back</p> <small>Brendon Huttmann <cite>2013-01-05</cite></small></blockquote>
     </div>
   </div>
   
@@ -240,8 +244,24 @@
     
     <div class="span6">
       <h3>Manage Assignments</h3>
+
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th><%=t 'name' %></th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @user.groups.each do |group| %>
+            <tr>
+              <td><%= link_to group.full_name, [group.division, group] %></td>
+              <td><%= link_to "Remove", assigned_group_path(@user.assigned_groups.where{ group_id == my{group.id}}.first, return_to: request.url), method: 'delete', class: "btn btn-mini btn-danger" %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
       
-      <p>This area will let you add and remove the player from groups</p>
     </div>
   </div>
 </div>
@@ -310,76 +330,8 @@
 </div>
 
 <!--div class="accordion" id="accordion">
-  <div class="accordion-group">
-    <div class="accordion-heading">
-      <h4 class="accordion-title">
-        <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#alerts">
-          <%=t 'alerts' %>
-        </a>
-      </h4>
-    </div>
-    <div id="alerts" class="accordion-collapse collapse in">
-      <div class="accordion-body">
-        <table class="table table-striped">
-          <thead>
-            <tr>
-              <th>Metric</th>
-              <th>Value</th>
-              <th>Date</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            <% resource.assigned_alerts.reorder{ date.desc }.each do |aa| %>
-              <tr>
-                <td><%= aa.alert.metric.name %></td>
-                <% if aa.recorded_metric %>
-                  <td><%= aa.recorded_metric.value %></td>
-                <% else %>
-                  <td><%= aa.recorded_metric_id %></td>
-                <% end %>
-                <td><%= aa.date %></td>
-                <td><%= aa.alert.message %></td>
-              </tr>
-            <% end %>
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </div>
-  
-  <div class="accordion-group">
-    <div class="accordion-heading">
-      <h4 class="accordion-title">
-        <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#completed_surveys">
-          <%=t 'completed_surveys' %>
-        </a>
-      </h4>
-    </div>
-    <div id="completed_surveys" class="accordion-collapse collapse">
-      <div class="accordion-body">
-        <table class="table table-striped">
-          <thead>
-            <tr>
-              <th><%=t 'date_taken' %></th>
-              <th><%=t 'name' %></th>
-              <th><%=t 'score' %></th>
-            </tr>
-          </thead>
-          <tbody>
-            <% @completed_surveys.each do |completed_survey| %>
-              <tr>
-                <td><%= completed_survey.date %></td>
-                <td><%= can?(:manage, @user.organizations.first) ? link_to(completed_survey, [@user,completed_survey]) : completed_survey %></td>
-                <td><%= completed_survey.score %></td>
-              </tr>
-            <% end %>
-          </tbody>
-        </table>
-        <%= will_paginate @completed_surveys %>
-      </div>
-    </div>
-  </div>
+
+    
 
   <div class="accordion-group">
     <div class="accordion-heading">
@@ -441,57 +393,4 @@
     </div>
   </div>
   
-  
-  <div class="accordion-group">
-    <div class="accordion-heading">
-      <h4 class="accordion-title">
-        <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#groups">
-          <%=t 'groups' %>
-        </a>
-      </h4>
-    </div>
-    <div id="groups" class="accordion-collapse collapse">
-      <div class="accordion-body">
-        <table class="table table-striped">
-          <thead>
-            <tr>
-              <th><%=t 'name' %></th>
-            </tr>
-          </thead>
-          <tbody>
-            <% @user.groups.each do |group| %>
-              <tr>
-                <td><%= link_to group.full_name, [group.division, group] %></td>
-              </tr>
-            <% end %>
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </div>
-  
-  <div class="accordion-group">
-    <div class="accordion-heading">
-      <h4 class="accordion-title">
-        <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#merge">
-          <%=t 'merge' %>
-        </a>
-      </h4>
-    </div>
-    <div id="merge" class="accordion-collapse collapse">
-      <div class="accordion-body">
-        <p>The merge tool will allow you to copy all an athletes data to another player.</p>
-        <p>Use this tool if you misspelled someone's name and then inadvertently created a new athlete with the correct spelling.</p>
-        <p>Submitting the form below will copy all data from this athlete to the target athlete selected and completely remove this athlete, so make sure this is what you want to do.</p>
-        
-        <%= simple_form_for resource, :html => { :class => 'form-horizontal' } do |f| %>
-          <%= f.input :transfer_to %>
-          <div class="form-actions">
-            <%= f.button :submit, :class => 'btn-primary' %>
-          </div>
-        <% end %>
-        
-      </div>
-    </div>
-  </div>
 </div-->

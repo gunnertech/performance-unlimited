@@ -39,6 +39,21 @@ class User < ActiveRecord::Base
   default_scope order{ last_name.asc }
   
   class << self
+    def duplicate_users
+      all.map do |user|
+        duplicates = User.where{ (name == my{user.name}) & (name != "") }
+        duplicates.count > 1 ? duplicates.pluck('name') : nil
+      end.flatten.compact.uniq
+    end
+    
+    def remove_duplicates
+      duplicate_users.each do |name|
+        duplicates = User.where{ name == my{name} }.reorder{ id.asc }
+        ids = duplicates.pluck('id').to_a.shift 
+        User.where{ (id >> my{ids}) }.destroy_all
+      end
+    end
+    
     def leaderboard(start_date=nil,end_date=nil)
       if start_date && end_date
         joins{ completed_surveys }.where{ completed_surveys.date >> (start_date..end_date) }.reorder{ completed_surveys.score.desc }
@@ -140,9 +155,7 @@ class User < ActiveRecord::Base
   
   def transfer
     target = User.find_by_name(transfer_to)
-    # raise target.inspect
-    # 2073
-    # 1589
+
     if target && target != self
       run_transfer_to(target)
     end

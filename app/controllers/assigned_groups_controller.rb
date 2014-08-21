@@ -1,7 +1,7 @@
 class AssignedGroupsController < InheritedResources::Base
-  belongs_to :user
+  belongs_to :user, optional: true
   
   def destroy
-    destroy!{ [resource.group.division, resource.group] }
+    destroy!{ params[:return_to].present? ? params[:return_to] : [resource.group.division, resource.group] }
   end
 end

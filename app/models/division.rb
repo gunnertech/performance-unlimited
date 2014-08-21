@@ -98,7 +98,7 @@ class Division < ActiveRecord::Base
       if row['Athlete ID'].present?
         user = User.find_by_id(row['Athlete ID'])
       else
-        user = self.users.where{ (first_name =~ my{row['First Name'].try(:squish)}) & (last_name =~ my{row['Last Name'].try(:squish)}) }.first
+        user = self.users.where{ (first_name =~ my{row['First Name'].try(:squish).try(:titlecase)}) & (last_name =~ my{row['Last Name'].try(:squish).try(:titlecase)}) }.first
       end
       
       if user.nil?
