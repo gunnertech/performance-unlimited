@@ -41,7 +41,7 @@ class User < ActiveRecord::Base
   class << self
     def duplicate_users
       all.map do |name|
-        duplicates = User.where{ (name == my{name}) & (name != "") }
+        duplicates = User.where{ (name == my{name}) & (name != "") & (name != " ") }
         duplicates.count > 1 ? duplicates.pluck('name') : nil
       end.flatten.compact.uniq
     end
@@ -49,7 +49,8 @@ class User < ActiveRecord::Base
     def remove_duplicates
       duplicate_users.each do |name|
         duplicates = User.where{ name == my{name} }.reorder{ id.asc }
-        ids = duplicates.pluck('id').to_a.shift 
+        ids = duplicates.pluck('id').to_a
+        ids.shift 
         User.where{ (id >> my{ids}) }.destroy_all
       end
     end
