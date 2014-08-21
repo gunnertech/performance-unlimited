@@ -40,8 +40,8 @@ class User < ActiveRecord::Base
   
   class << self
     def duplicate_users
-      all.map do |user|
-        duplicates = User.where{ (name == my{user.name}) & (name != "") }
+      all.map do |name|
+        duplicates = User.where{ (name == my{name}) & (name != "") }
         duplicates.count > 1 ? duplicates.pluck('name') : nil
       end.flatten.compact.uniq
     end
