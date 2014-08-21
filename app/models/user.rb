@@ -40,19 +40,11 @@ class User < ActiveRecord::Base
   
   class << self
     def duplicate_users
-      all.map do |name|
-        duplicates = User.where{ (name == my{name}) & (name != "") & (name != " ") }
-        duplicates.count > 1 ? duplicates.pluck('name') : nil
-      end.flatten.compact.uniq
+      User.where{ (name != "") & (name != " ")}.map{|n| User.where{ name == my{n.name}}.reorder{ id.asc }.offset(1).pluck("id") }.flatten.compact.uniq
     end
     
     def remove_duplicates
-      duplicate_users.each do |name|
-        duplicates = User.where{ name == my{name} }.reorder{ id.asc }
-        ids = duplicates.pluck('id').to_a
-        ids.shift 
-        User.where{ (id >> my{ids}) }.destroy_all
-      end
+      User.where{ id >> my{duplicate_users} }.destroy_all
     end
     
     def leaderboard(start_date=nil,end_date=nil)
