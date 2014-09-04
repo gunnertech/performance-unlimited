@@ -19,6 +19,10 @@
 <%= simple_form_for (parent? ? [parent,@user] : @user), :html => { :class => 'form-horizontal' } do |f| %>
   <%= f.input :name %>
   <%= f.input :email %>
+  <%= f.input :phone_number %>
+  <%= f.input :reminder_hour, label: "Remind At", collection: [['Midnight',0],['1:00 am',1],['2:00 am',2],['3:00 am',3],['4:00 am',4],['5:00 am',5],['6:00 am',6],['7:00 am',7],['8:00 am',8],['9:00 am',9],['10:00 am',10],['11:00 am',11],['12:00 am',1],['1:00 pm',13],['2:00 pm',14],['3:00 pm',15],['4:00 pm',16],['5:00 pm',17],['6:00 pm',18],['7:00 pm',19],['8:00 pm',20],['9:00 pm',21],['10:00 pm',22],['11:00 pm',23]], include_blank: false %>
+  <%= f.input :reminder_active %>
+  
   <%= f.association :default_division, collection: (@user.divisions.all + @user.admined_divisions) unless @user.new_record? %>
   <%= f.input :active %>
   <%= f.input :language, collection: Locale.all.map{ |locale| [locale.name,locale.code] }, include_blank: false %>

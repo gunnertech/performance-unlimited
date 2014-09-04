@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140130203922) do
+ActiveRecord::Schema.define(:version => 20140904221403) do
 
   create_table "alerts", :force => true do |t|
     t.string   "alertable_type"
@@ -385,8 +385,8 @@ ActiveRecord::Schema.define(:version => 20140130203922) do
   add_index "surveys", ["organization_id"], :name => "index_surveys_on_organization_id"
 
   create_table "users", :force => true do |t|
-    t.string   "email",                  :default => "",   :null => false
-    t.string   "encrypted_password",     :default => "",   :null => false
+    t.string   "email",                  :default => "",    :null => false
+    t.string   "encrypted_password",     :default => "",    :null => false
     t.string   "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
@@ -395,16 +395,20 @@ ActiveRecord::Schema.define(:version => 20140130203922) do
     t.datetime "last_sign_in_at"
     t.string   "current_sign_in_ip"
     t.string   "last_sign_in_ip"
-    t.datetime "created_at",                               :null => false
-    t.datetime "updated_at",                               :null => false
+    t.datetime "created_at",                                :null => false
+    t.datetime "updated_at",                                :null => false
     t.string   "name"
     t.string   "first_name"
     t.string   "last_name"
     t.integer  "score"
     t.float    "average"
-    t.boolean  "active",                 :default => true, :null => false
-    t.string   "language",               :default => "en", :null => false
+    t.boolean  "active",                 :default => true,  :null => false
+    t.string   "language",               :default => "en",  :null => false
     t.integer  "division_id"
+    t.string   "authentication_token"
+    t.integer  "reminder_hour"
+    t.boolean  "reminder_active",        :default => false
+    t.string   "phone_number"
   end
 
   add_index "users", ["email"], :name => "index_users_on_email"

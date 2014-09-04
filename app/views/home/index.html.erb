@@ -3,12 +3,16 @@
     <h2>Navigation</h2>
     
     <%= form_tag('#', method: 'get', id: "dropdown-nav") do -%>
-      <% if @possible_organizations.count > 1 %>
-      <% else %>
-        <%= hidden_field_tag :organization_id, @possible_organizations.first.id %>
+      <% if @possible_organizations.present? %>
+        <% if @possible_organizations.count > 1 %>
+        <% else %>
+          <%= hidden_field_tag :organization_id, @possible_organizations.first.id %>
+        <% end %>
       <% end %>
       
-      <%= @possible_groups.map{|group| "<input class='division-#{group.division.id}' type='hidden' data-name='#{group.to_s}' data-division-id='#{group.division.id}' value='#{group.id}' />".html_safe }.join("").html_safe %>
+      <% if @possible_groups.present? %>
+        <%= @possible_groups.map{|group| "<input class='division-#{group.division.id}' type='hidden' data-name='#{group.to_s}' data-division-id='#{group.division.id}' value='#{group.id}' />".html_safe }.join("").html_safe %>
+      <% end %>
       
       <%= select_tag :division_id, options_from_collection_for_select(@possible_divisions, "id", "to_s"), include_blank: true, class: 'input-small'  %>
       <%= select_tag :group_id, "", include_blank: true, class: 'input-small' %>

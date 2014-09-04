@@ -5,13 +5,16 @@ class User < ActiveRecord::Base
   # :token_authenticatable, :confirmable,
   # :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :trackable#, :validatable
+         :recoverable, :rememberable, :trackable, :token_authenticatable#, :validatable
 
   # Setup accessible (or protected) attributes for your model
   attr_accessible :name, :email, :password, :password_confirmation, :remember_me, :first_name, :last_name, :score, :average, 
-                  :active, :language, :division_id, :assigned_roles, :change_roles, :group_ids, :transfer_to
+                  :active, :language, :division_id, :assigned_roles, :change_roles, :group_ids, :transfer_to, :authentication_token, :phone_number
   
   attr_accessor :assigned_roles, :editor, :change_roles, :transfer_to
+
+  
+  before_save :ensure_authentication_token
   
   before_validation :set_first_name_and_last_name
   before_validation :transfer, if: Proc.new{ |user| user.transfer_to.present? }
@@ -89,6 +92,19 @@ class User < ActiveRecord::Base
     
   end
   
+  def send_survey_reminder
+    auth_token = authentication_token || ensure_authentication_token
+    number = ENV['TWILIO_NUMBERS'].split(",").sample
+    client = Twilio::REST::Client.new ENV['TWILIO_ACCOUNT_SID'], ENV['TWILIO_AUTH_TOKEN']
+    client.account.sms.messages.create(
+      :from => "+1#{number}",
+      :to => "+1#{phone_number}",
+      :body => "Reminder: http://#{organizations.first.mapped_domains.first.domain}/?auth_token=#{auth_token}"
+    )
+
+  end
+  # handle_asynchronously :send_survey_reminder
+  
   def rank_for(recorded_metric, among_users, for_date=nil)
     rank = 1
     values = []
@@ -130,6 +146,13 @@ class User < ActiveRecord::Base
   def url
     "/admin/users/#{id}"
   end
+  
+  def my_reset_authentication_token
+    self.authentication_token = nil
+    self.ensure_authentication_token
+    self.save!
+  end
+  handle_asynchronously :my_reset_authentication_token, run_at: Proc.new { 1.second.from_now }
   
   def run_transfer_to(target)
     target.comments << self.comments
@@ -196,8 +219,13 @@ class User < ActiveRecord::Base
   def set_first_name_and_last_name
     if name && first_name.blank? && last_name.blank?
       name_pieces = name.split(" ")
-      self.first_name = name_pieces.first.squish
-      self.last_name = (name_pieces - [name_pieces.first]).join(" ").squish
+      if name_pieces.length == 0
+        self.first_name = "blank"
+        self.last_name = "blank"
+      else
+        self.first_name = (name_pieces.first || "").squish
+        self.last_name = (name_pieces - [name_pieces.first]).join(" ").squish
+      end
     end
   end
   

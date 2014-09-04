@@ -31,6 +31,8 @@ gem 'batch_translations'
 gem 'paper_trail', '~> 2'
 gem 'delayed_job_active_record'
 gem 'rabl-rails'
+gem 'clockwork'
+gem 'twilio-ruby'
 
 group :assets do
   gem 'sass-rails',   '~> 3.2.3'

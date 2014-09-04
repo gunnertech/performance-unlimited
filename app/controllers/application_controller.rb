@@ -3,6 +3,7 @@ class ApplicationController < ActionController::Base
   load_and_authorize_resource :unless => :devise_controller?, except: :index
   
   before_filter :set_locale
+  before_filter :after_token_authentication
   
   protected
   
@@ -20,6 +21,13 @@ class ApplicationController < ActionController::Base
   
   def default_url_options(options={})
     { :locale => I18n.locale }
+  end
+  
+  def after_token_authentication
+    if params[:auth_token].present?
+      user = User.find_by_authentication_token(params[:auth_token])
+      user.my_reset_authentication_token if user.present?
+    end
   end
   
   rescue_from CanCan::AccessDenied do |exception|
