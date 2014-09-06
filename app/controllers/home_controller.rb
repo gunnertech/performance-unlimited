@@ -9,10 +9,13 @@ class HomeController < ApplicationController
     @possible_divisions = Division.where{ id >> my{Organization.with_role('admin', current_user).joins{ divisions }.pluck('divisions.id')}}
     @possible_groups = Group.where{ id >> my{Organization.with_role('admin', current_user).joins{ groups }.pluck('groups.id')}}
     
+    # params[:survey_id] = 3
+
     if @organization
       if params[:survey_id]
         @survey = @organization.surveys.find(params[:survey_id])
         @division = current_user.default_division
+        # @division = Division.first
         @groups = @division.groups
         @biggest_group_count, @total_groups, @user_array, @group_array = @division.grouped_users
         # @grouped_users = @division.grouped_users
