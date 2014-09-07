@@ -1,5 +1,5 @@
-<% if current_user.is_a_participant? %>
-  <%= render partial: 'participant_home' %>
-<% else %>
+<% if current_user.is_an_admin? %>
   <%= render partial: 'admin_home' %>
+<% else %>
+  <%= render partial: 'participant_home' %>
 <% end %>

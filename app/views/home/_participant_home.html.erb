@@ -1,0 +1,110 @@
+<% @survey.assigned_question_sets.each_with_index do |assigned_question_set,i| %>
+  <section class="clearfix question-set <%= i==0 ? 'start' : '' %>" id="<%= assigned_question_set.name.parameterize %>">
+    <h1><%= assigned_question_set %></h1>
+    <table class="table">
+      <tbody>
+        <% assigned_question_set.question_set.assigned_questions.each do |assigned_question| %>
+          <tr>
+            <td><strong><%= assigned_question %></strong></td>
+            <% 0.upto(assigned_question_set.question_set.max_responses).each do |i| %>
+              <td>
+                <% if assigned_question.question.responses[i] %>
+                  <a data-suggestion="<%=j assigned_question.question.responses[i].suggestion %>" data-response_id="<%= assigned_question.question.responses[i].id %>" data-question_id="<%= assigned_question.question.id %>" href="#" class="answer btn <%= response_css_point_class(assigned_question.question.responses[i],i+1) %>" data-value="<%= assigned_question.question.responses[i].points %>"><%= assigned_question.question.responses[i].short_text.try(:html_safe) %> <span class="print-only">(<%= assigned_question.question.responses[i].points %>)</span></a>
+                <% else %>
+                  &nbsp;
+                <% end %>
+              </td>
+            <% end %>
+            <td class="score"><strong></strong></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+    
+    <% if assigned_question_set == @survey.assigned_question_sets.first %>
+      <a href="#current-roster" class="navigate btn btn-inverse pull-left"><%=t 'prev' %></a>
+    <% else %>
+      <a href="#<%= @survey.assigned_question_sets[i-1].to_s.parameterize %>" class="navigate btn btn-inverse pull-left"><%=t 'prev' %></a>
+    <% end %>
+    
+    <% if assigned_question_set == @survey.assigned_question_sets.last %>
+      <a href="#summary" data-user_id="<%= current_user.try(:id) %>" data-sumbission-uri="<%= survey_completed_surveys_path(@survey) %>" class="navigate btn btn-primary pull-right next disabled"><%=t 'submit_answers' %></a>
+    <% else %>
+      <a href="#<%= @survey.assigned_question_sets[i+1].to_s.parameterize %>" class="navigate btn btn-inverse pull-right next disabled"><%=t 'next' %></a>
+    <% end %>
+  </section>
+<% end %>
+
+<section id="summary">
+  <div class="row-fluid">
+    <div class="span6" id="final-score">
+      <h1><%=t 'your_score' %>: <span id="score">0</span> <small><%= link_to t('history'), "/users/user_id", class: "btn pull-right completed-survey-link" %></small></h1>
+      
+      <h3><%=t 'scale' %></h3>
+      <table class="table table-bordered point-legend">
+        <% @survey.point_ranges.each_with_index do |point_range,i| %>
+          <tr data-range="<%= point_range.low %>^<%= point_range.high || 1000 %>">
+            <td><%= point_range_to_html(@survey,point_range,i) %></td>
+            <td><%= point_range.name %></td>
+          </tr>
+        <% end %>
+      </table>
+      
+      <h3><%=t ('tips_for_improvement') %></h3>
+      <dl class="dl-horizontal" id="suggestions"></dl>
+    </div>
+    
+    <div class="span6" id="leaderboard" data-division_id="<%= @division.id %>">
+      <h3><%=t ('todays_leaderboard') %> <small><%= link_to t('view_leaderboards'), @division, class: 'btn pull-right' %></small></h3>
+      <div class="attach-point">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th><% 'rank' %></th>
+              <th><%=t 'name' %></th>
+              <th><%=t 'score' %></th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @division.users.active.leaderboard(@division.today,@division.today).each_with_index do |user,i| %>
+              <tr id="user-<%= user.id %>">
+                <td><%= i+1 %></td>
+                <td><%= user %></td>
+                <td><%= user.completed_surveys.where{ date == my{@division.today} }.try(:first).try(:score) %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  
+  <div class="row-fluid">
+    <div class="span12">
+      <h2><%=t 'last_30_days' %></h2>
+      <div class="graph" data-user_id="<%= current_user.try(:id) %>" data-day_range="30"></div>
+    </div>
+  </div>
+  
+  <div class="row-fluid">
+    <div class="span12">
+      <h3><%=t ('follow_us') %></h3>
+      <ul class="unstyled">
+        <% @survey.organization.twitter_accounts.each do |account| %>
+          <li>
+            <a href="http://twitter.com/<%= account.nickname %>"><img src="<%= @organization.twitter_profile_image_src(account.nickname) %>" /></a>
+            <a href="http://twitter.com/<%= account.nickname %>"><%= t('follow_on_twitter', name: account.nickname) %></a>
+          </li>
+        <% end %>
+      </ul>
+      <h3><%=t ('latest_tweets') %></h3>
+      <% @survey.organization.twitter_accounts.each do |account| %>
+        <ul>
+          <% @survey.organization.tweets_for(account.nickname).each_with_index do |tweet,i| %>
+            <li><%= simple_format auto_link(tweet.text) %></li>
+          <% end %>
+        </ul>
+      <% end %>
+    </div>
+  </div>
+</section>

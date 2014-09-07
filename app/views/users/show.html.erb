@@ -1,3 +1,17 @@
+<%= content_for(:breadcrumb) do %>
+  <div class="span6">
+    <ul class="breadcrumb">
+      <li><%= link_to t('home'), root_path %><span class="divider">/</span></li>
+      <li><%= link_to t('users'), users_path %><span class="divider">/</span></li>
+      <li class="active"><%= @user %></li>
+    </ul>
+  </div>
+  
+  <div class="span6 btn-group">
+    <%= link_to "Sign in as #{resource}", sign_in_as_user_path, :class => 'btn btn-primary', method: "post" %>
+  </div>
+<% end %>
+
 <%- model_class = User -%>
 
 <%= content_for(:breadcrumb) do %>
@@ -27,7 +41,7 @@
   </div-->
 <% end %>
 
-<div class="row-fluid" style="margin-bottom: 30px;">
+<!--div class="row-fluid" style="margin-bottom: 30px;">
   <div class="span2">
     <img src="http://placehold.it/300x300">
   </div>
@@ -41,9 +55,9 @@
     <p>Ridiculus tincidunt tortor? Sit ac et. Placerat in mid ultricies elementum. Vel sed arcu habitasse montes ut adipiscing augue, massa tincidunt massa vel. Arcu? Ac pulvinar? Magnis sed augue, sed magna turpis scelerisque adipiscing etiam, dictumst penatibus aliquam sit sit adipiscing elit enim, rhoncus facilisis nisi ridiculus. Purus amet turpis ac mattis ac non cursus vel quis sed dapibus.</p>
   </div>
   <div class="span2">
-    <%= image_tag "http://i.imgur.com/0Gb6iAl.jpg" %>
+    <%#= image_tag "http://i.imgur.com/0Gb6iAl.jpg" %>
   </div>
-</div>
+</div-->
 
 
 <ul class="user-home nav nav-pills">
@@ -83,7 +97,27 @@
     </div>
   
     <div class="span4">
-      <h3>Awards</h3>
+      <h3><%= t('surveys') %></h3>
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th><%=t 'date_taken' %></th>
+            <th><%=t 'name' %></th>
+            <th><%=t 'score' %></th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @completed_surveys.each do |completed_survey| %>
+            <tr>
+              <td><%= completed_survey.date %></td>
+              <td><%= can?(:manage, @user.organizations.first) ? link_to(completed_survey, [@user,completed_survey]) : completed_survey %></td>
+              <td><%= completed_survey.score %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+      <%= will_paginate @completed_surveys %>
+      <!--h3>Awards</h3>
       <table class="table table-striped">
         <tbody>
           <tr>
@@ -107,13 +141,13 @@
             </td>
           </tr>
         </tbody>
-      </table>
+      </table-->
     </div>
   </div>
   
   <div class="row-fluid">
     <div class="span4">
-      <h3>Workouts</h3>
+      <!--h3>Workouts</h3>
       <table class="table table-striped">
         <tbody>
           <tr>
@@ -137,11 +171,11 @@
             <td><a href="#">Download</a></td>
           </tr>
         </tbody>
-      </table>
+      </table-->
     </div>
     
     <div class="span4">
-      <h3><%= t('surveys') %></h3>
+      <!--h3><%= t('surveys') %></h3>
       <table class="table table-striped">
         <thead>
           <tr>
@@ -160,19 +194,19 @@
           <% end %>
         </tbody>
       </table>
-      <%= will_paginate @completed_surveys %>
+      <%= will_paginate @completed_surveys %>-->
     </div>
     
     <div class="span4">
-      <h3>Announcements</h3>
+      <!--h3>Announcements</h3>
       <blockquote><h5>Workouts Cancelled</h5><p>The team will not be meeting for normal workouts tomorrow</p> <small>Brendon Huttmann <cite>2014-01-05</cite></small></blockquote>
       <blockquote><h5>Kyle Mcpherson</h5><p>Kyle is rejoining the team after 3 weeks on the self. Let's welcome him back</p> <small>Brendon Huttmann <cite>2013-01-05</cite></small></blockquote>
-    </div>
+    </div-->
   </div>
   
   <div class="row-fluid">
     <div class="span6">
-      <h3>Activity</h3>
+      <!--h3>Activity</h3>
       <ul class="media-list">
         <li class="media">
           <a class="pull-left" href="#">
@@ -193,12 +227,12 @@
             <p>Just joined the Iron Pirate Club</p>
           </div>
         </li>
-      </ul>
+      </ul-->
     </div>
 
     
     <div class="span6">
-      <h3>Inbox</h3>
+      <!--h3>Inbox</h3>
       
       <ul class="media-list">
         <li class="media">
@@ -220,7 +254,7 @@
             <p>Keep up the good work</p>
           </div>
         </li>
-      </ul>
+      </ul-->
     </div>
     
   </div>

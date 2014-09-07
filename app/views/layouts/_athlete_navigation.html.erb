@@ -30,7 +30,7 @@
         </ul>
       </li>
       <li>
-        <%= link_to t('log_out'), destroy_user_session_path, :method=>'delete' %>        
+        <%= link_to (current_user.to_s + " - " + t('log_out')), destroy_user_session_path, :method=>'delete' %>        
       </li>
     </ul>
   

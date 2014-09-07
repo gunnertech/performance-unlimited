@@ -91,6 +91,10 @@ class User < ActiveRecord::Base
     end
     
   end
+
+  def name_inverted
+    "#{last_name}, #{first_name}"
+  end
   
   def send_survey_reminder
     auth_token = authentication_token || ensure_authentication_token
@@ -98,12 +102,16 @@ class User < ActiveRecord::Base
     client = Twilio::REST::Client.new ENV['TWILIO_ACCOUNT_SID'], ENV['TWILIO_AUTH_TOKEN']
     client.account.sms.messages.create(
       :from => "+1#{number}",
-      :to => "+1#{phone_number}",
+      :to => "+1#{formatted_phone_number}",
       :body => "Reminder: http://#{organizations.first.mapped_domains.first.domain}/?auth_token=#{auth_token}"
     )
 
   end
-  # handle_asynchronously :send_survey_reminder
+  handle_asynchronously :send_survey_reminder
+
+  def formatted_phone_number
+    phone_number.to_s.gsub(/\D/,"")
+  end
   
   def rank_for(recorded_metric, among_users, for_date=nil)
     rank = 1

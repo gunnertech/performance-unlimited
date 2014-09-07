@@ -9,14 +9,21 @@ class UsersController < InheritedResources::Base
   before_filter :set_hide_averages, only: :dashboard
   before_filter :set_graph_type
   
-  custom_actions resource: [:dashboard,:transer]
-  skip_load_and_authorize_resource only: [:dashboard,:transer]
+  custom_actions resource: [:dashboard,:transer,:sign_in_as]
+  skip_load_and_authorize_resource only: [:dashboard,:transer,:sign_in_as]
   
   respond_to :json
   
   def dashboard
     authorize! :create, RecordedMetric
     dashboard!
+  end
+
+  def sign_in_as
+    authorize! :update, resource
+    sign_out current_user
+    sign_in resource
+    redirect_to root_url
   end
   
   def transfer

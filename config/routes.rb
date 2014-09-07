@@ -10,6 +10,7 @@ PerformanceUnlimited::Application.routes.draw do
       member do
         get 'dashboard'
         put 'transfer'
+        post 'sign_in_as'
       end
     end
   end
