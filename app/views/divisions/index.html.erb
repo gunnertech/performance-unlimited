@@ -31,7 +31,6 @@
            <%= link_to t('leaderboards'), division, class: 'btn  btn-info' %>
            <%= link_to t('add_group'), [:new,division,:group], class: 'btn  btn-info' if can?(:manage,division) %>
            <%= link_to t('surveys'), [division,:assigned_surveys], class: 'btn  btn-info' if can?(:manage,division) %>
-           <%= link_to t('take_survey'), root_path(division_id: division.id), class: 'btn  btn-info' if can?(:manage,division) %>
            <%= link_to t('metrics'), [:dashboard,division], class: 'btn  btn-info' if can?(:manage,division) %>
         </div>
         <% biggest_group_count, total_groups, user_array, group_array = division.grouped_users %>
