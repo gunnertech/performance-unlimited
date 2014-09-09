@@ -231,7 +231,7 @@
 
 <div id="admin" class="player-panel" style="display:none;">
   <div class="row-fluid">
-    <div class="span4">
+    <div class="span6">
       <h3>Merge Tool</h3>
       <p>The merge tool will allow you to copy all an athletes data to another player.</p>
       <p>Use this tool if you misspelled someone's name and then inadvertently created a new athlete with the correct spelling.</p>
@@ -245,7 +245,7 @@
       <% end %>
     </div>
     
-    <div class="span4">
+    <div class="span6">
       <h3>Manage Assignments</h3>
 
       <table class="table table-striped">
@@ -266,8 +266,10 @@
       </table>
       
     </div>
+  </div>
     
-    <div class="span4">
+  <div class="row-fluid">
+    <div class="span6">
       <h3>Reminders</h3>
       
       <%= simple_form_for (parent? ? [parent,@user] : @user), :html => { :class => 'form-horizontal' } do |f| %>
@@ -276,6 +278,34 @@
         <%= f.input :reminder_active %>
 
 
+        <div class="form-actions">
+          <%= f.button :submit, :class => 'btn-primary' %>
+        </div>
+      <% end %>
+      
+    </div>
+
+    <div class="span6">
+      <h3>Edit</h3>
+      
+      <%= simple_form_for (parent? ? [parent,@user] : @user), :html => { :class => 'form-horizontal' } do |f| %>
+        <%= f.input :name %>
+        <%= f.input :email %>
+        
+        <%= f.association :default_division, collection: (@user.divisions.all + @user.admined_divisions) unless @user.new_record? %>
+        <%= f.input :active %>
+        <%= f.input :language, collection: Locale.all.map{ |locale| [locale.name,locale.code] }, include_blank: false %>
+        
+        <%= f.input :assigned_roles, label: "Roles", as: :check_boxes, collection: ['admin','athlete'], input_html: {include_blank: true, multiple: true} %>
+        <%= f.input :change_roles, as: :hidden, input_html: {value: 1} %>
+        <%= f.association :groups, as: :check_boxes, label_method: :full_name, collection: Group.accessible_by(current_ability) %>
+        
+        
+        <%= f.input :password %>
+        <%= f.input :password_confirmation %>
+        
+        
+        
         <div class="form-actions">
           <%= f.button :submit, :class => 'btn-primary' %>
         </div>
