@@ -231,7 +231,7 @@
 
 <div id="admin" class="player-panel" style="display:none;">
   <div class="row-fluid">
-    <div class="span6">
+    <div class="span4">
       <h3>Merge Tool</h3>
       <p>The merge tool will allow you to copy all an athletes data to another player.</p>
       <p>Use this tool if you misspelled someone's name and then inadvertently created a new athlete with the correct spelling.</p>
@@ -245,8 +245,8 @@
       <% end %>
     </div>
     
-    <div class="span6">
-      <h3>Manage Assignments</h3>
+    <div class="span4">
+      <!--h3>Manage Assignments</h3>
 
       <table class="table table-striped">
         <thead>
@@ -263,29 +263,8 @@
             </tr>
           <% end %>
         </tbody>
-      </table>
-      
-    </div>
-  </div>
-    
-  <div class="row-fluid">
-    <div class="span6">
-      <h3>Reminders</h3>
-      
-      <%= simple_form_for (parent? ? [parent,@user] : @user), :html => { :class => 'form-horizontal' } do |f| %>
-        <%= f.input :phone_number %>
-        <%= f.input :reminder_hour, label: "Remind At", collection: [['Midnight',0],['1:00 am',1],['2:00 am',2],['3:00 am',3],['4:00 am',4],['5:00 am',5],['6:00 am',6],['7:00 am',7],['8:00 am',8],['9:00 am',9],['10:00 am',10],['11:00 am',11],['Noon',12],['1:00 pm',13],['2:00 pm',14],['3:00 pm',15],['4:00 pm',16],['5:00 pm',17],['6:00 pm',18],['7:00 pm',19],['8:00 pm',20],['9:00 pm',21],['10:00 pm',22],['11:00 pm',23]], include_blank: false %>
-        <%= f.input :reminder_active %>
+      </table-->
 
-
-        <div class="form-actions">
-          <%= f.button :submit, :class => 'btn-primary' %>
-        </div>
-      <% end %>
-      
-    </div>
-
-    <div class="span6">
       <h3>Edit</h3>
       
       <%= simple_form_for (parent? ? [parent,@user] : @user), :html => { :class => 'form-horizontal' } do |f| %>
@@ -312,8 +291,25 @@
       <% end %>
       
     </div>
-    
+
+    <div class="span4">
+
+      <h3>Reminders</h3>
+      
+      <%= simple_form_for (parent? ? [parent,@user] : @user), :html => { :class => 'form-horizontal' } do |f| %>
+        <%= f.input :phone_number %>
+        <%= f.input :reminder_hour, label: "Remind At", collection: [['Midnight',0],['1:00 am',1],['2:00 am',2],['3:00 am',3],['4:00 am',4],['5:00 am',5],['6:00 am',6],['7:00 am',7],['8:00 am',8],['9:00 am',9],['10:00 am',10],['11:00 am',11],['Noon',12],['1:00 pm',13],['2:00 pm',14],['3:00 pm',15],['4:00 pm',16],['5:00 pm',17],['6:00 pm',18],['7:00 pm',19],['8:00 pm',20],['9:00 pm',21],['10:00 pm',22],['11:00 pm',23]], include_blank: false %>
+        <%= f.input :reminder_active %>
+
+
+        <div class="form-actions">
+          <%= f.button :submit, :class => 'btn-primary' %>
+        </div>
+      <% end %>
+      
+    </div>
   </div>
+    
 </div>
 
 <div id="performance-profile" class="player-panel" style="display:none;">
