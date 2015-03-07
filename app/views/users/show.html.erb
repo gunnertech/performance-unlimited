@@ -14,33 +14,6 @@
 
 <%- model_class = User -%>
 
-<%= content_for(:breadcrumb) do %>
-  <!--div class="span6">
-    <ul class="breadcrumb">
-      <li><%= link_to t('home'), root_path %><span class="divider">/</span></li>
-      <% if resource.organization %>
-        <li><%= link_to resource.organization, [resource.organization] %><span class="divider">/</span></li>
-      <% end %>
-      <li><%= link_to t('divisions'), [current_user, :divisions] %><span class="divider">/</span></li>
-      <li><%= link_to resource.divisions.first, resource.divisions.first  %><span class="divider">/</span></li>
-      <li class="active"><%= resource %></li>
-    </ul>
-  </div>  
-  
-  <div class="span6 btn-group">
-    <%= link_to t('download'), user_path(@user,format:'csv'), class: 'btn btn-primary ' %>
-     <% if can?(:update, @user) %>
-       <%= link_to t('.edit', :default => t("helpers.links.edit")), edit_user_path(@user), :class => 'btn ' %>
-     <% end %>
-     <% if can?(:create, RecordedMetric) %>
-        <%= link_to t('record_metric'), new_user_recorded_metric_path(resource), :class => 'btn btn-info ' %>
-     <% end %>
-     <% if can?(:update, @user) %>
-      <%= link_to t('metrics'), [:dashboard,@user], :class => 'btn ' %>
-    <% end %>
-  </div-->
-<% end %>
-
 <!--div class="row-fluid" style="margin-bottom: 30px;">
   <div class="span2">
     <img src="http://placehold.it/300x300">
@@ -65,13 +38,6 @@
   <!--li><a href="#" data-target="#recovery-profile">Recovery Profile</a></li-->
   <li class="active"><a href="#" data-target="#dashboard">Dashboard</a></li>
   <li><a href="#" data-target="#admin">Admin</a></li>
-  <!--li><a href="#" >Surveys</a></li>
-  <li><a href="#">Workouts</a></li>
-  <li><a href="#">Alerts</a></li>
-  <li><a href="#">Announcements</a></li>
-  <li><a href="#">Activity</a></li>
-  <li><a href="#">Awards</a></li>
-  <li><a href="#">Comments</a></li-->
 </ul>
 
 <div id="recovery-profile" class="player-panel" style="display:none;">
@@ -117,37 +83,40 @@
         </tbody>
       </table>
       <%= will_paginate @completed_surveys %>
-      <!--h3>Awards</h3>
-      <table class="table table-striped">
-        <tbody>
-          <tr>
-            <td class="award-cell">
-              <%= image_tag "http://content.sportslogos.net/logos/54/71/full/2309.gif" %><br />
-              <strong>Iron Pirate</strong>
-            </td>
-            <td>10/12/2014</td>
-            <td>
-              Given to members of the 400lb bench-press club
-            </td>
-          </tr>
-          <tr>
-            <td class="award-cell">
-              <%= image_tag "https://cdn0.iconfinder.com/data/icons/elite-sports/512/trophy-fill-512.png" %><br />
-              <strong>Mr. Consistent</strong>
-            </td>
-            <td>8/2/2014</td>
-            <td>
-              20 days without missing a workout
-            </td>
-          </tr>
-        </tbody>
-      </table-->
+      
+      <div style="display:none;">
+        <h3>Awards</h3>
+        <table class="table table-striped">
+          <tbody>
+            <tr>
+              <td class="award-cell">
+                <%= image_tag "http://content.sportslogos.net/logos/54/71/full/2309.gif" %><br />
+                <strong>Iron Pirate</strong>
+              </td>
+              <td>10/12/2014</td>
+              <td>
+                Given to members of the 400lb bench-press club
+              </td>
+            </tr>
+            <tr>
+              <td class="award-cell">
+                <%= image_tag "https://cdn0.iconfinder.com/data/icons/elite-sports/512/trophy-fill-512.png" %><br />
+                <strong>Mr. Consistent</strong>
+              </td>
+              <td>8/2/2014</td>
+              <td>
+                20 days without missing a workout
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
   
-  <div class="row-fluid">
+  <div style="display:none;" class="row-fluid">
     <div class="span4">
-      <!--h3>Workouts</h3>
+      <h3>Workouts</h3>
       <table class="table table-striped">
         <tbody>
           <tr>
@@ -171,11 +140,11 @@
             <td><a href="#">Download</a></td>
           </tr>
         </tbody>
-      </table-->
+      </table>
     </div>
     
     <div class="span4">
-      <!--h3><%= t('surveys') %></h3>
+      <h3><%= t('surveys') %></h3>
       <table class="table table-striped">
         <thead>
           <tr>
@@ -194,19 +163,23 @@
           <% end %>
         </tbody>
       </table>
-      <%= will_paginate @completed_surveys %>-->
+      <%= will_paginate @completed_surveys %>
     </div>
     
     <div class="span4">
-      <!--h3>Announcements</h3>
+      <h3>Announcements</h3>
       <blockquote><h5>Workouts Cancelled</h5><p>The team will not be meeting for normal workouts tomorrow</p> <small>Brendon Huttmann <cite>2014-01-05</cite></small></blockquote>
+<<<<<<< HEAD
       <blockquote><h5>Kyle Mcpherson</h5><p>Kyle is rejoining the team after 3 weeks on the self. Let's welcome him back</p> <small>Brendon Huttmann <cite>2013-01-05</cite></small></blockquote-->
+=======
+      <blockquote><h5>Kyle Mcpherson</h5><p>Kyle is rejoining the team after 3 weeks on the self. Let's welcome him back</p> <small>Brendon Huttmann <cite>2013-01-05</cite></small></blockquote>
+>>>>>>> 95124b3d7672edc1b1d01f247e2cee33fcd6e6f2
     </div>
   </div>
   
-  <div class="row-fluid">
+  <div style="display:none;" class="row-fluid">
     <div class="span6">
-      <!--h3>Activity</h3>
+      <h3>Activity</h3>
       <ul class="media-list">
         <li class="media">
           <a class="pull-left" href="#">
@@ -227,12 +200,12 @@
             <p>Just joined the Iron Pirate Club</p>
           </div>
         </li>
-      </ul-->
+      </ul>
     </div>
 
     
     <div class="span6">
-      <!--h3>Inbox</h3>
+      <h3>Inbox</h3>
       
       <ul class="media-list">
         <li class="media">
@@ -254,7 +227,7 @@
             <p>Keep up the good work</p>
           </div>
         </li>
-      </ul-->
+      </ul>
     </div>
     
   </div>
@@ -277,7 +250,7 @@
     </div>
     
     <div class="span4">
-      <h3>Manage Assignments</h3>
+      <!--h3>Manage Assignments</h3>
 
       <table class="table table-striped">
         <thead>
@@ -294,16 +267,42 @@
             </tr>
           <% end %>
         </tbody>
-      </table>
+      </table-->
+
+      <h3>Edit</h3>
+      
+      <%= simple_form_for (parent? ? [parent,@user] : @user), :html => { :class => 'form-horizontal' } do |f| %>
+        <%= f.input :name %>
+        <%= f.input :email %>
+        
+        <%= f.association :default_division, collection: (@user.divisions.all + @user.admined_divisions) unless @user.new_record? %>
+        <%= f.input :active %>
+        <%= f.input :language, collection: Locale.all.map{ |locale| [locale.name,locale.code] }, include_blank: false %>
+        
+        <%= f.input :assigned_roles, label: "Roles", as: :check_boxes, collection: ['admin','athlete'], input_html: {include_blank: true, multiple: true} %>
+        <%= f.input :change_roles, as: :hidden, input_html: {value: 1} %>
+        <%= f.association :groups, as: :check_boxes, label_method: :full_name, collection: Group.accessible_by(current_ability) %>
+        
+        
+        <%= f.input :password %>
+        <%= f.input :password_confirmation %>
+        
+        
+        
+        <div class="form-actions">
+          <%= f.button :submit, :class => 'btn-primary' %>
+        </div>
+      <% end %>
       
     </div>
-    
+
     <div class="span4">
+
       <h3>Reminders</h3>
       
       <%= simple_form_for (parent? ? [parent,@user] : @user), :html => { :class => 'form-horizontal' } do |f| %>
         <%= f.input :phone_number %>
-        <%= f.input :reminder_hour, label: "Remind At", collection: [['Midnight',0],['1:00 am',1],['2:00 am',2],['3:00 am',3],['4:00 am',4],['5:00 am',5],['6:00 am',6],['7:00 am',7],['8:00 am',8],['9:00 am',9],['10:00 am',10],['11:00 am',11],['12:00 am',1],['1:00 pm',13],['2:00 pm',14],['3:00 pm',15],['4:00 pm',16],['5:00 pm',17],['6:00 pm',18],['7:00 pm',19],['8:00 pm',20],['9:00 pm',21],['10:00 pm',22],['11:00 pm',23]], include_blank: false %>
+        <%= f.input :reminder_hour, label: "Remind At", collection: [['Midnight',0],['1:00 am',1],['2:00 am',2],['3:00 am',3],['4:00 am',4],['5:00 am',5],['6:00 am',6],['7:00 am',7],['8:00 am',8],['9:00 am',9],['10:00 am',10],['11:00 am',11],['Noon',12],['1:00 pm',13],['2:00 pm',14],['3:00 pm',15],['4:00 pm',16],['5:00 pm',17],['6:00 pm',18],['7:00 pm',19],['8:00 pm',20],['9:00 pm',21],['10:00 pm',22],['11:00 pm',23]], include_blank: false %>
         <%= f.input :reminder_active %>
 
 
@@ -313,12 +312,11 @@
       <% end %>
       
     </div>
-    
   </div>
+    
 </div>
 
 <div id="performance-profile" class="player-panel" style="display:none;">
-  <!--h2>Performance Profile</h2-->
   <h5>Compared To: <strong><%= link_to @comparison, @comparison %></strong> <small>(<a id="performance-toggle" href="#">Change</a>)</small></h5>
   <form style="display:none;">
     <input type="hidden" id="compare-type" value="<%= @comparison.class.name %>">
@@ -379,69 +377,3 @@
     </div>
   </div>
 </div>
-
-<!--div class="accordion" id="accordion">
-
-    
-
-  <div class="accordion-group">
-    <div class="accordion-heading">
-      <h4 class="accordion-title">
-        <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#last_5_days">
-          <%=t 'last_5_days', number: '5' %>
-        </a>
-      </h4>
-    </div>
-    <div id="last_5_days" class="accordion-collapse collapse">
-      <div class="accordion-body">
-        <div class="graph" data-user_id="<%= @user.id %>" data-day_range="5"></div>
-      </div>
-    </div>
-  </div>
-  
-  <div class="accordion-group">
-    <div class="accordion-heading">
-      <h4 class="accordion-title">
-        <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#last_10_days">
-          <%=t 'last_10_days', number: '10' %>
-        </a>
-      </h4>
-    </div>
-    <div id="last_10_days" class="accordion-collapse collapse">
-      <div class="accordion-body">
-        <div class="graph" data-user_id="<%= @user.id %>" data-day_range="10"></div>
-      </div>
-    </div>
-  </div>
-  
-  <div class="accordion-group">
-    <div class="accordion-heading">
-      <h4 class="accordion-title">
-        <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#last_15_days">
-          <%=t 'last_15_days', number: '15' %>
-        </a>
-      </h4>
-    </div>
-    <div id="last_15_days" class="accordion-collapse collapse">
-      <div class="accordion-body">
-        <div class="graph" data-user_id="<%= @user.id %>" data-day_range="15"></div>
-      </div>
-    </div>
-  </div>
-  
-  <div class="accordion-group">
-    <div class="accordion-heading">
-      <h4 class="accordion-title">
-        <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#last_30_days">
-          <%=t 'last_30_days', number: '30' %>
-        </a>
-      </h4>
-    </div>
-    <div id="last_30_days" class="accordion-collapse collapse">
-      <div class="accordion-body">
-        <div class="graph" data-user_id="<%= @user.id %>" data-day_range="30"></div>
-      </div>
-    </div>
-  </div>
-  
-</div-->
