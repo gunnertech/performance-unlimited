@@ -47,11 +47,13 @@ class Ability
       can :manage, Authentication,        :id => Organization.with_role('admin', user).joins{ authentications }.pluck('authentications.id')
       can :create, PointRange
       can :manage, PointRange,            :id => Organization.with_role('admin', user).joins{ point_ranges }.pluck('point_ranges.id')
+      can :manage, SelectedResponse,      :id => Organization.with_role('admin', user).joins{ selected_responses }.pluck('selected_responses.id')
     elsif user.is_a_participant?
       can :read, Division, :id => Division.with_role('athlete', user).pluck('divisions.id')
       can :read, Organization, :id => Division.with_role('athlete', user).joins{ organization }.pluck('organizations.id')
       can :read, User, :id => user.id
       can :create, CompletedSurvey
+      can :manage, SelectedResponse,      :id => Division.with_role('athlete', user).joins{ organization.selected_responses }.pluck('selected_responses.id')
     end
   end
 end

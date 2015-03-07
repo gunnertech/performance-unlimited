@@ -16,7 +16,11 @@
       <%= simple_form_for selected_response, {remote: true, :html => { :class => 'inline-submit form-horizontal' }} do |f| %>
         <tr>
           <td><%= selected_response.question %></td>
-          <td><%= f.association :response, collection: selected_response.question.responses, label: false, include_blank: false %></td>
+          <% if selected_response.free_form_value.present? %>
+            <td><%= f.input :free_form_value, label: false %></td>
+          <% else %>
+            <td><%= f.association :response, collection: selected_response.question.responses, label: false, include_blank: false %></td>
+          <% end %>
           <td>
             <%= f.button :submit, :class => 'btn-primary', value: t('save') %>
           </td>

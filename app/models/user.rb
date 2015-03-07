@@ -108,6 +108,8 @@ class User < ActiveRecord::Base
 
   end
   handle_asynchronously :send_survey_reminder
+  
+  #send_survey_reminder_without_delay
 
   def formatted_phone_number
     phone_number.to_s.gsub(/\D/,"")

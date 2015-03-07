@@ -6,14 +6,20 @@
         <% assigned_question_set.question_set.assigned_questions.each do |assigned_question| %>
           <tr>
             <td><strong><%= assigned_question %></strong></td>
-            <% 0.upto(assigned_question_set.question_set.max_responses).each do |i| %>
-              <td>
-                <% if assigned_question.question.responses[i] %>
-                  <a data-suggestion="<%=j assigned_question.question.responses[i].suggestion %>" data-response_id="<%= assigned_question.question.responses[i].id %>" data-question_id="<%= assigned_question.question.id %>" href="#" class="answer btn <%= response_css_point_class(assigned_question.question.responses[i],i+1) %>" data-value="<%= assigned_question.question.responses[i].points %>"><%= assigned_question.question.responses[i].short_text.try(:html_safe) %> <span class="print-only">(<%= assigned_question.question.responses[i].points %>)</span></a>
-                <% else %>
-                  &nbsp;
-                <% end %>
+            <% if assigned_question.question.allow_free_form_response? %>
+              <td colspan="<%= assigned_question_set.question_set.max_responses+1 %>">
+                <input type="text" data-question_id="<%= assigned_question.question.id %>" data-response_id="0" class="answer">
               </td>
+            <% else %>
+              <% 0.upto(assigned_question_set.question_set.max_responses).each do |i| %>
+                <td>
+                  <% if assigned_question.question.responses[i] %>
+                    <a data-suggestion="<%=j assigned_question.question.responses[i].suggestion %>" data-response_id="<%= assigned_question.question.responses[i].id %>" data-question_id="<%= assigned_question.question.id %>" href="#" class="answer btn <%= response_css_point_class(assigned_question.question.responses[i],i+1) %>" data-value="<%= assigned_question.question.responses[i].points %>"><%= assigned_question.question.responses[i].short_text.try(:html_safe) %> <span class="print-only">(<%= assigned_question.question.responses[i].points %>)</span></a>
+                  <% else %>
+                    &nbsp;
+                  <% end %>
+                </td>
+              <% end %>
             <% end %>
             <td class="score"><strong></strong></td>
           </tr>

@@ -24,8 +24,14 @@ class CompletedSurveysController < InheritedResources::Base
     if @completed_survey.valid?
       @user = User.find(params[:taker_id])
       params[:responses].split(',').each do |response_code|
-        question_id, response_id = response_code.split('-')
-        @completed_survey.selected_responses.create(user_id: params[:taker_id], response_id: response_id)
+        if response_code.match(/~/)
+          question_id, free_form_value = response_code.split('~')
+          @completed_survey.selected_responses.create(user_id: params[:taker_id], free_form_value: free_form_value, question_id: question_id)
+        else
+          question_id, response_id = response_code.split('-')
+          @completed_survey.selected_responses.create(user_id: params[:taker_id], response_id: response_id, question_id: question_id)
+        end
+        
       end
     
       # title = "#{@user.name.parameterize}-#{today}.csv"

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140904221403) do
+ActiveRecord::Schema.define(:version => 20150307200048) do
 
   create_table "alerts", :force => true do |t|
     t.string   "alertable_type"
@@ -292,10 +292,11 @@ ActiveRecord::Schema.define(:version => 20140904221403) do
   create_table "questions", :force => true do |t|
     t.string   "short_text"
     t.text     "long_text"
-    t.datetime "created_at",         :null => false
-    t.datetime "updated_at",         :null => false
+    t.datetime "created_at",                                  :null => false
+    t.datetime "updated_at",                                  :null => false
     t.integer  "organization_id"
     t.boolean  "measures_dimension"
+    t.boolean  "allow_free_form_response", :default => false, :null => false
   end
 
   add_index "questions", ["organization_id"], :name => "index_questions_on_organization_id"
@@ -357,9 +358,12 @@ ActiveRecord::Schema.define(:version => 20140904221403) do
     t.datetime "created_at",          :null => false
     t.datetime "updated_at",          :null => false
     t.integer  "completed_survey_id"
+    t.string   "free_form_value"
+    t.integer  "question_id"
   end
 
   add_index "selected_responses", ["completed_survey_id"], :name => "index_selected_responses_on_completed_survey_id"
+  add_index "selected_responses", ["question_id"], :name => "index_selected_responses_on_question_id"
   add_index "selected_responses", ["response_id"], :name => "index_selected_responses_on_response_id"
   add_index "selected_responses", ["user_id"], :name => "index_selected_responses_on_user_id"
 
@@ -411,7 +415,9 @@ ActiveRecord::Schema.define(:version => 20140904221403) do
     t.string   "phone_number"
   end
 
+  add_index "users", ["authentication_token"], :name => "index_users_on_authentication_token"
   add_index "users", ["email"], :name => "index_users_on_email"
+  add_index "users", ["reminder_hour"], :name => "index_users_on_reminder_hour"
   add_index "users", ["reset_password_token"], :name => "index_users_on_reset_password_token", :unique => true
 
   create_table "users_roles", :id => false, :force => true do |t|

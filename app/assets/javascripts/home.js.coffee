@@ -48,6 +48,12 @@ $('.navigate.btn-primary').live('click', (event) ->
     response_string = "#{response_string},#{$(this).data('question_id')}-#{$(this).data('response_id')}"
   )
   
+  $('input.answer').each(->
+    response_string = "#{response_string},#{$(this).data('question_id')}~#{$(this).val()}"
+  )
+  
+  
+  
   response_string = response_string.replace(/^,/,'')
   _this = this
   $(".completed-survey-link").attr('href',"/users/#{$(_this).data('user_id')}")
@@ -99,7 +105,7 @@ $('.home.index .table .btn').live('click', (event) ->
   
   $(this).parents('tr').find('.score strong').html($(this).data('value'))
   
-  if $(this).parents('table').find('tr').length == $(this).parents('table').find('.active').length
+  if $(this).parents('table').find('tr').length == $(this).parents('table').find('.active').length + $(this).parents('table').find('input').length
     $(this).parents('section').find('.disabled').removeClass('disabled')
   
   $('table .active').each( -> 

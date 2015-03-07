@@ -23,6 +23,7 @@ class Organization < ActiveRecord::Base
   has_many :comments, through: :metrics
   
   has_many :responses, through: :questions
+  has_many :selected_responses, through: :questions
   has_many :data_files, as: :data_fileable
   
   attr_accessible :name, :logo, :file, :file_contents

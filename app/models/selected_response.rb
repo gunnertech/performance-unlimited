@@ -2,11 +2,12 @@ class SelectedResponse < ActiveRecord::Base
   belongs_to :user
   belongs_to :response
   belongs_to :completed_survey
+  belongs_to :question
   
-  has_one :question, through: :response
+  # has_one :question, through: :response
   has_one :organization, through: :question
   
-  attr_accessible :response, :user, :user_id, :response_id
+  attr_accessible :response, :user, :user_id, :response_id, :free_form_value, :question_id
   
   after_save :update_survey_score
   

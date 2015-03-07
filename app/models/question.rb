@@ -8,8 +8,9 @@ class Question < ActiveRecord::Base
   has_many :assigned_questions
   has_many :question_sets, through: :assigned_questions
   has_many :responses, order: :position
+  has_many :selected_responses
   
-  attr_accessible :long_text, :short_text, :organization, :organization_id, :measures_dimension
+  attr_accessible :long_text, :short_text, :organization, :organization_id, :measures_dimension, :allow_free_form_response
   
   after_save :set_organization
   
