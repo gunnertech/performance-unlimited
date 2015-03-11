@@ -49,7 +49,8 @@
                   <td>
                     <% if user_array[group.id] && user_array[group.id][i-1] %>
                       <%= link_to user_array[group.id][i-1], user_array[group.id][i-1] %>
-                      <%= link_to "<i class=\"icon-user\"></i>".html_safe, sign_in_as_user_path(user_array[group.id][i-1]), :class => 'btn btn-primary btn-mini pull-right', method: "post" %>
+                      <%#= link_to "<i class=\"icon-user\"></i>".html_safe, sign_in_as_user_path(user_array[group.id][i-1]), :class => 'btn btn-primary btn-mini pull-right', method: "post" %>
+                      <%= link_to "Take Survey".html_safe, sign_in_as_user_path(user_array[group.id][i-1]), :class => 'btn btn-primary btn-mini pull-right', method: "post" %>
                     <% else %>
                       &nbsp;
                     <% end %>

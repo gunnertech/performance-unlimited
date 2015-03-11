@@ -1,20 +1,21 @@
-$('#division_id').live('change', (event) ->
+$('.division_id').live('change', (event) ->
   
   html = "<option></option>"
   $(".division-#{$(this).val()}").each( ->
     html = "#{html}<option value='#{$(this).val()}'>#{$(this).data('name')}</option>"
   )
-  $("#group_id").html(html)
+  $(this).parents('form').find(".group_id").html(html)
 )
   
 
-$('#dropdown-nav').live('submit', (event) ->
+$('.dropdown-nav').live('submit', (event) ->
   event.preventDefault()
   
-  organization_id = $("#organization_id").val()
-  division_id = $("#division_id").val()
-  group_id = $("#group_id").val()
-  location = $("#location").val()
+  $form = $(this)
+  organization_id = $form.find(".organization_id").val()
+  division_id = $form.find(".division_id").val()
+  group_id = $form.find(".group_id").val()
+  location = $form.find(".location").val()
   
   if division_id
     uri = "/divisions/#{division_id}"
@@ -30,6 +31,34 @@ $('#dropdown-nav').live('submit', (event) ->
   window.location.href = uri
   
 )
+
+$('.dropdown-athletes-nav').live('submit', (event) ->
+  event.preventDefault()
+  
+  $form = $(this)
+  location = $form.find(".location").val()
+  user_id = $form.find(".user_id").val()
+    
+  if division_id
+    uri = "/divisions/#{division_id}"
+    if group_id
+      uri = "#{uri}/groups/#{group_id}"
+  else
+    uri = "/organizations/#{organization_id}"
+  
+  if location == 'profile'
+    window.location.href = "/admin/users/#{user_id}"
+  else
+    $("#athlete-#{user_id}").trigger('click')
+      
+    
+    #http://localhost:3007/admin/users/2370
+    
+  
+  
+  
+)
+
 
 $('.user.navigate').live('click', (event) ->
   _this = this

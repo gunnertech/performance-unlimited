@@ -1,39 +1,65 @@
 <div class="row-fluid">
-  <div class="span6">
-    <h2>Navigation</h2>
+  <div class="span4">
+    <h2>Admin</h2>
     
-    <%= form_tag('#', method: 'get', id: "dropdown-nav") do -%>
+    <%= form_tag('#', method: 'get', class: "dropdown-nav") do -%>
       <% if @possible_organizations.count > 1 %>
       <% else %>
-        <%= hidden_field_tag :organization_id, @possible_organizations.first.id %>
+        <%= hidden_field_tag :organization_id, @possible_organizations.first.id, class: "organization_id" %>
       <% end %>
       
       <%= @possible_groups.map{|group| "<input class='division-#{group.division.id}' type='hidden' data-name='#{group.to_s}' data-division-id='#{group.division.id}' value='#{group.id}' />".html_safe }.join("").html_safe %>
       
-      <%= select_tag :division_id, options_from_collection_for_select(@possible_divisions, "id", "to_s"), include_blank: true, class: 'input-small'  %>
-      <%= select_tag :group_id, "", include_blank: true, class: 'input-small' %>
-      <%= select_tag :location, options_for_select([ ["Admin",""], ["Dashboard","dashboard"] ], "Admin"), class: 'input-small' %>
+      <%= select_tag :division_id, options_from_collection_for_select(@possible_divisions, "id", "to_s"), include_blank: true, class: 'input-small division_id'  %>
+      <%= select_tag :group_id, "", include_blank: true, class: 'input-small group_id' %>
+      
+      <input name="location" value="admin" class="location" type="hidden">
       
       <%= submit_tag('Go', class: "btn btn-primary", style: "margin-bottom: 11px;") %>
     <% end %>
 
   </div>
-  <div class="span6">
-    <h2>Recent Activity</h2>
-    <% Comment.where{ (created_at > my{current_user.last_sign_in_at}) & (for_user_id >> my{current_user.users.pluck('users.id')})}.each do |comment| %>
-      <blockquote><p><%= comment.body %></p> <small><%= comment.commenter.name %> on <%= comment.user %> <cite><%= comment.left_on %></cite></small></blockquote>
+  <div class="span4">
+    <h2>Data History</h2>
+    <%= form_tag('#', method: 'get', class: "dropdown-nav") do -%>
+      <% if @possible_organizations.count > 1 %>
+      <% else %>
+        <%= hidden_field_tag :organization_id, @possible_organizations.first.id, class: "organization_id" %>
+      <% end %>
+      
+      <%= @possible_groups.map{|group| "<input class='division-#{group.division.id}' type='hidden' data-name='#{group.to_s}' data-division-id='#{group.division.id}' value='#{group.id}' />".html_safe }.join("").html_safe %>
+      
+      <%= select_tag :division_id, options_from_collection_for_select(@possible_divisions, "id", "to_s"), include_blank: true, class: 'input-small division_id'  %>
+      <%= select_tag :group_id, "", include_blank: true, class: 'input-small group_id' %>
+      <input name="location" class="location" value="dashboard" type="hidden">
+      
+      <%= submit_tag('Go', class: "btn btn-primary", style: "margin-bottom: 11px;") %>
+    <% end %>
+  </div>
+  <div class="span4">
+    <h2>Athletes</h2>
+    
+    <% @possible_organizations.first.users.each do |user| %>
+      <%= link_to "Sign in as #{user}", sign_in_as_user_path(user), id: "athlete-#{user.id}", class: "btn btn-primary", style: "display: none", method: "post" %>
+    <% end %>
+    
+    
+    <%= form_tag('#', method: 'get', class: "dropdown-athletes-nav") do -%>
+      <% if @possible_organizations.count > 1 %>
+      <% else %>
+        <%= hidden_field_tag :organization_id, @possible_organizations.first.id, class: "organization_id" %>
+      <% end %>
+      
+      <%= select_tag :user_id, options_from_collection_for_select(@possible_organizations.first.users.reorder{ name.asc }, "id", "to_s"), include_blank: true, class: 'input-small user_id'  %>
+      
+      <%= select_tag :location, options_for_select([ ["Take Survey",""], ["View Profile","profile"] ], "Admin"), class: 'location input-small' %>
+      
+      <%= submit_tag('Go', class: "btn btn-primary", style: "margin-bottom: 11px;") %>
     <% end %>
   </div>
 </div>
 
-
 <div class="row-fluid">
-  <div class="span6">
-    
-    <h2 style="clear:both;">Divisions</h2>
-    <%= render partial: "#{@division.nil? ? 'divisions' : @survey.nil? ? 'no_survey' : 'survey'}_index" %>
-    <%#= render partial: "survey_index" %>
-  </div>
   <div class="span6">
     <h2>Recent Alerts <small>Since your last login</small></h2>
     <% cache(cache_key_for_alerts(current_user)) do %>
@@ -42,4 +68,11 @@
       <% end %>
     <% end %>
   </div>
+  <div class="span6">
+    <h2>Recent Activity</h2>
+    <% Comment.where{ (created_at > my{current_user.last_sign_in_at}) & (for_user_id >> my{current_user.users.pluck('users.id')})}.each do |comment| %>
+      <blockquote><p><%= comment.body %></p> <small><%= comment.commenter.try(:name) %> on <%= comment.user %> <cite><%= comment.left_on %></cite></small></blockquote>
+    <% end %>
+  </div>
 </div>
+
