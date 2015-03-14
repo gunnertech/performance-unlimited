@@ -24,7 +24,7 @@ $('.dropdown-nav').live('submit', (event) ->
   else
     uri = "/organizations/#{organization_id}"
   
-  if location
+  if location && location != 'admin'
     uri = "#{uri}/#{location}"
     
   
