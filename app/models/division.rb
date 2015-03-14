@@ -61,7 +61,7 @@ class Division < ActiveRecord::Base
     
     rows.headers.each_with_index do |header,i|
       if header.present? && i > offset && self.metrics.where{ lower(name) == my{header.downcase} }.first.nil?
-        self.metrics.create(name: header, metric_type: MetricType.find_or_create_by_name('Number'))
+        self.organization.metrics.create(name: header, metric_type: MetricType.find_or_create_by_name('Number'))
       end
     end
     (rows||[]).each_with_index do |row, i|

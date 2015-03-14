@@ -28,10 +28,11 @@ PerformanceUnlimited::Application.configure do
   # Print deprecation notices to the Rails logger
   config.active_support.deprecation = :log
   
-  config.logger = Logger.new(STDOUT)
-  config.logger.level = Logger.const_get(
-    ENV['LOG_LEVEL'] ? ENV['LOG_LEVEL'].upcase : 'DEBUG'
-  )
+  logger = Logger.new(STDOUT)
+  logger = ActiveSupport::TaggedLogging.new(logger) if defined?(ActiveSupport::TaggedLogging)
+  config.logger = logger
+  log_level_env_override = Logger.const_get(ENV['LOG_LEVEL'].try(:upcase)) rescue nil
+  config.logger.level = log_level_env_override || Logger.const_get(Rails.configuration.log_level.to_s.upcase)
 
   # Only use best-standards-support built into browsers
   config.action_dispatch.best_standards_support = :builtin
@@ -48,4 +49,5 @@ PerformanceUnlimited::Application.configure do
 
   # Expands the lines which load the assets
   config.assets.debug = true
+  
 end
