@@ -76,7 +76,10 @@ class Organization < ActiveRecord::Base
       next if row['First Name'].blank?
       if row['Date'].present?
         date_pieces = row['Date'].split("/")
-        if date_pieces.last.length > 2
+        if date_pieces.length == 1
+          date = "#{row['Date']}-#{Time.now.year}"
+          recorded_date = Date.strptime(date, "%d-%b-%Y") rescue nil
+        elsif date_pieces.last.length > 2
           recorded_date = Date.strptime(row['Date'], "%m/%d/%Y") rescue nil
         else
           recorded_date = Date.strptime(row['Date'], "%m/%d/%y") rescue nil

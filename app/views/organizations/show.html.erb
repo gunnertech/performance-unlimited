@@ -57,7 +57,7 @@
           <% rm = m.recorded_metrics.where{ metric_id == my{@comparison.id}}.reorder{ recorded_on.desc } %>
           <% if rm.limit(1).first %>
             <tr id="performance-calculation-<%= @comparison.id %>-<%= m.id %>" class="performance-calculation" data-for_metric="<%= @comparison.id %>" data-for_user="<%= m.id %>">
-              <td><%= link_to m, "/admin/users/#{m.id}?compare_id=#{resource.id}&amp;compare_type=#{resource.class.name}" %></td>
+              <td><%= link_to m, "/admin/users/#{m.id}?compare_id=#{resource.id}&compare_type=#{resource.class.name}" %></td>
               <td style="text-align: right;"><%= rm.limit(1).first.numerical_value %></td>
               <td><%= rm.limit(1).first.recorded_on %></td>
               <td style="text-align: center;" class="rank"></td>
