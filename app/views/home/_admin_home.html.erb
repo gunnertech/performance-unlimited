@@ -1,6 +1,12 @@
 <div class="row-fluid">
   <div class="span4">
-    <h2>Admin</h2>
+    <h2>
+      <% if @possible_organizations.first.present? %>
+        <%= link_to "Admin", @possible_organizations.first %>
+      <% else %>
+        Admin
+      <% end %>
+    </h2>
     
     <%= form_tag('#', method: 'get', class: "dropdown-nav") do -%>
       <% if @possible_organizations.count > 1 %>
@@ -20,7 +26,13 @@
 
   </div>
   <div class="span4">
-    <h2>Data History</h2>
+    <h2>
+      <% if @possible_organizations.first.present? %>
+        <%= link_to "Data History", [:dashboard, @possible_organizations.first] %>
+      <% else %>
+        Data History
+      <% end %>
+    </h2>
     <%= form_tag('#', method: 'get', class: "dropdown-nav") do -%>
       <% if @possible_organizations.count > 1 %>
       <% else %>
